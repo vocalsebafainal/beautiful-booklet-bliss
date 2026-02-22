@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Megaphone, Youtube, Newspaper, BookOpen, Moon, Palette, Building2, Mic, Star, Crown, Check, X } from "lucide-react";
+import { Megaphone, Youtube, Newspaper, BookOpen, Moon, Palette, Building2, Mic, Star, Crown, Check, ChevronDown, ChevronUp } from "lucide-react";
 
 const categories = [
   { icon: Megaphone, name: "অ্যাডভার্টাইজমেন্ট ভয়েস", emoji: "📢", desc: "বিজ্ঞাপন ও প্রমোশনাল কন্টেন্ট" },
@@ -99,7 +99,7 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
               >
                 {/* Card Header */}
                 <div
-                  className={`p-5 md:p-6 flex items-center gap-4 ${isExpanded ? "cursor-pointer" : ""}`}
+                  className={`p-5 md:p-6 ${isExpanded ? "cursor-pointer" : ""}`}
                   onClick={(e) => {
                     if (isExpanded) {
                       e.stopPropagation();
@@ -107,24 +107,40 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
                     }
                   }}
                 >
-                  <div className="text-4xl md:text-5xl">{cat.emoji}</div>
-                  <div className="text-left flex-1">
-                    <h3 className="text-foreground font-bold text-sm md:text-base">
-                      {cat.name}
-                    </h3>
-                    <p className="text-muted-foreground text-xs md:text-sm">{cat.desc}</p>
-                  </div>
-                  {isExpanded ? (
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-semibold rounded-full px-3 py-1 bg-primary text-primary-foreground">
-                        প্যাকেজ দেখা হচ্ছে ✓
+                  <div className="flex items-center gap-4">
+                    <div className="text-4xl md:text-5xl">{cat.emoji}</div>
+                    <div className="text-left flex-1 min-w-0">
+                      <h3 className="text-foreground font-bold text-sm md:text-base">
+                        {cat.name}
+                      </h3>
+                      <p className="text-muted-foreground text-xs md:text-sm">{cat.desc}</p>
+                    </div>
+                    {/* Desktop-only inline badges */}
+                    {isExpanded ? (
+                      <div className="hidden md:flex items-center gap-2">
+                        <span className="text-sm font-semibold rounded-full px-4 py-1.5 bg-primary text-primary-foreground flex items-center gap-1.5">
+                          প্যাকেজ দেখা হচ্ছে ✓
+                        </span>
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                      </div>
+                    ) : (
+                      <span className="hidden md:inline-block text-xs font-semibold rounded-full px-4 py-1.5 bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
+                        বিস্তারিত জানতে ক্লিক করুন ›
                       </span>
-                      <X className="w-4 h-4 text-muted-foreground" />
+                    )}
+                  </div>
+
+                  {/* Mobile-only buttons below header */}
+                  {isExpanded ? (
+                    <div className="mt-3 md:hidden flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-primary/10 border border-primary/20">
+                      <span className="text-sm font-semibold text-primary">প্যাকেজ দেখা হচ্ছে ✓</span>
+                      <ChevronUp className="w-4 h-4 text-primary" />
                     </div>
                   ) : (
-                    <span className="text-[11px] font-semibold rounded-full px-3 py-1 bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
-                      বিস্তারিত জানতে ক্লিক করুন ›
-                    </span>
+                    <div className="mt-3 md:hidden flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-muted/80 border border-border hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all duration-200">
+                      <span className="text-sm font-medium text-muted-foreground">বিস্তারিত জানতে ক্লিক করুন</span>
+                      <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                    </div>
                   )}
                 </div>
 
