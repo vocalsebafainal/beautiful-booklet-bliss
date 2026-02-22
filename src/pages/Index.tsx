@@ -27,9 +27,6 @@ const Index = () => {
       <footer className="border-t border-border/50 py-10 px-4">
         <div className="container mx-auto max-w-4xl text-center space-y-3">
           <p className="text-foreground font-bold text-lg"><span className="text-primary">Vocal</span><span className="text-secondary">seba</span> Agency</p>
-          <p className="text-muted-foreground text-sm">
-            প্রফেশনাল ভয়েস ওভার সার্ভিস — বাংলাদেশ থেকে বিশ্বে
-          </p>
           <div className="flex items-center justify-center gap-4 pt-2">
             <a
               href="https://wa.me/8801XXXXXXXXX"
