@@ -1,29 +1,25 @@
 
-# Category Cards -- Hover Preview Hint
+# ক্যাটাগরি কার্ড রিডিজাইন -- প্রথমটি এক্টিভ + "বিস্তারিত জানুন" বাটন
 
-## Problem
-Currently, when a user clicks a category card, the pricing tiers expand below the entire grid. But there's no visual hint on hover that clicking will reveal packages -- users may not realize the cards are interactive.
+## কী পরিবর্তন হবে
 
-## Solution
-Add a hover preview tooltip/overlay on each category card that shows a mini summary of the 3 tiers (Basic, Standard, Pro) as a small hint. This gives users an instant signal: "click to see full packages."
+### 1. প্রথম ক্যাটাগরি ডিফল্টভাবে এক্টিভ/এক্সপান্ডেড থাকবে
+- পেজ লোড হলে প্রথম ক্যাটাগরি ("অ্যাডভার্টাইজমেন্ট ভয়েস") এর প্যাকেজ (বেসিক/স্ট্যান্ডার্ড/প্রো) সরাসরি দেখা যাবে
+- বাকি ক্যাটাগরিগুলো collapsed/hidden থাকবে
 
-## How It Will Look
+### 2. প্রতিটি ক্যাটাগরি কার্ডে "বিস্তারিত জানুন" বাটন
+- প্রতিটি কার্ডের নিচে একটি ছোট বাটন থাকবে: "বিস্তারিত জানতে ক্লিক করুন"
+- যে ক্যাটাগরি এক্টিভ আছে সেটার বাটনে লেখা থাকবে "প্যাকেজ দেখা হচ্ছে ✓"
+- বাটনে ক্লিক করলে সেই ক্যাটাগরির প্যাকেজ expand হবে (এবং আগেরটা collapse হবে)
 
-When hovering over a category card:
-- A small semi-transparent overlay slides up from the bottom of the card
-- Shows 3 mini tier badges in a row: "🎙 বেসিক", "⭐ স্ট্যান্ডার্ড", "👑 প্রো"
-- Below that, a subtle text: "ক্লিক করে প্যাকেজ দেখুন >"
-- Smooth fade-in/slide-up animation (200ms)
-- When the category is already expanded, the hover overlay shows "প্যাকেজ দেখা হচ্ছে" instead
+### 3. এক্টিভ কার্ডে ভিজুয়াল ইন্ডিকেটর
+- এক্টিভ কার্ডে গোল্ড বর্ডার + গ্লো ইফেক্ট থাকবে
+- বাটনের কালার পরিবর্তন হবে (primary color)
 
-## Technical Changes
+## টেকনিক্যাল ডিটেইলস
 
 ### `src/components/CategoryGrid.tsx`
-- Add a `hoveredCategory` state to track which card is being hovered
-- Add `onMouseEnter` / `onMouseLeave` handlers to each category card
-- Inside each card, add a conditional overlay div that appears on hover with:
-  - 3 small tier name badges (Basic/Standard/Pro) in a horizontal row
-  - A "ক্লিক করে প্যাকেজ দেখুন" call-to-action text
-  - CSS: absolute positioned at bottom, backdrop-blur, gradient background from transparent to dark
-- Use `framer-motion` `AnimatePresence` for the overlay entrance/exit animation
-- No other files need to change
+- `useState` এর ডিফল্ট ভ্যালু প্রথম ক্যাটাগরির নাম দিয়ে সেট করা হবে: `useState(categories[0].name)`
+- hover overlay সরিয়ে পরিবর্তে একটি স্থায়ী "বিস্তারিত জানতে ক্লিক করুন" বাটন প্রতিটি কার্ডের নিচে যোগ করা হবে
+- এক্টিভ কার্ডের বাটনে ভিন্ন টেক্সট ও স্টাইল থাকবে
+- `hoveredCategory` state সরানো হবে কারণ বাটন সবসময় দেখা যাবে
