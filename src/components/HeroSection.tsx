@@ -6,20 +6,20 @@ const SoundwaveBars = () => {
   const bars = Array.from({ length: 40 }, (_, i) => i);
   return (
     <div className="absolute inset-0 flex items-center justify-center gap-[3px] opacity-20 pointer-events-none overflow-hidden">
-      {bars.map((i) => (
-        <div
-          key={i}
-          className={`w-[2px] md:w-[3px] bg-primary/60 rounded-full ${
-            i % 3 === 0 ? "soundwave-bar-slow" : "soundwave-bar"
-          }`}
-          style={{
-            animationDelay: `${i * 0.08}s`,
-            height: "8px",
-          }}
-        />
-      ))}
-    </div>
-  );
+      {bars.map((i) =>
+      <div
+        key={i}
+        className={`w-[2px] md:w-[3px] bg-primary/60 rounded-full ${
+        i % 3 === 0 ? "soundwave-bar-slow" : "soundwave-bar"}`
+        }
+        style={{
+          animationDelay: `${i * 0.08}s`,
+          height: "8px"
+        }} />
+
+      )}
+    </div>);
+
 };
 
 const HeroSection = () => {
@@ -40,22 +40,22 @@ const HeroSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="inline-flex items-center gap-2 glass-card px-4 py-2 mb-6 md:mb-8">
-            <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-            <span className="text-muted-foreground text-xs md:text-sm">
-              বাংলাদেশের #১ ভয়েস ওভার এজেন্সি
-            </span>
-          </div>
+          transition={{ duration: 0.8 }}>
+
+          
+
+
+
+
+
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-4 md:mb-6"
-        >
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-4 md:mb-6">
+
           কণ্ঠ, কন্টেন্ট{" "}
           <span className="gradient-text">জাদু</span> –<br />
           আপনার কাজের জন্য{" "}
@@ -66,8 +66,8 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35 }}
-          className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto mb-3"
-        >
+          className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto mb-3">
+
           প্রফেশনাল ভয়েস ওভার সার্ভিস — অ্যাডভার্টাইজমেন্ট, ইউটিউব, অডিওবুক, কর্পোরেট ন্যারেশন এবং আরও অনেক কিছু।
         </motion.p>
 
@@ -75,8 +75,8 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.45 }}
-          className="text-primary font-bold text-lg md:text-xl mb-8 md:mb-10"
-        >
+          className="text-primary font-bold text-lg md:text-xl mb-8 md:mb-10">
+
           আপনার কন্টেন্টকে পরবর্তী লেভেলে নিয়ে যান — ২৪ ঘণ্টার মধ্যে ✨
         </motion.p>
 
@@ -85,8 +85,8 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           onClick={scrollToCategories}
-          className="gold-btn text-lg md:text-xl px-10 py-5 group pulse-glow-btn"
-        >
+          className="gold-btn text-lg md:text-xl px-10 py-5 group pulse-glow-btn">
+
           ভয়েস ক্যাটাগরি দেখুন
           <ChevronDown className="w-5 h-5 inline-block ml-2 group-hover:translate-y-1 transition-transform" />
         </motion.button>
@@ -96,8 +96,8 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-10 md:mt-14"
-        >
+          className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-10 md:mt-14">
+
           <div className="flex items-center gap-2 glass-card px-4 py-2.5">
             <Users className="w-4 h-4 text-primary" />
             <span className="text-foreground text-sm font-semibold">500+</span>
@@ -115,8 +115,8 @@ const HeroSection = () => {
           </div>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default HeroSection;
