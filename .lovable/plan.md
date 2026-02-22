@@ -1,71 +1,55 @@
 
 
-# 🎙 Vocalseba Agency — Landing Page Plan
+# Category Section Redesign — Pricing Tiers Visible on Page
 
-## Overview
-Vocalseba Agency এর জন্য একটি premium, high-converting Bengali landing page তৈরি করা হবে। Dark theme, glassmorphism effects, এবং smooth animations দিয়ে luxurious feel আনা হবে।
+## Problem
+Currently pricing tiers (Basic, Standard, Pro) are hidden inside a modal that only appears after clicking a category card. Many visitors won't click, so they'll never see the packages.
 
-## Design Theme
-- **Background**: Deep Navy/Black (#0B0E14) with subtle glowing soundwave animation
-- **Accent Colors**: Gold (#FFD700) for CTAs, Turquoise (#20B2AA) for highlights
-- **Style**: Glassmorphism cards with translucent blur effects
-- **Typography**: Bold Bengali-friendly fonts, clean and modern
+## Solution
+Each category card will become an expandable section. When a user clicks a category, the 3 pricing tiers (Basic, Standard, Pro) will expand/slide down directly below that category card on the page itself — no modal needed for pricing.
 
----
+## How It Will Work
 
-## Sections to Build
+1. **Category cards stay as-is** visually, but clicking one will expand/collapse the pricing tiers inline below it
+2. **Accordion-style behavior**: Only one category's pricing is visible at a time. Clicking another category closes the previous one and opens the new one
+3. **Pricing tier cards** (Basic, Standard, Pro) will appear in a row below the selected category with smooth animation
+4. **"Order" button** on each tier still opens the Order Flow modal as before
 
-### 1. 🔝 Sticky Header
-- Vocalseba logo (left)
-- "Contact Us" button (right, gold accent)
-- Always visible on scroll
+## Technical Details
 
-### 2. 🚀 Hero Section
-- Animated soundwave background effect
-- Bold Bengali headline: "কণ্ঠ, কন্টেন্ট জাদু – আপনার কাজের জন্য সেরা ভয়েস ওভার"
-- Sub-headline describing the service
-- Gold CTA button: "ভয়েস ক্যাটাগরি দেখুন ↓" (smooth scroll down)
+### Files to Modify
 
-### 3. 📦 Category Selection Grid
-- Heading: "আপনার প্রজেক্টের ধরন অনুযায়ী ক্যাটাগরি বেছে নিন"
-- 7 glassmorphism cards with icons & hover effects:
-  - 📢 Advertisement Voice
-  - 🎥 YouTube Voice
-  - 📰 News & Documentary
-  - 📖 Storytelling & Audiobook
-  - 🕌 Islamic Voice
-  - 🎨 Cartoon & Character
-  - 🏢 Corporate Voice
+**`src/components/CategoryGrid.tsx`**
+- Add state to track which category is currently expanded (`expandedCategory`)
+- When a category card is clicked, toggle its expanded state
+- Below each category card (or below the grid row containing it), render the 3 pricing tier cards with an animated expand/collapse
+- Move the pricing tiers data (from PricingModal) into a shared constant or import it
+- The "Order" button on each tier calls `onCategorySelect` with both category and tier info
 
-### 4. 💰 Pricing Modal (Interactive)
-- When a category card is clicked, a popup modal appears with 3 pricing tiers:
-  - 🎙 Basic — Personal Projects, 24-48hr delivery, 1 revision
-  - ⭐ Standard — Professional Content, 24hr delivery, 3 revisions
-  - 👑 Pro — High-End Brands, 12hr super-fast delivery, unlimited revisions
-- Each tier has an "অডার করুন" button
+**`src/components/PricingModal.tsx`**
+- Extract the `tiers` data to be reusable (or just duplicate it in CategoryGrid since it's small)
+- Keep the modal component available as a fallback but it won't be the primary flow anymore
 
-### 5. 📝 Smart Order Flow (Multi-step Popup)
-- **Step A — Script Inquiry**: "আপনার কি স্ক্রিপ্ট তৈরি আছে?" (Yes/No options)
-  - "No" → shows message to contact manager
-- **Step B — File Upload** (if Yes): Drag & drop or paste script text area
-- Submit button to proceed
+**`src/pages/Index.tsx`**
+- Update the flow: category click no longer opens pricing modal
+- Instead, the tier selection from the inline cards directly opens the OrderFlow
+- Simplify state management accordingly
 
-### 6. 💳 Payment & Confirmation
-- Header: "৫০% অগ্রিম পেমেন্ট সম্পন্ন করুন"
-- bKash / Nagad payment info display
-- Transaction ID input field
-- "Pay & Confirm Order" gold CTA button
+### Visual Layout
+When a category is clicked, a full-width panel slides down below the category grid row showing:
 
-### 7. 🎉 Post-Order Success
-- Congratulations message with order ID
-- Info that customer manager will contact soon
+```text
+[Category Cards Row]
+ ┌──────────────────────────────────────────────────┐
+ │  Basic        |  Standard (Popular) |  Pro       │
+ │  Features...  |  Features...        |  Features  │
+ │  [Order Btn]  |  [Order Btn]        |  [Order]   │
+ └──────────────────────────────────────────────────┘
+[Next Category Cards Row]
+```
 
----
-
-## Interactions & Effects
-- Smooth scroll navigation from Hero to Categories
-- Hover glow effects on category cards
-- Modal transitions for pricing and order flow
-- Subtle soundwave CSS animation in the hero background
-- Responsive design for mobile and desktop
+- Smooth height animation using framer-motion's `AnimatePresence`
+- The expanded panel spans the full width of the grid container
+- Gold highlight on the "Popular" Standard tier
+- Clicking the same category again collapses it
 
