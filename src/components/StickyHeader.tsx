@@ -23,7 +23,7 @@ const StickyHeader = () => {
         <div className="flex items-center gap-2">
           <img src={logo} alt="Vocalseba Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover" />
           <span className="text-foreground font-bold text-lg md:text-xl tracking-tight">
-            Vocal<span className="text-primary">seba</span>
+            <span className="text-primary">Vocal</span><span className="text-secondary">seba</span>
           </span>
         </div>
         <a

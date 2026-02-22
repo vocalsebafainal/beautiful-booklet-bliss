@@ -15,16 +15,16 @@
     --popover: 220 25% 10%;
     --popover-foreground: 210 40% 95%;
 
-    --primary: 45 100% 50%;
-    --primary-foreground: 220 30% 6%;
+    --primary: 295 55% 39%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 174 56% 40%;
+    --secondary: 250 72% 24%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 220 20% 16%;
     --muted-foreground: 215 20% 55%;
 
-    --accent: 174 56% 40%;
+    --accent: 250 72% 24%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -32,18 +32,18 @@
 
     --border: 220 20% 18%;
     --input: 220 20% 18%;
-    --ring: 45 100% 50%;
+    --ring: 295 55% 39%;
 
     --radius: 0.75rem;
 
     --sidebar-background: 220 25% 8%;
     --sidebar-foreground: 210 40% 95%;
-    --sidebar-primary: 45 100% 50%;
-    --sidebar-primary-foreground: 220 30% 6%;
+    --sidebar-primary: 295 55% 39%;
+    --sidebar-primary-foreground: 210 40% 98%;
     --sidebar-accent: 220 20% 16%;
     --sidebar-accent-foreground: 210 40% 95%;
     --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 45 100% 50%;
+    --sidebar-ring: 295 55% 39%;
   }
 }
 
@@ -70,12 +70,12 @@
 
   .glass-card-hover:hover {
     @apply border-primary/40;
-    box-shadow: 0 8px 40px rgba(255, 215, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 40px rgba(155, 45, 139, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     transform: translateY(-4px);
   }
 
   .gold-glow {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 60px rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 20px rgba(155, 45, 139, 0.4), 0 0 60px rgba(155, 45, 139, 0.15);
   }
 
   .gold-btn {
@@ -88,7 +88,7 @@
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, hsl(45, 100%, 50%), hsl(45, 100%, 70%), hsl(174, 56%, 40%));
+    background: linear-gradient(135deg, hsl(295, 55%, 50%), hsl(295, 55%, 65%), hsl(250, 72%, 35%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -100,7 +100,7 @@
 
   .shimmer-border {
     position: relative;
-    border-color: hsl(45, 100%, 50%, 0.5);
+    border-color: hsl(295, 55%, 39%, 0.5);
     overflow: hidden;
   }
 
@@ -111,7 +111,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, hsl(45, 100%, 50%, 0.08), transparent);
+    background: linear-gradient(90deg, transparent, hsl(295, 55%, 39%, 0.08), transparent);
     animation: shimmer 3s infinite;
     pointer-events: none;
   }
@@ -155,8 +155,8 @@
 }
 
 @keyframes btn-glow {
-  0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
-  50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 0 60px rgba(255, 215, 0, 0.15); }
+  0%, 100% { box-shadow: 0 0 10px rgba(155, 45, 139, 0.25); }
+  50% { box-shadow: 0 0 30px rgba(155, 45, 139, 0.45), 0 0 60px rgba(155, 45, 139, 0.2); }
 }
 
 @keyframes shimmer {
