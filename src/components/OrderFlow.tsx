@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Upload, MessageCircle, CheckCircle2, Copy, Check, X } from "lucide-react";
+import { FileText, Upload, MessageCircle, CheckCircle2, Copy, Check, X, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type Step = "script" | "no-script" | "upload" | "payment" | "success";
@@ -238,6 +238,25 @@ const OrderFlow = ({ open, onClose, category, tier }: OrderFlowProps) => {
         <p className="text-sm text-muted-foreground">
           আমাদের কাস্টমার ম্যানেজার শীঘ্রই আপনার সাথে যোগাযোগ করবে। ধন্যবাদ! 🙏
         </p>
+
+        <div className="flex flex-col gap-3 w-full">
+          <a
+            href="https://chat.whatsapp.com/XXXXXXXXX"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-700 transition-colors"
+          >
+            <MessageCircle className="w-5 h-5" />
+            WhatsApp গ্রুপে জয়েন করুন
+          </a>
+          <a
+            href="tel:01XXXXXXXXX"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-primary-foreground bg-primary hover:bg-primary/90 transition-colors"
+          >
+            <Phone className="w-5 h-5" />
+            সরাসরি কল করুন
+          </a>
+        </div>
 
         <button onClick={handleClose} className="gold-btn">
           হোম পেজে ফিরে যান
