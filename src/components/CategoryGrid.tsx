@@ -166,8 +166,8 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
                           }>
 
                               {tier.highlight &&
-                          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold rounded-full px-3 py-1">
-                                  জনপ্রিয়
+                          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 bg-primary text-primary-foreground text-xs font-bold rounded-full px-4 py-1 shadow-lg shadow-primary/30 whitespace-nowrap">
+                                  ⭐ জনপ্রিয়
                                 </div>
                           }
                               <div className="text-2xl md:text-3xl mb-2">{tier.label}</div>
