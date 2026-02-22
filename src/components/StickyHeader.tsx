@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Phone } from "lucide-react";
+import logo from "@/assets/logo.jfif";
 
 const StickyHeader = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -20,9 +21,7 @@ const StickyHeader = () => {
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between h-16 md:h-20">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-black text-sm md:text-lg">V</span>
-          </div>
+          <img src={logo} alt="Vocalseba Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover" />
           <span className="text-foreground font-bold text-lg md:text-xl tracking-tight">
             Vocal<span className="text-primary">seba</span>
           </span>
