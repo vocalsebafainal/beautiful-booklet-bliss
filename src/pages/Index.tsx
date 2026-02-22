@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { MessageCircle, Mail } from "lucide-react";
 import StickyHeader from "@/components/StickyHeader";
 import HeroSection from "@/components/HeroSection";
 import TrustSection from "@/components/TrustSection";
@@ -27,21 +28,22 @@ const Index = () => {
       <footer className="border-t border-border/50 py-10 px-4">
         <div className="container mx-auto max-w-4xl text-center space-y-3">
           <p className="text-foreground font-bold text-lg"><span className="text-primary">Vocal</span><span className="text-secondary">seba</span> Agency</p>
-          <div className="flex items-center justify-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
             <a
               href="https://wa.me/8801XXXXXXXXX"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(142,70%,49%)] hover:bg-[hsl(142,70%,42%)] text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 text-sm"
             >
-              📱 WhatsApp
+              <MessageCircle size={20} />
+              WhatsApp এ মেসেজ করুন
             </a>
-            <span className="text-border">|</span>
             <a
               href="mailto:contact@vocalseba.com"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 text-sm"
             >
-              ✉️ Email
+              <Mail size={20} />
+              ইমেইল করুন
             </a>
           </div>
           <p className="text-muted-foreground text-xs pt-2">
