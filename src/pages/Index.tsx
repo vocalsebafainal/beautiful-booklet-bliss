@@ -2,23 +2,16 @@ import { useState } from "react";
 import StickyHeader from "@/components/StickyHeader";
 import HeroSection from "@/components/HeroSection";
 import CategoryGrid from "@/components/CategoryGrid";
-import PricingModal from "@/components/PricingModal";
 import OrderFlow from "@/components/OrderFlow";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [pricingOpen, setPricingOpen] = useState(false);
   const [orderOpen, setOrderOpen] = useState(false);
   const [selectedTier, setSelectedTier] = useState("");
 
-  const handleCategorySelect = (category: string) => {
+  const handleTierSelect = (category: string, tier: string) => {
     setSelectedCategory(category);
-    setPricingOpen(true);
-  };
-
-  const handleTierSelect = (tier: string) => {
     setSelectedTier(tier);
-    setPricingOpen(false);
     setOrderOpen(true);
   };
 
@@ -26,7 +19,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <StickyHeader />
       <HeroSection />
-      <CategoryGrid onCategorySelect={handleCategorySelect} />
+      <CategoryGrid onTierSelect={handleTierSelect} />
 
       {/* Footer */}
       <footer className="border-t border-border/50 py-8 text-center">
@@ -34,13 +27,6 @@ const Index = () => {
           © {new Date().getFullYear()} Vocalseba Agency. সর্বস্বত্ব সংরক্ষিত।
         </p>
       </footer>
-
-      <PricingModal
-        open={pricingOpen}
-        onClose={() => setPricingOpen(false)}
-        category={selectedCategory}
-        onSelectTier={handleTierSelect}
-      />
 
       <OrderFlow
         open={orderOpen}
