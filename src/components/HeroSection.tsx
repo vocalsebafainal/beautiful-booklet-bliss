@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ChevronDown, Star, Users, Zap } from "lucide-react";
+import studioBg from "@/assets/studio-bg.jpg";
 
 const SoundwaveBars = () => {
   const bars = Array.from({ length: 40 }, (_, i) => i);
@@ -29,6 +30,7 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
       {/* Background effects */}
+      <img src={studioBg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-[0.05] pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow" />
       <SoundwaveBars />
