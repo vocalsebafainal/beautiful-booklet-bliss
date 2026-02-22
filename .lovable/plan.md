@@ -1,66 +1,37 @@
 
-# লোগো অনুযায়ী ব্র্যান্ড কালার থিম আপডেট
+# ডার্ক/লাইট মোড টগল যোগ করা
 
-## লোগোর রং বিশ্লেষণ
-
-লোগোতে দুটি প্রধান রং আছে:
-- **Purple/Magenta** (#9B2D8B) - "VOCAL" অংশ, মাইক্রোফোন আইকন
-- **Dark Navy Blue** (#1B1464) - "SEBA" অংশ, ট্রেবল ক্লেফ
-
-## কী পরিবর্তন হবে
-
-বর্তমান Gold + Turquoise থিম সরিয়ে Purple + Navy Blue থিম দেওয়া হবে। ডার্ক ব্যাকগ্রাউন্ড রাখা হবে কিন্তু সব accent কালার লোগো অনুযায়ী হবে। প্রিমিয়াম ফিল বজায় থাকবে।
+## কী হবে
+সাইটে একটি ডার্ক/লাইট মোড টগল বাটন যোগ হবে। হেডারে একটি সুন্দর টগল থাকবে - চাপ দিলে ব্ল্যাক (ডার্ক), আবার চাপ দিলে হোয়াইট (লাইট) মোডে যাবে। বর্তমানে সাইটটি শুধু ডার্ক মোডে আছে।
 
 ## টেকনিক্যাল ডিটেইলস
 
-### ফাইল ১: `src/index.css` - CSS Variables আপডেট
+### ধাপ ১: `src/index.css` - লাইট মোড CSS Variables যোগ
+- বর্তমান `:root` ভ্যারিয়েবলগুলো `.dark` ক্লাসের আন্ডারে নিয়ে যাওয়া হবে
+- নতুন `:root` (লাইট মোড) ভ্যারিয়েবল তৈরি হবে:
+  - `--background`: সাদা/হালকা ধূসর
+  - `--foreground`: গাঢ় কালো
+  - `--card`: হালকা সাদা
+  - `--muted`: হালকা ধূসর
+  - `--border`: হালকা বর্ডার
+  - Primary (Purple) ও Secondary (Navy Blue) একই থাকবে
+- `.glass-card`, `.gold-glow`, `.gradient-text` ইত্যাদি কম্পোনেন্ট ক্লাসগুলোও লাইট মোডে সুন্দরভাবে দেখাবে
 
-**কালার ম্যাপিং:**
-- `--primary`: Gold (45 100% 50%) থেকে **Purple** (295 55% 39%) - মূল ব্র্যান্ড কালার
-- `--secondary`: Turquoise (174 56% 40%) থেকে **Navy Blue** (250 72% 24%) - সেকেন্ডারি কালার
-- `--ring`: Gold থেকে Purple
-- `--sidebar-primary` ও `--sidebar-ring`: Gold থেকে Purple
-- `--accent`: Turquoise থেকে Navy Blue
+### ধাপ ২: `src/components/ThemeToggle.tsx` - নতুন কম্পোনেন্ট
+- Sun/Moon আইকন দিয়ে একটি সুন্দর টগল বাটন
+- `localStorage` এ থিম সেভ হবে যাতে রিফ্রেশ করলেও থাকে
+- `document.documentElement` এ `dark` ক্লাস টগল করবে
 
-**Gradient ও Glow আপডেট:**
-- `.gradient-text`: Gold-Turquoise গ্র্যাডিয়েন্ট থেকে Purple-Navy গ্র্যাডিয়েন্ট
-- `.gold-glow` কে `.brand-glow` স্টাইলে Purple glow দেওয়া হবে
-- `@keyframes btn-glow`: Gold glow থেকে Purple glow
-- `.shimmer-border`: Gold shimmer থেকে Purple shimmer
+### ধাপ ৩: `src/components/StickyHeader.tsx` - টগল বাটন বসানো
+- হেডারের ডান পাশে (যোগাযোগ বাটনের আগে) ThemeToggle কম্পোনেন্ট বসবে
 
-### ফাইল ২: `src/components/HeroSection.tsx`
+### ধাপ ৪: `tailwind.config.ts`
+- `darkMode: ["class"]` ইতিমধ্যেই আছে, তাই এটি কাজ করবে
 
-- `bg-primary/5` glow ইফেক্ট ঠিক থাকবে (CSS variable আপডেটের কারণে অটো চেঞ্জ হবে)
-- `text-secondary` ক্লাস অটো Navy Blue হবে
-- Soundwave bars এর `bg-primary/60` অটো Purple হবে
+### ধাপ ৫: `index.html`
+- ডিফল্ট হিসেবে `<html>` ট্যাগে `class="dark"` যোগ হবে (বর্তমান ডার্ক থিম ডিফল্ট থাকবে)
 
-### ফাইল ৩: `src/components/StickyHeader.tsx`
-
-- হেডারের "seba" টেক্সটে `text-primary` অটো Purple হবে
-- "Vocal" অংশকে `text-primary` দিয়ে Purple করা হবে, "seba" অংশকে Navy Blue কালার দেওয়া হবে লোগোর মতো
-
-### ফাইল ৪: `src/components/TrustSection.tsx`
-
-- সব `text-primary` আইকন ও ব্যাজ অটো Purple হবে
-- কোনো ম্যানুয়াল পরিবর্তন দরকার নেই
-
-### ফাইল ৫: `src/components/CategoryGrid.tsx`
-
-- `border-primary/30`, `bg-primary/10` সব অটো Purple টোনে হবে
-- `text-secondary` ডেলিভারি টেক্সট Navy Blue হবে
-
-### ফাইল ৬: `src/components/OrderFlow.tsx`
-
-- সব `text-primary` আইকন Purple হবে
-- `bg-primary` বাটন Purple হবে
-
-### ফাইল ৭: `src/pages/Index.tsx`
-
-- Footer এ "Vocalseba" নামটা লোগোর মতো দুই রঙে দেখানো হবে
-
-## সামগ্রিক প্রভাব
-
-- পুরো সাইট Gold-Turquoise থেকে Purple-Navy Blue থিমে পরিবর্তিত হবে
-- ডার্ক ব্যাকগ্রাউন্ড ও গ্লাসমরফিজম ইফেক্ট আগের মতোই থাকবে
-- লোগোর সাথে পুরো ব্র্যান্ডিং মিলে যাবে
-- প্রিমিয়াম, লাক্সারি ফিল বজায় থাকবে
+## ফলাফল
+- ডার্ক মোড: বর্তমান ডিজাইনের মতোই থাকবে (কালো ব্যাকগ্রাউন্ড, Purple/Navy accent)
+- লাইট মোড: সাদা/হালকা ব্যাকগ্রাউন্ড, একই Purple/Navy ব্র্যান্ড কালার, পরিষ্কার পড়ার উপযোগী
+- টগল বাটনে সুন্দর অ্যানিমেশন থাকবে
