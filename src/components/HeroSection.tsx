@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Star, Users, Zap } from "lucide-react";
 
 const SoundwaveBars = () => {
   const bars = Array.from({ length: 40 }, (_, i) => i);
@@ -34,7 +34,7 @@ const HeroSection = () => {
       <SoundwaveBars />
 
       {/* Content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto">
+      <div className="relative z-10 text-center max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -52,10 +52,10 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-4 md:mb-6"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-4 md:mb-6"
         >
           কণ্ঠ, কন্টেন্ট{" "}
-          <span className="text-primary">জাদু</span> –<br />
+          <span className="gradient-text">জাদু</span> –<br />
           আপনার কাজের জন্য{" "}
           <span className="text-secondary">সেরা ভয়েস ওভার</span>
         </motion.h1>
@@ -63,10 +63,19 @@ const HeroSection = () => {
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-muted-foreground text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-8 md:mb-12"
+          transition={{ duration: 0.8, delay: 0.35 }}
+          className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto mb-3"
         >
           প্রফেশনাল ভয়েস ওভার সার্ভিস — অ্যাডভার্টাইজমেন্ট, ইউটিউব, অডিওবুক, কর্পোরেট ন্যারেশন এবং আরও অনেক কিছু।
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.45 }}
+          className="text-primary font-bold text-lg md:text-xl mb-8 md:mb-10"
+        >
+          আপনার কন্টেন্টকে পরবর্তী লেভেলে নিয়ে যান — ২৪ ঘণ্টার মধ্যে ✨
         </motion.p>
 
         <motion.button
@@ -74,11 +83,35 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           onClick={scrollToCategories}
-          className="gold-btn text-base md:text-lg group"
+          className="gold-btn text-lg md:text-xl px-10 py-5 group pulse-glow-btn"
         >
           ভয়েস ক্যাটাগরি দেখুন
           <ChevronDown className="w-5 h-5 inline-block ml-2 group-hover:translate-y-1 transition-transform" />
         </motion.button>
+
+        {/* Social Proof Badges */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-10 md:mt-14"
+        >
+          <div className="flex items-center gap-2 glass-card px-4 py-2.5">
+            <Users className="w-4 h-4 text-primary" />
+            <span className="text-foreground text-sm font-semibold">500+</span>
+            <span className="text-muted-foreground text-sm">সন্তুষ্ট ক্লায়েন্ট</span>
+          </div>
+          <div className="flex items-center gap-2 glass-card px-4 py-2.5">
+            <Star className="w-4 h-4 text-primary fill-primary" />
+            <span className="text-foreground text-sm font-semibold">4.9</span>
+            <span className="text-muted-foreground text-sm">রেটিং</span>
+          </div>
+          <div className="flex items-center gap-2 glass-card px-4 py-2.5">
+            <Zap className="w-4 h-4 text-secondary" />
+            <span className="text-foreground text-sm font-semibold">১২ ঘণ্টা</span>
+            <span className="text-muted-foreground text-sm">ফাস্ট ডেলিভারি</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
