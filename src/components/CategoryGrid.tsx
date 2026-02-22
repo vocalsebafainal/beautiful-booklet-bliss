@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Megaphone, Youtube, Newspaper, BookOpen, Moon, Palette, Building2, Mic, Star, Crown, Check } from "lucide-react";
+import { Megaphone, Youtube, Newspaper, BookOpen, Moon, Palette, Building2, Mic, Star, Crown, Check, X } from "lucide-react";
 
 const categories = [
   { icon: Megaphone, name: "অ্যাডভার্টাইজমেন্ট ভয়েস", emoji: "📢", desc: "বিজ্ঞাপন ও প্রমোশনাল কন্টেন্ট" },
@@ -78,106 +78,124 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
           </p>
         </motion.div>
 
-        {/* Grid layout for category cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {categories.map((cat, index) => (
-            <motion.button
-              key={cat.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              onClick={() => handleCategoryClick(cat.name)}
-              className={`glass-card-hover p-5 md:p-6 text-center group cursor-pointer flex flex-col items-center gap-3 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden ${
-                expandedCategory === cat.name
-                  ? "border-primary/50 ring-2 ring-primary/40 gold-glow"
-                  : ""
-              }`}
-            >
-              <div className="text-4xl md:text-5xl">{cat.emoji}</div>
-              <h3 className="text-foreground font-bold text-sm md:text-base group-hover:text-primary transition-colors">
-                {cat.name}
-              </h3>
-              <p className="text-muted-foreground text-xs md:text-sm">{cat.desc}</p>
+          {categories.map((cat, index) => {
+            const isExpanded = expandedCategory === cat.name;
 
-              <span
-                className={`mt-1 text-[11px] font-semibold rounded-full px-3 py-1 transition-all duration-200 ${
-                  expandedCategory === cat.name
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"
+            return (
+              <motion.div
+                key={cat.name}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className={`glass-card-hover cursor-pointer relative overflow-hidden transition-all duration-300 ${
+                  isExpanded
+                    ? "col-span-1 sm:col-span-2 lg:col-span-3 border-primary/50 ring-2 ring-primary/40 gold-glow"
+                    : "hover:scale-[1.02]"
                 }`}
+                onClick={() => !isExpanded && handleCategoryClick(cat.name)}
               >
-                {expandedCategory === cat.name ? "প্যাকেজ দেখা হচ্ছে ✓" : "বিস্তারিত জানতে ক্লিক করুন ›"}
-              </span>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Expanded pricing tiers below grid */}
-        <AnimatePresence>
-          {expandedCategory && (
-            <motion.div
-              key={expandedCategory}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="overflow-hidden"
-            >
-              <div className="pt-8 pb-2">
-                <p className="text-center text-muted-foreground text-sm mb-6">
-                  <span className="text-primary font-semibold">{expandedCategory}</span> — প্যাকেজ বেছে নিন
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                  {tiers.map((tier, i) => (
-                    <motion.div
-                      key={tier.name}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className={`glass-card p-6 md:p-7 flex flex-col relative ${
-                        tier.highlight ? "shimmer-border ring-1 ring-primary/40" : ""
-                      }`}
-                    >
-                      {tier.highlight && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">
-                          জনপ্রিয়
-                        </div>
-                      )}
-                      <div className="text-2xl md:text-3xl mb-2">{tier.label}</div>
-                      <span className="inline-block text-xs font-semibold text-primary bg-primary/10 rounded-full px-3 py-1 mb-3 w-fit">
-                        {tier.value}
+                {/* Card Header */}
+                <div
+                  className={`p-5 md:p-6 flex items-center gap-4 ${isExpanded ? "cursor-pointer" : ""}`}
+                  onClick={(e) => {
+                    if (isExpanded) {
+                      e.stopPropagation();
+                      handleCategoryClick(cat.name);
+                    }
+                  }}
+                >
+                  <div className="text-4xl md:text-5xl">{cat.emoji}</div>
+                  <div className="text-left flex-1">
+                    <h3 className="text-foreground font-bold text-sm md:text-base">
+                      {cat.name}
+                    </h3>
+                    <p className="text-muted-foreground text-xs md:text-sm">{cat.desc}</p>
+                  </div>
+                  {isExpanded ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-semibold rounded-full px-3 py-1 bg-primary text-primary-foreground">
+                        প্যাকেজ দেখা হচ্ছে ✓
                       </span>
-                      <p className="text-muted-foreground text-sm mb-1">{tier.target}</p>
-                      <p className="text-secondary text-sm font-medium mb-1">{tier.delivery}</p>
-                      <p className="text-foreground text-sm font-semibold mb-4">{tier.revisions}</p>
-
-                      <div className="flex-1 space-y-2 mb-6">
-                        {tier.features.map((f) => (
-                          <div key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Check className="w-3.5 h-3.5 text-primary shrink-0" />
-                            {f}
-                          </div>
-                        ))}
-                      </div>
-
-                      <button
-                        onClick={() => onTierSelect(expandedCategory, tier.name)}
-                        className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                          tier.highlight
-                            ? "gold-btn"
-                            : "bg-muted text-foreground hover:bg-muted/80"
-                        }`}
-                      >
-                        অর্ডার করুন
-                      </button>
-                    </motion.div>
-                  ))}
+                      <X className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                  ) : (
+                    <span className="text-[11px] font-semibold rounded-full px-3 py-1 bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
+                      বিস্তারিত জানতে ক্লিক করুন ›
+                    </span>
+                  )}
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+                {/* Expanded Package Tiers */}
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-5 md:px-6 pb-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+                          {tiers.map((tier, i) => (
+                            <motion.div
+                              key={tier.name}
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: i * 0.1 }}
+                              className={`glass-card p-5 md:p-6 flex flex-col relative ${
+                                tier.highlight ? "shimmer-border ring-1 ring-primary/40" : ""
+                              }`}
+                            >
+                              {tier.highlight && (
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">
+                                  জনপ্রিয়
+                                </div>
+                              )}
+                              <div className="text-2xl md:text-3xl mb-2">{tier.label}</div>
+                              <span className="inline-block text-xs font-semibold text-primary bg-primary/10 rounded-full px-3 py-1 mb-3 w-fit">
+                                {tier.value}
+                              </span>
+                              <p className="text-muted-foreground text-sm mb-1">{tier.target}</p>
+                              <p className="text-secondary text-sm font-medium mb-1">{tier.delivery}</p>
+                              <p className="text-foreground text-sm font-semibold mb-4">{tier.revisions}</p>
+
+                              <div className="flex-1 space-y-2 mb-6">
+                                {tier.features.map((f) => (
+                                  <div key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Check className="w-3.5 h-3.5 text-primary shrink-0" />
+                                    {f}
+                                  </div>
+                                ))}
+                              </div>
+
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onTierSelect(cat.name, tier.name);
+                                }}
+                                className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                                  tier.highlight
+                                    ? "gold-btn"
+                                    : "bg-muted text-foreground hover:bg-muted/80"
+                                }`}
+                              >
+                                অর্ডার করুন
+                              </button>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
