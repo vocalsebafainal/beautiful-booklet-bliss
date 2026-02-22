@@ -53,8 +53,7 @@ interface CategoryGridProps {
 }
 
 const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(categories[0].name);
 
   const handleCategoryClick = (categoryName: string) => {
     setExpandedCategory((prev) => (prev === categoryName ? null : categoryName));
@@ -89,11 +88,9 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
               onClick={() => handleCategoryClick(cat.name)}
-              onMouseEnter={() => setHoveredCategory(cat.name)}
-              onMouseLeave={() => setHoveredCategory(null)}
               className={`glass-card-hover p-5 md:p-6 text-center group cursor-pointer flex flex-col items-center gap-3 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden ${
                 expandedCategory === cat.name
-                  ? "border-primary/50 ring-1 ring-primary/30"
+                  ? "border-primary/50 ring-2 ring-primary/40 gold-glow"
                   : ""
               }`}
             >
@@ -103,26 +100,15 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
               </h3>
               <p className="text-muted-foreground text-xs md:text-sm">{cat.desc}</p>
 
-              <AnimatePresence>
-                {hoveredCategory === cat.name && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/95 via-background/80 to-transparent backdrop-blur-sm px-3 py-3 flex flex-col items-center gap-1.5"
-                  >
-                    <div className="flex gap-1.5">
-                      <span className="text-[10px] bg-muted/80 text-muted-foreground rounded-full px-2 py-0.5">🎙 বেসিক</span>
-                      <span className="text-[10px] bg-primary/15 text-primary rounded-full px-2 py-0.5 font-semibold">⭐ স্ট্যান্ডার্ড</span>
-                      <span className="text-[10px] bg-muted/80 text-muted-foreground rounded-full px-2 py-0.5">👑 প্রো</span>
-                    </div>
-                    <span className="text-[10px] text-primary/80 font-medium">
-                      {expandedCategory === cat.name ? "প্যাকেজ দেখা হচ্ছে ✓" : "ক্লিক করে প্যাকেজ দেখুন ›"}
-                    </span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <span
+                className={`mt-1 text-[11px] font-semibold rounded-full px-3 py-1 transition-all duration-200 ${
+                  expandedCategory === cat.name
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                }`}
+              >
+                {expandedCategory === cat.name ? "প্যাকেজ দেখা হচ্ছে ✓" : "বিস্তারিত জানতে ক্লিক করুন ›"}
+              </span>
             </motion.button>
           ))}
         </div>
