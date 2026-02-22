@@ -4,10 +4,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Upload, MessageCircle, CheckCircle2, Copy } from "lucide-react";
+import { FileText, Upload, MessageCircle, CheckCircle2, Copy, Check, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-type Step = "script" | "upload" | "payment" | "success";
+type Step = "script" | "no-script" | "upload" | "payment" | "success";
 
 interface OrderFlowProps {
   open: boolean;
@@ -54,24 +54,56 @@ const OrderFlow = ({ open, onClose, category, tier }: OrderFlowProps) => {
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => setStep("upload")}
-            className="glass-card-hover p-6 text-center"
+            className="glass-card-hover p-6 text-center flex flex-col items-center gap-3"
           >
-            <span className="text-2xl mb-2 block">✅</span>
-            <span className="font-bold">হ্যাঁ, আছে</span>
+            <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+              <Check className="w-6 h-6 text-green-500" />
+            </div>
+            <span className="font-bold">হ্যাঁ</span>
           </button>
           <button
-            onClick={() =>
-              toast({
-                title: "ম্যানেজারের সাথে যোগাযোগ করুন",
-                description: "স্ক্রিপ্ট তৈরি করতে আমাদের ম্যানেজার আপনাকে সাহায্য করবে।",
-              })
-            }
-            className="glass-card-hover p-6 text-center"
+            onClick={() => setStep("no-script")}
+            className="glass-card-hover p-6 text-center flex flex-col items-center gap-3"
           >
-            <span className="text-2xl mb-2 block">❌</span>
-            <span className="font-bold">না, নেই</span>
+            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+              <X className="w-6 h-6 text-red-500" />
+            </div>
+            <span className="font-bold">না</span>
           </button>
         </div>
+      </motion.div>
+    ),
+
+    "no-script": (
+      <motion.div
+        key="no-script"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        className="space-y-6"
+      >
+        <div className="text-center">
+          <MessageCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+          <h3 className="text-lg font-bold mb-2">স্ক্রিপ্ট তৈরি করতে সাহায্য চান?</h3>
+          <p className="text-muted-foreground text-sm">
+            স্ক্রিপ্ট তৈরি করতে আমাদের ম্যানেজারের সাথে যোগাযোগ করুন
+          </p>
+        </div>
+        <a
+          href="https://wa.me/8801XXXXXXXXX"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-700 transition-colors"
+        >
+          <MessageCircle className="w-5 h-5" />
+          WhatsApp এ যোগাযোগ করুন
+        </a>
+        <button
+          onClick={() => setStep("script")}
+          className="w-full py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          ← পিছনে যান
+        </button>
       </motion.div>
     ),
 
