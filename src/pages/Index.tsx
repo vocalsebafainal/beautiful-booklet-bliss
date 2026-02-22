@@ -29,21 +29,21 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border/50 py-10 px-4">
         <div className="container mx-auto max-w-4xl text-center space-y-3">
-          <p className="text-foreground font-bold text-lg"><span className="text-primary">Vocal</span><span className="text-secondary">seba</span> Agency</p>
+          <p className="font-bold text-lg text-muted-foreground"><span className="text-primary">Vocal</span><span className="text-secondary">seba</span> Agency</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
             <a
               href="https://wa.me/8801XXXXXXXXX"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(142,70%,49%)] hover:bg-[hsl(142,70%,42%)] text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 text-sm"
-            >
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(142,70%,49%)] hover:bg-[hsl(142,70%,42%)] text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 text-sm">
+
               <MessageCircle size={20} />
               WhatsApp এ মেসেজ করুন
             </a>
             <a
               href="mailto:contact@vocalseba.com"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 text-sm"
-            >
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 text-sm">
+
               <Mail size={20} />
               ইমেইল করুন
             </a>
@@ -58,10 +58,10 @@ const Index = () => {
         open={orderOpen}
         onClose={() => setOrderOpen(false)}
         category={selectedCategory}
-        tier={selectedTier}
-      />
-    </div>
-  );
+        tier={selectedTier} />
+
+    </div>);
+
 };
 
 export default Index;
