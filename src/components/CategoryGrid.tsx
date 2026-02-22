@@ -116,33 +116,32 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
                       <p className="text-muted-foreground text-xs md:text-sm">{cat.desc}</p>
                     </div>
                     {/* Desktop-only inline badges */}
-                    {isExpanded ? (
+                    {isExpanded && (
                       <div className="hidden md:flex items-center gap-2">
                         <span className="text-sm font-semibold rounded-full px-4 py-1.5 bg-primary text-primary-foreground flex items-center gap-1.5">
                           প্যাকেজ দেখা হচ্ছে ✓
                         </span>
                         <ChevronUp className="w-5 h-5 text-muted-foreground" />
                       </div>
-                    ) : (
-                      <span className="hidden md:inline-block text-xs font-semibold rounded-full px-4 py-1.5 bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all duration-200">
-                        বিস্তারিত জানতে ক্লিক করুন ›
-                      </span>
                     )}
                   </div>
 
-                  {/* Mobile-only buttons below header */}
-                  {isExpanded ? (
+                  {/* Mobile-only expanded badge */}
+                  {isExpanded && (
                     <div className="mt-3 md:hidden flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-primary/10 border border-primary/20">
                       <span className="text-sm font-semibold text-primary">প্যাকেজ দেখা হচ্ছে ✓</span>
                       <ChevronUp className="w-4 h-4 text-primary" />
                     </div>
-                  ) : (
-                    <div className="mt-3 md:hidden flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-muted/80 border border-border hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all duration-200">
-                      <span className="text-sm font-medium text-muted-foreground">বিস্তারিত জানতে ক্লিক করুন</span>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                    </div>
                   )}
                 </div>
+
+                {/* Unified collapsed button at bottom center */}
+                {!isExpanded && (
+                  <div className="mx-5 mb-5 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-muted/80 border border-primary/30 hover:bg-primary/10 hover:border-primary/50 hover:text-primary transition-all duration-200">
+                    <span className="text-sm font-medium text-muted-foreground">বিস্তারিত জানতে ক্লিক করুন</span>
+                    <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                )}
 
                 {/* Expanded Package Tiers */}
                 <AnimatePresence>
