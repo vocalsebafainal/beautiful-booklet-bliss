@@ -59,7 +59,7 @@ const HeroSection = () => {
           কণ্ঠ, কন্টেন্ট{" "}
           <span className="gradient-text">জাদু</span> –<br />
           আপনার কাজের জন্য{" "}
-          <span className="text-secondary">সেরা ভয়েস ওভার</span>
+          <span className="text-destructive">সেরা ভয়েস ওভার</span>
         </motion.h1>
 
         <motion.p
