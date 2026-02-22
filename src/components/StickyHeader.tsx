@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Phone } from "lucide-react";
 import logo from "@/assets/logo.jfif";
+import ThemeToggle from "./ThemeToggle";
 
 const StickyHeader = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -26,16 +27,19 @@ const StickyHeader = () => {
             <span className="text-primary">Vocal</span><span className="text-secondary">seba</span>
           </span>
         </div>
-        <a
-          href="https://wa.me/8801XXXXXXXXX"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="gold-btn flex items-center gap-2 text-sm px-4 py-2 md:px-6 md:py-3"
-        >
-          <Phone className="w-4 h-4" />
-          <span className="hidden sm:inline">যোগাযোগ করুন</span>
-          <span className="sm:hidden">Contact</span>
-        </a>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <a
+            href="https://wa.me/8801XXXXXXXXX"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="gold-btn flex items-center gap-2 text-sm px-4 py-2 md:px-6 md:py-3"
+          >
+            <Phone className="w-4 h-4" />
+            <span className="hidden sm:inline">যোগাযোগ করুন</span>
+            <span className="sm:hidden">Contact</span>
+          </a>
+        </div>
       </div>
     </header>
   );
