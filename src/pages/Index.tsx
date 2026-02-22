@@ -4,6 +4,7 @@ import StickyHeader from "@/components/StickyHeader";
 import HeroSection from "@/components/HeroSection";
 import TrustSection from "@/components/TrustSection";
 import CategoryGrid from "@/components/CategoryGrid";
+import ArtistSection from "@/components/ArtistSection";
 import OrderFlow from "@/components/OrderFlow";
 
 const Index = () => {
@@ -23,6 +24,7 @@ const Index = () => {
       <HeroSection />
       <TrustSection />
       <CategoryGrid onTierSelect={handleTierSelect} />
+      <ArtistSection />
 
       {/* Footer */}
       <footer className="border-t border-border/50 py-10 px-4">
