@@ -29,7 +29,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border/50 py-10 px-4">
         <div className="container mx-auto max-w-4xl text-center space-y-3">
-          <p className="font-bold text-lg text-muted-foreground"><span className="text-primary">Vocal</span><span className="text-secondary">seba</span> Agency</p>
+          <p className="font-bold text-lg text-primary-foreground"><span className="text-primary">Vocal</span><span className="text-secondary">seba</span> Agency</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
             <a
               href="https://wa.me/8801XXXXXXXXX"
