@@ -34,7 +34,7 @@ const Index = () => {
           <p className="font-bold text-lg text-primary-foreground"><span className="text-primary">Vocal</span><span className="text-secondary">seba</span> Agency</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
             <a
-              href="https://wa.me/8801XXXXXXXXX"
+              href="https://wa.me/8801710922638"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(142,70%,49%)] hover:bg-[hsl(142,70%,42%)] text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 text-sm">
