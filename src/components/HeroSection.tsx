@@ -58,7 +58,7 @@ const HeroSection = () => {
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-4 md:mb-6">
 
           কণ্ঠ, কন্টেন্ট{" "}
-          <span className="gradient-text">জাদু</span> –<br />
+          <span className="gradient-text">​</span> –<br />
           আপনার কাজের জন্য{" "}
           <span className="text-destructive">সেরা ভয়েস ওভার</span>
         </motion.h1>
