@@ -182,10 +182,10 @@ const OrderFlow = ({ open, onClose, category, tier }: OrderFlowProps) => {
           </p>
           <div className="flex items-center justify-center gap-2">
             <p className="text-xl font-bold text-foreground">
-              {paymentMethod === "bkash" ? "01XXXXXXXXX" : "01XXXXXXXXX"}
+              {paymentMethod === "bkash" ? "01619070709" : "01619070709"}
             </p>
             <button
-              onClick={() => copyNumber(paymentMethod === "bkash" ? "01XXXXXXXXX" : "01XXXXXXXXX")}
+              onClick={() => copyNumber(paymentMethod === "bkash" ? "01619070709" : "01619070709")}
               className="text-muted-foreground hover:text-primary transition-colors"
             >
               <Copy className="w-4 h-4" />
