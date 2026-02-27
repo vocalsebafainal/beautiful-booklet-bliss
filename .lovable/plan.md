@@ -1,11 +1,8 @@
 
 
-# WhatsApp নম্বর আপডেট
+# পেমেন্ট নম্বর আপডেট
 
-সব WhatsApp বাটনে `8801710922638` নম্বর বসানো হবে।
+## পরিবর্তন: `src/components/OrderFlow.tsx`
 
-## পরিবর্তন
-
-1. **`src/components/StickyHeader.tsx`** — লাইন 37: `wa.me/8801XXXXXXXXX` → `wa.me/8801710922638`
-2. **`src/pages/Index.tsx`** — লাইন 41: `wa.me/8801XXXXXXXXX` → `wa.me/8801710922638`
+বিকাশ ও নগদ নম্বর `01XXXXXXXXX` → `01619070709` আপডেট করা হবে (লাইন 155-162 এর আশেপাশে)।
 
