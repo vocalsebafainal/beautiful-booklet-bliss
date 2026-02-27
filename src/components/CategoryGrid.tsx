@@ -69,31 +69,31 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="text-center mb-12 md:mb-16">
 
-          <motion.h2 
+          <motion.h2
             className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
+            transition={{ duration: 0.6, delay: 0.1 }}>
+
             আপনার প্রজেক্টের ধরন অনুযায়ী{" "}
-            <motion.span 
+            <motion.span
               className="text-primary inline-block"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
+              transition={{ duration: 0.5, delay: 0.3 }}>
+
               ক্যাটাগরি
             </motion.span>{" "}বেছে নিন
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
+            transition={{ duration: 0.5, delay: 0.4 }}>
+
             নিচের ক্যাটাগরি থেকে আপনার পছন্দ সিলেক্ট করুন
           </motion.p>
         </motion.div>
@@ -130,11 +130,11 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
                   }}>
 
                   <div className="flex items-center gap-4">
-                    <motion.div 
+                    <motion.div
                       className="text-4xl md:text-5xl"
                       animate={isExpanded ? { scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] } : {}}
-                      transition={{ duration: 0.5 }}
-                    >
+                      transition={{ duration: 0.5 }}>
+
                       {cat.emoji}
                     </motion.div>
                     <div className="text-left flex-1 min-w-0">
@@ -195,11 +195,11 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
                           }>
 
                               {tier.highlight &&
-                          <motion.div 
+                          <motion.div
                             initial={{ opacity: 0, scale: 0.5, y: -10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             transition={{ delay: 0.5, type: "spring", damping: 15 }}
-                            className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 bg-primary text-primary-foreground text-xs font-bold rounded-full px-4 py-1 shadow-lg shadow-primary/30 whitespace-nowrap">
+                            className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 bg-primary text-primary-foreground text-xs font-bold rounded-full shadow-lg shadow-primary/30 whitespace-nowrap py-[3px] px-[19px] mx-[54px] my-[25px]">
                                   ⭐ জনপ্রিয়
                                 </motion.div>
                           }
@@ -213,13 +213,13 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
 
                               <div className="flex-1 space-y-2 mb-6">
                                 {tier.features.map((f, fi) =>
-                            <motion.div 
-                              key={f} 
+                            <motion.div
+                              key={f}
                               className="flex items-center gap-2 text-sm text-muted-foreground"
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.3 + i * 0.1 + fi * 0.05 }}
-                            >
+                              transition={{ delay: 0.3 + i * 0.1 + fi * 0.05 }}>
+
                                     <Check className="w-3.5 h-3.5 text-primary shrink-0" />
                                     {f}
                                   </motion.div>
