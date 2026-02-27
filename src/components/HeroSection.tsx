@@ -40,13 +40,14 @@ const HeroSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}>
-
-          
-
-
-
-
+          transition={{ duration: 0.8 }}
+          className="mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black gradient-text tracking-tight">
+            ভোকাল সেবা
+          </h2>
+          <p className="text-muted-foreground text-sm md:text-base mt-1 tracking-widest uppercase">
+            কন্ঠ হোক স্বপ্ন জয়ের ঠিকানা।
+          </p>
 
         </motion.div>
 
