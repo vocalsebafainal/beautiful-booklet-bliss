@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection";
 import TrustSection from "@/components/TrustSection";
 import CategoryGrid from "@/components/CategoryGrid";
 import ArtistSection from "@/components/ArtistSection";
+import DemoSection from "@/components/DemoSection";
 import OrderFlow from "@/components/OrderFlow";
 
 const Index = () => {
@@ -24,6 +25,7 @@ const Index = () => {
       <HeroSection />
       <TrustSection />
       <CategoryGrid onTierSelect={handleTierSelect} />
+      <DemoSection />
       <ArtistSection />
 
       {/* Footer */}
