@@ -20,7 +20,7 @@ const OrderFlow = ({ open, onClose, category, tier }: OrderFlowProps) => {
   const [step, setStep] = useState<Step>("script");
   const [scriptText, setScriptText] = useState("");
   const [transactionId, setTransactionId] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<"bkash" | "nagad">("bkash");
+  const [paymentMethod, setPaymentMethod] = useState<"bkash" | "nagad" | "rocket">("bkash");
   const { toast } = useToast();
 
   const orderId = `VS-${Date.now().toString(36).toUpperCase()}`;
@@ -174,18 +174,26 @@ const OrderFlow = ({ open, onClose, category, tier }: OrderFlowProps) => {
           >
             নগদ
           </button>
+          <button
+            onClick={() => setPaymentMethod("rocket")}
+            className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all ${
+              paymentMethod === "rocket"
+                ? "bg-purple-600 text-foreground"
+                : "bg-muted text-muted-foreground"
+            }`}
+          >
+            রকেট
+          </button>
         </div>
 
         <div className="glass-card p-4 text-center">
           <p className="text-muted-foreground text-sm mb-1">
-            {paymentMethod === "bkash" ? "বিকাশ" : "নগদ"} নম্বর
+            {paymentMethod === "bkash" ? "বিকাশ" : paymentMethod === "nagad" ? "নগদ" : "রকেট"} নম্বর
           </p>
           <div className="flex items-center justify-center gap-2">
-            <p className="text-xl font-bold text-foreground">
-              {paymentMethod === "bkash" ? "01619070709" : "01619070709"}
-            </p>
+            <p className="text-xl font-bold text-foreground">01619070709</p>
             <button
-              onClick={() => copyNumber(paymentMethod === "bkash" ? "01619070709" : "01619070709")}
+              onClick={() => copyNumber("01619070709")}
               className="text-muted-foreground hover:text-primary transition-colors"
             >
               <Copy className="w-4 h-4" />
