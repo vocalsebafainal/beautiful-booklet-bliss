@@ -199,7 +199,7 @@ const OrderFlow = ({ open, onClose, category, tier }: OrderFlowProps) => {
               <Copy className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-muted-foreground text-xs mt-1">(পার্সোনাল নম্বর)</p>
+          <p className="text-muted-foreground text-xs mt-1">(পার্সোনাল নম্বর — Send Money করুন)</p>
         </div>
 
         <div className="space-y-2">
