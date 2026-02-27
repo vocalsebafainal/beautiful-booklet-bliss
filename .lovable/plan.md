@@ -1,18 +1,11 @@
 
 
-# Demo সেকশন তৈরি
+# WhatsApp নম্বর আপডেট
 
-## নতুন ফাইল: `src/components/DemoSection.tsx`
+সব WhatsApp বাটনে `8801710922638` নম্বর বসানো হবে।
 
-একটি ডেমো ভিডিও সেকশন তৈরি হবে যেখানে:
-- হেডার: "আমাদের কাজ দেখুন" (gradient text, animated)
-- সাবটেক্সট: ছোট বর্ণনা
-- ভিডিও এম্বেড এরিয়া: `16:9` aspect ratio, YouTube/অন্য ভিডিও লিংক embed করার জন্য `iframe`
-- একটি placeholder VIDEO_URL ভ্যারিয়েবল থাকবে যেখানে সহজেই লিংক বসানো যাবে
-- Glass card স্টাইল, framer-motion অ্যানিমেশন
-- Play বাটন ওভারলে (থাম্বনেইল মোডে)
+## পরিবর্তন
 
-## পরিবর্তন: `src/pages/Index.tsx`
-
-- `DemoSection` import করে `ArtistSection` এর আগে বসানো হবে
+1. **`src/components/StickyHeader.tsx`** — লাইন 37: `wa.me/8801XXXXXXXXX` → `wa.me/8801710922638`
+2. **`src/pages/Index.tsx`** — লাইন 41: `wa.me/8801XXXXXXXXX` → `wa.me/8801710922638`
 
