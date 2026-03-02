@@ -45,7 +45,7 @@ const HeroSection = () => {
           <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black gradient-text tracking-tight md:text-6xl mx-[63px] my-[36px] px-[11px]">
             ভোকাল সেবা
           </h2>
-          <p className="text-muted-foreground text-sm md:text-base mt-1 tracking-widest uppercase">
+          <p className="text-muted-foreground text-sm md:text-base mt-1 tracking-widest uppercase px-[33px] my-[20px] py-[2px] mx-[164px]">
             কন্ঠ হোক স্বপ্ন জয়ের ঠিকানা।
           </p>
 
