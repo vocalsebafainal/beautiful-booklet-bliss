@@ -87,7 +87,7 @@ const Footer = () => {
 
         <div className="border-t border-border/30 mt-10 pt-6 text-center">
           <p className="text-muted-foreground text-xs">
-            © {new Date().getFullYear()} Vocalseba Agency. সর্বস্বত্ব সংরক্ষিত।
+            © {new Date().getFullYear()} Vocalseba Agency.
           </p>
         </div>
       </div>
