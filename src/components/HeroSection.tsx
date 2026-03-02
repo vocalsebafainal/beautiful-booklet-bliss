@@ -42,7 +42,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="mb-4">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black gradient-text tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black gradient-text tracking-tight md:text-6xl mx-[63px] my-[36px] px-[11px]">
             ভোকাল সেবা
           </h2>
           <p className="text-muted-foreground text-sm md:text-base mt-1 tracking-widest uppercase">
