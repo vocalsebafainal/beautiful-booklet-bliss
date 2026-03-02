@@ -51,16 +51,16 @@ const HeroSection = () => {
 
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] mb-4 md:mb-6">
+        
 
-          কণ্ঠ, কন্টেন্ট –<br />
-          আপনার কাজের জন্য{" "}
-          <span className="text-destructive">সেরা ভয়েস ওভার</span>
-        </motion.h1>
+
+
+
+
+
+
+
+
 
         <motion.p
           initial={{ opacity: 0, y: 30 }}
