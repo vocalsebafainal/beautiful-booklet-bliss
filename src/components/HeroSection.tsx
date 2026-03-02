@@ -68,7 +68,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.35 }}
           className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto mb-3">
 
-          প্রফেশনাল ভয়েস ওভার সার্ভিস — অ্যাডভার্টাইজমেন্ট, ইউটিউব, অডিওবুক, কর্পোরেট ন্যারেশন এবং আরও অনেক কিছু।
+          আপনার কন্টেন্টকে পরবর্তী লেভেলে নিয়ে যান — ২৪ ঘণ্টার মধ্যে 
         </motion.p>
 
         <motion.p
