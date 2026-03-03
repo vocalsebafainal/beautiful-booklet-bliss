@@ -1,102 +1,120 @@
 
 
-# Vocalseba Website - Full Professional Upgrade Plan
+# Admin Panel — Professional Vocalseba Dashboard
 
-বর্তমান সাইটটি ভালো ফাউন্ডেশনের উপর তৈরি, কিন্তু একে truly professional, eye-catching ও unique করতে নিচের পরিবর্তনগুলো করা হবে:
-
----
-
-## 1. Animated Stats Counter Section (নতুন)
-TrustSection এর আগে একটি animated counter section যোগ হবে যেখানে সংখ্যাগুলো scroll-in এ count up হবে:
-- 500+ Projects | 50+ Artists | 4.9 Rating | 12hr Delivery
-- `framer-motion` দিয়ে number counting animation
-
-## 2. Client Testimonials / Reviews Section (নতুন)
-DemoSection এর পরে একটি carousel-based testimonial section:
-- 4-6টি ক্লায়েন্ট রিভিউ (Bangla)
-- Star ratings, client name, project type
-- `embla-carousel-react` (already installed) ব্যবহার করা হবে
-- Glassmorphism card design
-
-## 3. FAQ Accordion Section (নতুন)
-Footer এর আগে frequently asked questions section:
-- 6-8টি প্রশ্ন-উত্তর (Bangla)
-- Radix accordion (already installed) ব্যবহার
-- Smooth open/close animation
-
-## 4. "How It Works" Process Steps Section (নতুন)
-CategoryGrid এর আগে একটি 4-step process section:
-- ক্যাটাগরি বাছাই → স্ক্রিপ্ট দিন → রেকর্ডিং → ডেলিভারি
-- Step connector lines সহ animated icons
-- Numbered steps with icons
-
-## 5. Hero Section Enhancement
-- Animated typing effect বা rotating text ("বিজ্ঞাপন | ইউটিউব | পডকাস্ট") 
-- Floating particle/bokeh effect background
-- Duplicate paragraph text fix (currently two similar lines)
-
-## 6. Footer Enhancement
-- Multi-column footer: About, Quick Links, Contact, Social
-- Social media icons (Facebook, YouTube, Instagram)
-- Newsletter signup field (UI only)
-
-## 7. Smooth Scroll Navigation
-- StickyHeader এ nav links যোগ: সেবাসমূহ | কিভাবে কাজ করে | ডেমো | রিভিউ | FAQ
-- Mobile hamburger menu
-- Active section highlighting on scroll
-
-## 8. Back-to-Top Button (নতুন)
-- Floating button যা scroll down করলে দেখা যাবে
-- Smooth scroll to top
-
-## 9. WhatsApp Floating Button
-- Fixed position WhatsApp chat button (bottom-right)
-- Pulse animation সহ
-
-## 10. Overall Polish
-- Page section dividers (wave/gradient separators)
-- Loading skeleton/animation on initial load
-- OrderFlow এর placeholder links fix (WhatsApp group, phone number)
+## Prerequisites
+Supabase এখনো connect করা হয়নি। প্রথমে **Lovable Cloud** activate করতে হবে যাতে database, authentication, এবং RLS সবকিছু কাজ করে।
 
 ---
 
-## Technical Approach
+## Database Schema (Supabase Migrations)
 
-### নতুন ফাইলগুলো তৈরি হবে:
-- `src/components/StatsCounter.tsx` — animated counting stats
-- `src/components/HowItWorks.tsx` — 4-step process
-- `src/components/TestimonialsSection.tsx` — client reviews carousel
-- `src/components/FAQSection.tsx` — accordion FAQ
-- `src/components/FloatingButtons.tsx` — WhatsApp + back-to-top
-- `src/components/SectionDivider.tsx` — wave/gradient dividers
+### Tables:
+1. **`orders`** — অর্ডার ট্র্যাকিং
+   - `id`, `order_id` (VS-XXX), `client_name`, `client_phone`, `client_email`, `category`, `tier`, `script_text`, `payment_method`, `transaction_id`, `amount`, `status` (pending/in_progress/recording/delivered/cancelled), `assigned_artist_id`, `notes`, `created_at`, `updated_at`
 
-### পরিবর্তিত ফাইলগুলো:
-- `src/pages/Index.tsx` — নতুন sections যোগ, section order update
-- `src/components/HeroSection.tsx` — rotating text, duplicate fix
-- `src/components/StickyHeader.tsx` — nav links + mobile menu
-- `src/index.css` — নতুন animations ও styles
-- Footer inline → enhanced multi-column footer
+2. **`clients`** — ক্লায়েন্ট ডাটা
+   - `id`, `name`, `phone`, `email`, `total_orders`, `total_spent`, `notes`, `created_at`
 
-### Section Order (top to bottom):
-1. StickyHeader (enhanced nav)
-2. HeroSection (enhanced)
-3. StatsCounter (নতুন)
-4. TrustSection
-5. HowItWorks (নতুন)
-6. CategoryGrid
-7. DemoSection
-8. TestimonialsSection (নতুন)
-9. ArtistSection
-10. FAQSection (নতুন)
-11. Footer (enhanced)
-12. FloatingButtons (WhatsApp + Back to top)
+3. **`artists`** — কণ্ঠশিল্পী প্রোফাইল
+   - `id`, `name`, `phone`, `specialization`, `rate_per_project`, `status` (active/inactive), `total_projects`, `rating`, `created_at`
 
-### ব্যবহৃত Technology:
-- `framer-motion` — সব animation
-- `embla-carousel-react` — testimonials carousel
-- `@radix-ui/react-accordion` — FAQ
-- `lucide-react` — icons
-- Existing glass-card, gradient-text, gold-btn CSS classes
+4. **`user_roles`** — admin role management (security definer function সহ)
 
-এই পরিবর্তনগুলো বড় তাই ২-৩টি message এ ভাগ করে implement করা হবে।
+### RLS Policies:
+- সব table এ RLS enabled
+- `has_role(auth.uid(), 'admin')` দিয়ে admin-only access
+- Security architecture tool ব্যবহার করা হবে
+
+---
+
+## New Pages & Components
+
+### 1. `/admin/login` — Admin Login Page
+- Email/password login (Supabase Auth)
+- Protected route — শুধু admin role holder access পাবে
+
+### 2. `/admin` — Dashboard (Analytics)
+- Total Orders, Revenue, Active Clients, Active Artists — animated stat cards
+- Orders by status (pie/bar chart — recharts)
+- Recent orders table
+- Monthly revenue trend line chart
+
+### 3. `/admin/orders` — Order Management
+- Sortable/filterable table: Order ID, Client, Category, Tier, Status, Artist, Date
+- Status update dropdown (Pending → In Progress → Recording → Delivered)
+- Artist assign করা
+- Order details modal
+- Search by order ID / client name
+
+### 4. `/admin/clients` — Client Management
+- Client list table with search
+- Add/Edit client dialog
+- Order history per client
+- Total spent, order count
+
+### 5. `/admin/artists` — Artist Management
+- Artist list with status badges
+- Add/Edit artist dialog
+- Specialization tags
+- Active/Inactive toggle
+- Projects count, rating
+
+### Layout:
+- **Sidebar** navigation (shadcn sidebar component ব্যবহার)
+- Collapsible sidebar with icons
+- Header with admin name, logout button
+- Responsive — mobile এ hamburger menu
+
+---
+
+## File Structure
+
+```text
+src/
+├── pages/
+│   ├── AdminLogin.tsx
+│   ├── AdminDashboard.tsx
+│   ├── AdminOrders.tsx
+│   ├── AdminClients.tsx
+│   └── AdminArtists.tsx
+├── components/admin/
+│   ├── AdminLayout.tsx        (sidebar + header wrapper)
+│   ├── AdminSidebar.tsx       (navigation sidebar)
+│   ├── StatCard.tsx           (animated dashboard card)
+│   ├── OrdersTable.tsx        (orders data table)
+│   ├── OrderStatusBadge.tsx   (color-coded status)
+│   ├── ClientsTable.tsx
+│   ├── ArtistsTable.tsx
+│   ├── AddEditDialog.tsx      (reusable form dialog)
+│   └── DashboardCharts.tsx    (recharts charts)
+├── hooks/
+│   ├── useOrders.ts
+│   ├── useClients.ts
+│   ├── useArtists.ts
+│   └── useAdminAuth.ts
+└── integrations/supabase/     (auto-generated after Cloud setup)
+```
+
+---
+
+## Implementation Steps (3-4 messages এ ভাগ করে)
+
+**Phase 1**: Lovable Cloud activate → Database schema create → Auth setup → Admin login page  
+**Phase 2**: Admin layout (sidebar) → Dashboard with analytics charts  
+**Phase 3**: Orders management page (table, status update, artist assign)  
+**Phase 4**: Clients & Artists management pages
+
+---
+
+## Technology
+- **Supabase** — Auth, Database, RLS
+- **shadcn sidebar** — Admin navigation
+- **recharts** (already installed) — Dashboard charts
+- **@tanstack/react-query** — Data fetching & caching
+- **framer-motion** — Animations
+- **shadcn table, dialog, select, badge** — UI components
+
+## First Step
+শুরু করতে আমাকে **Lovable Cloud enable** করতে হবে। Approve করলে আমি Cloud setup শুরু করবো।
 
