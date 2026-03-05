@@ -3,12 +3,12 @@ import { MapPin, Mic } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const artists = [
-  { name: "রাকিব হাসান", location: "ঢাকা", specialty: "প্লেব্যাক সিঙ্গার", initials: "রহ" },
-  { name: "তানিয়া আক্তার", location: "চট্টগ্রাম", specialty: "ভয়েসওভার আর্টিস্ট", initials: "তা" },
-  { name: "সাকিব রহমান", location: "রাজশাহী", specialty: "রেকর্ডিং আর্টিস্ট", initials: "সর" },
-  { name: "নুসরাত জাহান", location: "সিলেট", specialty: "পডকাস্ট হোস্ট", initials: "নজ" },
-  { name: "ফাহিম আহমেদ", location: "খুলনা", specialty: "মিক্সিং ইঞ্জিনিয়ার", initials: "ফআ" },
-  { name: "মিথিলা সরকার", location: "ঢাকা", specialty: "সঙ্গীত পরিচালক", initials: "মস" },
+  { name: "Shadman Sakib", specialty: "Ad", initials: "SS" },
+  { name: "Rajvi", specialty: "Ad, Documentary", initials: "RJ" },
+  { name: "Farzana Haq", specialty: "Caller Tune", initials: "FH" },
+  { name: "Ummay Habiba Shibly", specialty: "Promotion", initials: "UH" },
+  { name: "Fatima Islam", specialty: "Narration", initials: "FI" },
+  { name: "Zain Shiplu", specialty: "Movie Explainer", initials: "ZS" },
 ];
 
 const ArtistSection = () => {
@@ -49,9 +49,9 @@ const ArtistSection = () => {
 
               <div className="space-y-1">
                 <h3 className="font-bold text-foreground text-sm md:text-base">{artist.name}</h3>
-                <div className="flex items-center justify-center gap-1 text-muted-foreground text-xs">
-                  <MapPin size={12} />
-                  <span>{artist.location}</span>
+                <div className="flex items-center justify-center gap-1 text-primary text-xs font-medium">
+                  <Mic size={12} />
+                  <span>{artist.specialty}</span>
                 </div>
                 <div className="flex items-center justify-center gap-1 text-primary text-xs font-medium">
                   <Mic size={12} />
