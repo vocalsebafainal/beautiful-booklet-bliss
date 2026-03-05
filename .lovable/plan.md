@@ -1,35 +1,36 @@
 
 
-# আর্টিস্ট তথ্য আপডেট
+# Ball Pool সেকশন — ইন্টারেক্টিভ সার্ভিস এক্সপ্লোরার
 
-PDF থেকে ১৩ জন ভয়েস আর্টিস্টের তথ্য পাওয়া গেছে। দুটি জায়গায় আপডেট করতে হবে:
+HeroSection এর পরে একটি আকর্ষণীয় "Ball Pool" সেকশন তৈরি হবে যেখানে সার্ভিস ক্যাটাগরিগুলো ফ্লোটিং বাবল/বল আকারে দেখাবে। ক্লিক করলে ডিটেইল expand হবে।
 
 ---
 
-## ১. ডাটাবেস আপডেট (artists টেবিল)
+## কী তৈরি হবে
 
-নিচের ১৩ জন আর্টিস্ট ডাটাবেসে INSERT করা হবে:
+একটি নতুন `BallPoolSection.tsx` কম্পোনেন্ট:
 
-| নাম | ফোন | বিশেষত্ব | রেট |
-|-----|------|----------|-----|
-| Shadman Sakib | 01684-559779 | Ad | 2000 |
-| Farzana Haq | 01771-941444 | Caller Tune | 1000 |
-| Ekram Hossain | 01813-226236 | Carton | 200 |
-| Anny | 01833-626976 | News, Ad | 1000 |
-| Sadik Hasan Emon | 01707-457968 | News | 400 |
-| Srabon Sani | 01794-692719 | Promotion | 700 |
-| Ummay Habiba Shibly | 01881-138975 | Promotion | 800 |
-| Rajvi | 01916-913814 | Ad, Documentary | 7000 |
-| Zain Shiplu | 01770-871770 | Movie Explainer | 700 |
-| Hasib | 01707-457968 | News | 200 |
-| Fatima Islam | 01714-379334 | Narration | 1000 |
-| Mim | 01812-710490 | News, Story Telling, Caller Tune | 500 |
-| Sakhawat | 01911-462211 | Ad | 2000 |
+- **7টি ফ্লোটিং বল/বাবল** — প্রতিটি একটি সার্ভিস ক্যাটাগরি (Ad, YouTube, News, Storytelling, Islamic, Cartoon, Corporate)
+- প্রতিটি বলে **emoji + নাম** থাকবে
+- বলগুলো `framer-motion` দিয়ে **float animation** করবে (ওঠানামা, হালকা rotate)
+- **hover এ glow effect** ও scale up
+- **ক্লিক করলে** নিচে সেই ক্যাটাগরির সংক্ষিপ্ত বিবরণ + "অর্ডার করুন" বাটন expand হবে (AnimatePresence দিয়ে)
+- মোবাইলে 3 কলাম, ডেস্কটপে circular/scattered layout
+- CategoryGrid এর ডাটা reuse করা হবে
 
-- Supabase insert tool ব্যবহার করে ডাটা যোগ হবে
-- Admin panel এর Artists page এ এরা সরাসরি দেখা যাবে
+## পেজে অবস্থান
 
-## ২. ফ্রন্টেন্ড আর্টিস্ট সেকশন আপডেট
+```text
+StickyHeader
+HeroSection
+→ BallPoolSection (নতুন)
+StatsCounter
+TrustSection
+...
+```
 
-`src/components/ArtistSection.tsx` এর হার্ডকোডেড বাংলা নামগুলো আসল আর্টিস্টদের নাম ও বিশেষত্ব দিয়ে রিপ্লেস হবে (৬টি ফিচার্ড আর্টিস্ট দেখানো হবে ল্যান্ডিং পেজে)।
+## ফাইল পরিবর্তন
+
+1. **নতুন**: `src/components/BallPoolSection.tsx` — ফ্লোটিং বাবল UI + ক্লিকে ডিটেইল শো
+2. **এডিট**: `src/pages/Index.tsx` — BallPoolSection import ও HeroSection এর পরে যোগ
 
