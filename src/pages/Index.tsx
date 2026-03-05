@@ -1,6 +1,7 @@
 import { useState } from "react";
 import StickyHeader from "@/components/StickyHeader";
 import HeroSection from "@/components/HeroSection";
+import BallPoolSection from "@/components/BallPoolSection";
 import StatsCounter from "@/components/StatsCounter";
 import TrustSection from "@/components/TrustSection";
 import HowItWorks from "@/components/HowItWorks";
@@ -28,6 +29,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <StickyHeader />
       <HeroSection />
+      <BallPoolSection />
       <StatsCounter />
       <TrustSection />
       <HowItWorks />
