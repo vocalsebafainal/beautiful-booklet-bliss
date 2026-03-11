@@ -1,33 +1,36 @@
 
 
-# আর্টিস্ট স্যাম্পল ভিডিও সিস্টেম
+# Ball Pool সেকশন — ইন্টারেক্টিভ সার্ভিস এক্সপ্লোরার
 
-প্রতিটি আর্টিস্ট কার্ডে একটি "স্যাম্পল দেখুন" বাটন যোগ হবে। ক্লিক করলে একটি Dialog/Modal popup এ ভিডিও প্লে হবে।
+HeroSection এর পরে একটি আকর্ষণীয় "Ball Pool" সেকশন তৈরি হবে যেখানে সার্ভিস ক্যাটাগরিগুলো ফ্লোটিং বাবল/বল আকারে দেখাবে। ক্লিক করলে ডিটেইল expand হবে।
 
 ---
 
-## ডাটাবেস পরিবর্তন
+## কী তৈরি হবে
 
-`artists` টেবিলে একটি নতুন কলাম যোগ করা হবে:
-- `sample_video_url` (text, nullable) — YouTube embed URL বা অন্য ভিডিও লিংক
+একটি নতুন `BallPoolSection.tsx` কম্পোনেন্ট:
 
-এতে Admin panel থেকে প্রতিটি আর্টিস্টের জন্য ভিডিও URL সেট করা যাবে — সম্পূর্ণ dynamic।
+- **7টি ফ্লোটিং বল/বাবল** — প্রতিটি একটি সার্ভিস ক্যাটাগরি (Ad, YouTube, News, Storytelling, Islamic, Cartoon, Corporate)
+- প্রতিটি বলে **emoji + নাম** থাকবে
+- বলগুলো `framer-motion` দিয়ে **float animation** করবে (ওঠানামা, হালকা rotate)
+- **hover এ glow effect** ও scale up
+- **ক্লিক করলে** নিচে সেই ক্যাটাগরির সংক্ষিপ্ত বিবরণ + "অর্ডার করুন" বাটন expand হবে (AnimatePresence দিয়ে)
+- মোবাইলে 3 কলাম, ডেস্কটপে circular/scattered layout
+- CategoryGrid এর ডাটা reuse করা হবে
 
-## ফ্রন্টেন্ড পরিবর্তন
+## পেজে অবস্থান
 
-### `src/components/ArtistSection.tsx`
-- হার্ডকোডেড artists array সরিয়ে Supabase থেকে active artists fetch করা হবে (React Query দিয়ে)
-- প্রতিটি কার্ডে "🎬 স্যাম্পল দেখুন" বাটন যোগ হবে (শুধু যাদের `sample_video_url` আছে)
-- ক্লিক করলে Dialog popup open হবে — ভিতরে আর্টিস্টের নাম + iframe ভিডিও প্লেয়ার
-- X বাটন দিয়ে বন্ধ করা যাবে
+```text
+StickyHeader
+HeroSection
+→ BallPoolSection (নতুন)
+StatsCounter
+TrustSection
+...
+```
 
-### `src/pages/AdminArtists.tsx`
-- Artist create/edit ফর্মে "Sample Video URL" ইনপুট ফিল্ড যোগ হবে
-- Admin এখান থেকে যেকোনো আর্টিস্টের ভিডিও URL যোগ/আপডেট করতে পারবে
+## ফাইল পরিবর্তন
 
-## ফাইল পরিবর্তন সারসংক্ষেপ
-
-1. **Migration** — `artists` টেবিলে `sample_video_url` কলাম যোগ
-2. **Edit** `src/components/ArtistSection.tsx` — DB থেকে fetch + ভিডিও popup modal
-3. **Edit** `src/pages/AdminArtists.tsx` — ফর্মে video URL ফিল্ড যোগ
+1. **নতুন**: `src/components/BallPoolSection.tsx` — ফ্লোটিং বাবল UI + ক্লিকে ডিটেইল শো
+2. **এডিট**: `src/pages/Index.tsx` — BallPoolSection import ও HeroSection এর পরে যোগ
 
