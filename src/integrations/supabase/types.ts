@@ -22,6 +22,7 @@ export type Database = {
           phone: string | null
           rate_per_project: number | null
           rating: number | null
+          sample_video_url: string | null
           specialization: string | null
           status: string
           total_projects: number | null
@@ -34,6 +35,7 @@ export type Database = {
           phone?: string | null
           rate_per_project?: number | null
           rating?: number | null
+          sample_video_url?: string | null
           specialization?: string | null
           status?: string
           total_projects?: number | null
@@ -46,6 +48,7 @@ export type Database = {
           phone?: string | null
           rate_per_project?: number | null
           rating?: number | null
+          sample_video_url?: string | null
           specialization?: string | null
           status?: string
           total_projects?: number | null
