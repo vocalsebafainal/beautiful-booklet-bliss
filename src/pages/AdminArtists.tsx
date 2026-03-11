@@ -70,6 +70,7 @@ export default function AdminArtists() {
       phone: fd.get("phone") as string,
       specialization: fd.get("specialization") as string,
       rate_per_project: Number(fd.get("rate_per_project")) || 0,
+      sample_video_url: (fd.get("sample_video_url") as string) || null,
     };
     if (editing) data.id = editing.id;
     saveMutation.mutate(data);
