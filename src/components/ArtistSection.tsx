@@ -1,27 +1,37 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, ChevronDown, ChevronUp } from "lucide-react";
+import { Mic, ChevronDown, ChevronUp, Play } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-
-const artists = [
-  { name: "Shadman Sakib", specialty: "Ad", initials: "SS" },
-  { name: "Rajvi", specialty: "Ad, Documentary", initials: "RJ" },
-  { name: "Farzana Haq", specialty: "Caller Tune", initials: "FH" },
-  { name: "Ummay Habiba Shibly", specialty: "Promotion", initials: "UH" },
-  { name: "Fatima Islam", specialty: "Narration", initials: "FI" },
-  { name: "Zain Shiplu", specialty: "Movie Explainer", initials: "ZS" },
-  { name: "Ekram Hossain", specialty: "Carton", initials: "EH" },
-  { name: "Anny", specialty: "News, Ad", initials: "AN" },
-  { name: "Sadik Hasan Emon", specialty: "News", initials: "SE" },
-  { name: "Srabon Sani", specialty: "Promotion", initials: "SS" },
-  { name: "Hasib", specialty: "News", initials: "HA" },
-  { name: "Mim", specialty: "News, Story Telling, Caller Tune", initials: "MI" },
-  { name: "Sakhawat", specialty: "Ad", initials: "SK" },
-];
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const ArtistSection = () => {
   const [showAll, setShowAll] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState<any>(null);
+
+  const { data: artists = [] } = useQuery({
+    queryKey: ["public-artists"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("artists")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", { ascending: true });
+      return data || [];
+    },
+  });
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+  };
+
   const visible = showAll ? artists : artists.slice(0, 6);
 
   return (
@@ -44,9 +54,9 @@ const ArtistSection = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6">
           <AnimatePresence mode="popLayout">
-            {visible.map((artist, index) => (
+            {visible.map((artist: any, index: number) => (
               <motion.div
-                key={artist.name}
+                key={artist.id}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -56,33 +66,70 @@ const ArtistSection = () => {
               >
                 <Avatar className="h-16 w-16 md:h-20 md:w-20 border-2 border-primary/30">
                   <AvatarFallback className="bg-primary/10 text-primary font-bold text-lg md:text-xl">
-                    {artist.initials}
+                    {getInitials(artist.name)}
                   </AvatarFallback>
                 </Avatar>
 
                 <div className="space-y-1">
                   <h3 className="font-bold text-foreground text-sm md:text-base">{artist.name}</h3>
-                  <div className="flex items-center justify-center gap-1 text-primary text-xs font-medium">
-                    <Mic size={12} />
-                    <span>{artist.specialty}</span>
-                  </div>
+                  {artist.specialization && (
+                    <div className="flex items-center justify-center gap-1 text-primary text-xs font-medium">
+                      <Mic size={12} />
+                      <span>{artist.specialization}</span>
+                    </div>
+                  )}
                 </div>
+
+                {artist.sample_video_url && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
+                    onClick={() => setSelectedArtist(artist)}
+                  >
+                    <Play size={12} />
+                    স্যাম্পল দেখুন
+                  </Button>
+                )}
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
 
-        <div className="flex justify-center mt-8">
-          <Button
-            variant="outline"
-            onClick={() => setShowAll(!showAll)}
-            className="gap-2"
-          >
-            {showAll ? "কম দেখুন" : `আরো দেখুন (${artists.length - 6})`}
-            {showAll ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </Button>
-        </div>
+        {artists.length > 6 && (
+          <div className="flex justify-center mt-8">
+            <Button
+              variant="outline"
+              onClick={() => setShowAll(!showAll)}
+              className="gap-2"
+            >
+              {showAll ? "কম দেখুন" : `আরো দেখুন (${artists.length - 6})`}
+              {showAll ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </Button>
+          </div>
+        )}
       </div>
+
+      <Dialog open={!!selectedArtist} onOpenChange={(open) => !open && setSelectedArtist(null)}>
+        <DialogContent className="sm:max-w-2xl p-0 overflow-hidden">
+          <DialogHeader className="p-4 pb-0">
+            <DialogTitle className="text-lg">
+              🎬 {selectedArtist?.name} — স্যাম্পল
+            </DialogTitle>
+          </DialogHeader>
+          <div className="aspect-video w-full">
+            {selectedArtist?.sample_video_url && (
+              <iframe
+                src={selectedArtist.sample_video_url}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={`${selectedArtist.name} sample`}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

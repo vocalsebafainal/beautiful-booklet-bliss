@@ -160,6 +160,7 @@ export default function AdminArtists() {
             <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} /></div>
             <div className="space-y-2"><Label>বিশেষত্ব</Label><Input name="specialization" defaultValue={editing?.specialization} placeholder="যেমন: পুরুষ কণ্ঠ, নারী কণ্ঠ, শিশু কণ্ঠ" /></div>
             <div className="space-y-2"><Label>রেট/প্রজেক্ট (৳)</Label><Input name="rate_per_project" type="number" defaultValue={editing?.rate_per_project} /></div>
+            <div className="space-y-2"><Label>স্যাম্পল ভিডিও URL</Label><Input name="sample_video_url" defaultValue={editing?.sample_video_url} placeholder="YouTube embed URL (যেমন: https://www.youtube.com/embed/...)" /></div>
             <Button type="submit" className="w-full">{editing ? "আপডেট" : "যোগ করুন"}</Button>
           </form>
         </DialogContent>
