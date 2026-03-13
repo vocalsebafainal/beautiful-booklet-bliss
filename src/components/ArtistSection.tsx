@@ -71,7 +71,7 @@ const ArtistSection = () => {
                 </Avatar>
 
                 <div className="space-y-1">
-                  <h3 className="font-bold text-foreground text-sm md:text-base">{artist.name}</h3>
+                  <h3 className="font-bold text-foreground text-base md:text-lg">{artist.name}</h3>
                   {artist.specialization && (
                     <div className="flex items-center justify-center gap-1 text-primary text-xs font-medium">
                       <Mic size={12} />
