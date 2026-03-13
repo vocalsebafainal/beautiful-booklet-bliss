@@ -300,7 +300,7 @@ const categories: CategoryInfo[] = [
 ];
 
 interface CategoryGridProps {
-  onTierSelect: (category: string, tier: string) => void;
+  onTierSelect: (category: string, tier: string, price: number) => void;
 }
 
 const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
@@ -505,7 +505,7 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
                               <motion.button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  onTierSelect(cat.name, tier.name);
+                                  onTierSelect(cat.name, tier.name, tier.priceNum);
                                 }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}

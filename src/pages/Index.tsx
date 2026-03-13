@@ -18,10 +18,12 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [orderOpen, setOrderOpen] = useState(false);
   const [selectedTier, setSelectedTier] = useState("");
+  const [selectedPrice, setSelectedPrice] = useState(0);
 
-  const handleTierSelect = (category: string, tier: string) => {
+  const handleTierSelect = (category: string, tier: string, price: number) => {
     setSelectedCategory(category);
     setSelectedTier(tier);
+    setSelectedPrice(price);
     setOrderOpen(true);
   };
 
@@ -46,6 +48,7 @@ const Index = () => {
         onClose={() => setOrderOpen(false)}
         category={selectedCategory}
         tier={selectedTier}
+        price={selectedPrice}
       />
     </div>
   );
