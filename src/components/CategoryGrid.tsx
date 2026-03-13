@@ -300,7 +300,7 @@ const categories: CategoryInfo[] = [
 ];
 
 interface CategoryGridProps {
-  onTierSelect: (category: string, tier: string) => void;
+  onTierSelect: (category: string, tier: string, price: number) => void;
 }
 
 const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
