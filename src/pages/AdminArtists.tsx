@@ -146,7 +146,7 @@ export default function AdminArtists() {
           <h2 className="text-2xl font-bold text-foreground">আর্টিস্ট ম্যানেজমেন্ট</h2>
           <p className="text-muted-foreground text-sm">কণ্ঠশিল্পীদের প্রোফাইল পরিচালনা করুন</p>
         </div>
-        <Button onClick={() => { setEditing(null); setImageFile(null); setImagePreview(null); setDialogOpen(true); }}>
+        <Button onClick={() => { setEditing(null); setImageFile(null); setImagePreview(null); setSelectedCategory(""); setDialogOpen(true); }}>
           <Plus className="h-4 w-4 mr-2" /> নতুন আর্টিস্ট
         </Button>
       </div>
