@@ -29,6 +29,7 @@ export default function AdminArtists() {
   const [editing, setEditing] = useState<any>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const queryClient = useQueryClient();
 
   const { data: artists = [], isLoading } = useQuery({
