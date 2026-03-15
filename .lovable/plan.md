@@ -1,36 +1,30 @@
 
 
-# Ball Pool সেকশন — ইন্টারেক্টিভ সার্ভিস এক্সপ্লোরার
+## Plan: PDF থেকে ১৩ জন আর্টিস্ট ডাটাবেসে যোগ করা
 
-HeroSection এর পরে একটি আকর্ষণীয় "Ball Pool" সেকশন তৈরি হবে যেখানে সার্ভিস ক্যাটাগরিগুলো ফ্লোটিং বাবল/বল আকারে দেখাবে। ক্লিক করলে ডিটেইল expand হবে।
+PDF থেকে পাওয়া ১৩ জন আর্টিস্টের তথ্য `artists` টেবিলে ইনসার্ট করা হবে।
 
----
+### আর্টিস্ট তালিকা
 
-## কী তৈরি হবে
+| # | নাম | ফোন | ক্যাটাগরি | স্যাম্পল লিংক |
+|---|------|------|-----------|---------------|
+| 1 | Shadman Sakib | 01684-559779 | ন্যারেশন | https://ln.run/L4N6 |
+| 2 | Farzana Haq | 01771-941444 | নারী কণ্ঠ | https://ln.run/6a7c |
+| 3 | Ekram Hossain | 01813-226236 | পুরুষ কণ্ঠ | https://ln.run/Z0Ne |
+| 4 | Anny | 01833-626976 | নারী কণ্ঠ | https://ln.run/ybDK9 |
+| 5 | Sadik Hasan Emon | 01707-457968 | পুরুষ কণ্ঠ | https://ln.run/AaNCd |
+| 6 | Srabon Sani | 01794-692719 | পুরুষ কণ্ঠ | https://ln.run/T_Orr |
+| 7 | Ummay Habiba Shibly | 01881-138975 | নারী কণ্ঠ | https://ln.run/pSyn |
+| 8 | Rajvi | 01916-913814 | পুরুষ কণ্ঠ | https://ln.run/u5b3 |
+| 9 | Zain Shiplu | 01770-871770 | পুরুষ কণ্ঠ | https://ln.run/M20K |
+| 10 | Hasib | 01707-457968 | পুরুষ কণ্ঠ | https://ln.run/cKr-z |
+| 11 | Fatima Islam | 01714-379334 | ন্যারেশন | https://ln.run/EhWn |
+| 12 | Mim | 01812-710490 | নারী কণ্ঠ | https://ln.run/QwP |
+| 13 | Sakhawat | 01911-462211 | পুরুষ কণ্ঠ | https://ln.run/aY6G |
 
-একটি নতুন `BallPoolSection.tsx` কম্পোনেন্ট:
+### বাস্তবায়ন
 
-- **7টি ফ্লোটিং বল/বাবল** — প্রতিটি একটি সার্ভিস ক্যাটাগরি (Ad, YouTube, News, Storytelling, Islamic, Cartoon, Corporate)
-- প্রতিটি বলে **emoji + নাম** থাকবে
-- বলগুলো `framer-motion` দিয়ে **float animation** করবে (ওঠানামা, হালকা rotate)
-- **hover এ glow effect** ও scale up
-- **ক্লিক করলে** নিচে সেই ক্যাটাগরির সংক্ষিপ্ত বিবরণ + "অর্ডার করুন" বাটন expand হবে (AnimatePresence দিয়ে)
-- মোবাইলে 3 কলাম, ডেস্কটপে circular/scattered layout
-- CategoryGrid এর ডাটা reuse করা হবে
+**একটি ডাটাবেস মাইগ্রেশন** চালিয়ে সব আর্টিস্ট একসাথে `artists` টেবিলে ইনসার্ট করা হবে — নাম, ফোন, ক্যাটাগরি, দেশ (বাংলাদেশ), এবং প্রথম স্যাম্পল ভিডিও লিংক সহ। সব আর্টিস্ট `active` স্ট্যাটাসে থাকবে এবং ল্যান্ডিং পেজে স্বয়ংক্রিয়ভাবে দেখাবে।
 
-## পেজে অবস্থান
-
-```text
-StickyHeader
-HeroSection
-→ BallPoolSection (নতুন)
-StatsCounter
-TrustSection
-...
-```
-
-## ফাইল পরিবর্তন
-
-1. **নতুন**: `src/components/BallPoolSection.tsx` — ফ্লোটিং বাবল UI + ক্লিকে ডিটেইল শো
-2. **এডিট**: `src/pages/Index.tsx` — BallPoolSection import ও HeroSection এর পরে যোগ
+পরে আপনি Admin panel থেকে প্রতিটি আর্টিস্টের ছবি আপলোড ও ভিডিও লিংক পরিবর্তন করতে পারবেন।
 
