@@ -16,8 +16,11 @@ export type Database = {
     Tables: {
       artists: {
         Row: {
+          category: string | null
+          country: string | null
           created_at: string
           id: string
+          image_url: string | null
           name: string
           phone: string | null
           rate_per_project: number | null
@@ -29,8 +32,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          category?: string | null
+          country?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           name: string
           phone?: string | null
           rate_per_project?: number | null
@@ -42,8 +48,11 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          category?: string | null
+          country?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           name?: string
           phone?: string | null
           rate_per_project?: number | null
