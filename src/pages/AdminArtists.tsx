@@ -107,6 +107,7 @@ export default function AdminArtists() {
     setEditing(null);
     setImageFile(null);
     setImagePreview(null);
+    setSelectedCategory("");
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
