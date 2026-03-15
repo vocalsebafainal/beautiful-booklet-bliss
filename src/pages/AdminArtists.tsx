@@ -201,7 +201,7 @@ export default function AdminArtists() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => { setEditing(a); setImagePreview(null); setImageFile(null); setDialogOpen(true); }}>
+                        <Button variant="ghost" size="icon" onClick={() => { setEditing(a); setImagePreview(null); setImageFile(null); setSelectedCategory(a.category || a.specialization || ""); setDialogOpen(true); }}>
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
