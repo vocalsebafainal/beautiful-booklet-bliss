@@ -9,8 +9,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Search, Plus, Loader2, Pencil, Trash2, Upload, Image } from "lucide-react";
+
+const CATEGORY_OPTIONS = [
+  "পুরুষ কণ্ঠ",
+  "নারী কণ্ঠ",
+  "শিশু কণ্ঠ",
+  "ডুয়েট",
+  "কোরাস",
+  "র‍্যাপ",
+  "ন্যারেশন",
+];
 
 export default function AdminArtists() {
   const [search, setSearch] = useState("");
@@ -18,6 +29,7 @@ export default function AdminArtists() {
   const [editing, setEditing] = useState<any>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const queryClient = useQueryClient();
 
   const { data: artists = [], isLoading } = useQuery({
@@ -95,6 +107,7 @@ export default function AdminArtists() {
     setEditing(null);
     setImageFile(null);
     setImagePreview(null);
+    setSelectedCategory("");
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,12 +121,16 @@ export default function AdminArtists() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    if (!selectedCategory) {
+      toast.error("ক্যাটাগরি সিলেক্ট করুন");
+      return;
+    }
     const data: any = {
       name: fd.get("name") as string,
-      category: fd.get("category") as string,
+      category: selectedCategory,
       country: fd.get("country") as string,
       phone: fd.get("phone") as string,
-      specialization: fd.get("category") as string, // keep specialization in sync
+      specialization: selectedCategory,
       sample_video_url: (fd.get("sample_video_url") as string) || null,
     };
     if (editing) data.id = editing.id;
@@ -129,7 +146,7 @@ export default function AdminArtists() {
           <h2 className="text-2xl font-bold text-foreground">আর্টিস্ট ম্যানেজমেন্ট</h2>
           <p className="text-muted-foreground text-sm">কণ্ঠশিল্পীদের প্রোফাইল পরিচালনা করুন</p>
         </div>
-        <Button onClick={() => { setEditing(null); setImageFile(null); setImagePreview(null); setDialogOpen(true); }}>
+        <Button onClick={() => { setEditing(null); setImageFile(null); setImagePreview(null); setSelectedCategory(""); setDialogOpen(true); }}>
           <Plus className="h-4 w-4 mr-2" /> নতুন আর্টিস্ট
         </Button>
       </div>
@@ -184,7 +201,7 @@ export default function AdminArtists() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => { setEditing(a); setImagePreview(null); setImageFile(null); setDialogOpen(true); }}>
+                        <Button variant="ghost" size="icon" onClick={() => { setEditing(a); setImagePreview(null); setImageFile(null); setSelectedCategory(a.category || a.specialization || ""); setDialogOpen(true); }}>
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
@@ -237,7 +254,19 @@ export default function AdminArtists() {
             </div>
 
             <div className="space-y-2"><Label>নাম *</Label><Input name="name" defaultValue={editing?.name} required /></div>
-            <div className="space-y-2"><Label>ক্যাটাগরি *</Label><Input name="category" defaultValue={editing?.category || editing?.specialization} placeholder="যেমন: পুরুষ কণ্ঠ, নারী কণ্ঠ, শিশু কণ্ঠ" required /></div>
+            <div className="space-y-2">
+              <Label>ক্যাটাগরি *</Label>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger>
+                  <SelectValue placeholder="ক্যাটাগরি সিলেক্ট করুন" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CATEGORY_OPTIONS.map((cat) => (
+                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-2"><Label>দেশ</Label><Input name="country" defaultValue={editing?.country || "বাংলাদেশ"} /></div>
             <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} /></div>
             <div className="space-y-2"><Label>স্যাম্পল ভিডিও লিংক</Label><Input name="sample_video_url" defaultValue={editing?.sample_video_url} placeholder="https://www.youtube.com/watch?v=..." /></div>
