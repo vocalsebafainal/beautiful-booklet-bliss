@@ -1,11 +1,21 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, ChevronDown, ChevronUp, Play } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Mic, ChevronDown, ChevronUp, Play, MapPin, Image as ImageIcon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+
+const getYouTubeEmbedUrl = (url: string) => {
+  if (!url) return null;
+  // Already an embed URL
+  if (url.includes("/embed/")) return url;
+  // Extract video ID from various YouTube URL formats
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/))([^&?\s]+)/);
+  if (match) return `https://www.youtube.com/embed/${match[1]}`;
+  return url;
+};
 
 const ArtistSection = () => {
   const [showAll, setShowAll] = useState(false);
@@ -65,6 +75,9 @@ const ArtistSection = () => {
                 className="glass-card-hover p-5 md:p-6 flex flex-col items-center text-center gap-3"
               >
                 <Avatar className="h-16 w-16 md:h-20 md:w-20 border-2 border-primary/30">
+                  {artist.image_url ? (
+                    <AvatarImage src={artist.image_url} alt={artist.name} className="object-cover" />
+                  ) : null}
                   <AvatarFallback className="bg-primary/10 text-primary font-bold text-lg md:text-xl">
                     {getInitials(artist.name)}
                   </AvatarFallback>
@@ -72,10 +85,16 @@ const ArtistSection = () => {
 
                 <div className="space-y-1">
                   <h3 className="font-bold text-foreground text-base md:text-lg">{artist.name}</h3>
-                  {artist.specialization && (
+                  {(artist.category || artist.specialization) && (
                     <div className="flex items-center justify-center gap-1 text-primary text-xs font-medium">
                       <Mic size={12} />
-                      <span>{artist.specialization}</span>
+                      <span>{artist.category || artist.specialization}</span>
+                    </div>
+                  )}
+                  {artist.country && (
+                    <div className="flex items-center justify-center gap-1 text-muted-foreground text-xs">
+                      <MapPin size={10} />
+                      <span>{artist.country}</span>
                     </div>
                   )}
                 </div>
@@ -120,7 +139,7 @@ const ArtistSection = () => {
           <div className="aspect-video w-full">
             {selectedArtist?.sample_video_url && (
               <iframe
-                src={selectedArtist.sample_video_url}
+                src={getYouTubeEmbedUrl(selectedArtist.sample_video_url) || ""}
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
