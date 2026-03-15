@@ -9,8 +9,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Search, Plus, Loader2, Pencil, Trash2, Upload, Image } from "lucide-react";
+
+const CATEGORY_OPTIONS = [
+  "পুরুষ কণ্ঠ",
+  "নারী কণ্ঠ",
+  "শিশু কণ্ঠ",
+  "ডুয়েট",
+  "কোরাস",
+  "র‍্যাপ",
+  "ন্যারেশন",
+];
 
 export default function AdminArtists() {
   const [search, setSearch] = useState("");
