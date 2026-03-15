@@ -121,12 +121,16 @@ export default function AdminArtists() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    if (!selectedCategory) {
+      toast.error("ক্যাটাগরি সিলেক্ট করুন");
+      return;
+    }
     const data: any = {
       name: fd.get("name") as string,
-      category: fd.get("category") as string,
+      category: selectedCategory,
       country: fd.get("country") as string,
       phone: fd.get("phone") as string,
-      specialization: fd.get("category") as string, // keep specialization in sync
+      specialization: selectedCategory,
       sample_video_url: (fd.get("sample_video_url") as string) || null,
     };
     if (editing) data.id = editing.id;
