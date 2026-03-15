@@ -254,7 +254,19 @@ export default function AdminArtists() {
             </div>
 
             <div className="space-y-2"><Label>নাম *</Label><Input name="name" defaultValue={editing?.name} required /></div>
-            <div className="space-y-2"><Label>ক্যাটাগরি *</Label><Input name="category" defaultValue={editing?.category || editing?.specialization} placeholder="যেমন: পুরুষ কণ্ঠ, নারী কণ্ঠ, শিশু কণ্ঠ" required /></div>
+            <div className="space-y-2">
+              <Label>ক্যাটাগরি *</Label>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger>
+                  <SelectValue placeholder="ক্যাটাগরি সিলেক্ট করুন" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CATEGORY_OPTIONS.map((cat) => (
+                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-2"><Label>দেশ</Label><Input name="country" defaultValue={editing?.country || "বাংলাদেশ"} /></div>
             <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} /></div>
             <div className="space-y-2"><Label>স্যাম্পল ভিডিও লিংক</Label><Input name="sample_video_url" defaultValue={editing?.sample_video_url} placeholder="https://www.youtube.com/watch?v=..." /></div>
