@@ -24,6 +24,7 @@ const CATEGORY_OPTIONS = [
 ];
 
 const CUSTOM_CATEGORY_VALUE = "__custom__";
+const EMPTY_CATEGORY_VALUE = "__none__";
 
 export default function AdminArtists() {
   const [search, setSearch] = useState("");
