@@ -126,19 +126,23 @@ export default function AdminArtists() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    const finalCategory = selectedCategory === CUSTOM_CATEGORY_VALUE ? customCategory.trim() : selectedCategory;
+    const finalCategory = selectedCategory === CUSTOM_CATEGORY_VALUE
+      ? customCategory.trim()
+      : selectedCategory === EMPTY_CATEGORY_VALUE
+        ? ""
+        : selectedCategory;
 
-    if (!finalCategory) {
-      toast.error("ক্যাটাগরি সিলেক্ট বা লিখুন");
+    if (selectedCategory === CUSTOM_CATEGORY_VALUE && !finalCategory) {
+      toast.error("নতুন ক্যাটাগরি লিখুন");
       return;
     }
 
     const data: any = {
       name: fd.get("name") as string,
-      category: finalCategory,
+      category: finalCategory || null,
       country: fd.get("country") as string,
       phone: fd.get("phone") as string,
-      specialization: finalCategory,
+      specialization: finalCategory || null,
       sample_video_url: (fd.get("sample_video_url") as string) || null,
     };
     if (editing) data.id = editing.id;
