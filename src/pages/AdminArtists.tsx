@@ -23,6 +23,8 @@ const CATEGORY_OPTIONS = [
   "ন্যারেশন",
 ];
 
+const CUSTOM_CATEGORY_VALUE = "__custom__";
+
 export default function AdminArtists() {
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -30,6 +32,7 @@ export default function AdminArtists() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [customCategory, setCustomCategory] = useState("");
   const queryClient = useQueryClient();
 
   const { data: artists = [], isLoading } = useQuery({
@@ -108,6 +111,7 @@ export default function AdminArtists() {
     setImageFile(null);
     setImagePreview(null);
     setSelectedCategory("");
+    setCustomCategory("");
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,16 +125,19 @@ export default function AdminArtists() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    if (!selectedCategory) {
-      toast.error("ক্যাটাগরি সিলেক্ট করুন");
+    const finalCategory = selectedCategory === CUSTOM_CATEGORY_VALUE ? customCategory.trim() : selectedCategory;
+
+    if (!finalCategory) {
+      toast.error("ক্যাটাগরি সিলেক্ট বা লিখুন");
       return;
     }
+
     const data: any = {
       name: fd.get("name") as string,
-      category: selectedCategory,
+      category: finalCategory,
       country: fd.get("country") as string,
       phone: fd.get("phone") as string,
-      specialization: selectedCategory,
+      specialization: finalCategory,
       sample_video_url: (fd.get("sample_video_url") as string) || null,
     };
     if (editing) data.id = editing.id;
@@ -146,7 +153,7 @@ export default function AdminArtists() {
           <h2 className="text-2xl font-bold text-foreground">আর্টিস্ট ম্যানেজমেন্ট</h2>
           <p className="text-muted-foreground text-sm">কণ্ঠশিল্পীদের প্রোফাইল পরিচালনা করুন</p>
         </div>
-        <Button onClick={() => { setEditing(null); setImageFile(null); setImagePreview(null); setSelectedCategory(""); setDialogOpen(true); }}>
+        <Button onClick={() => { setEditing(null); setImageFile(null); setImagePreview(null); setSelectedCategory(""); setCustomCategory(""); setDialogOpen(true); }}>
           <Plus className="h-4 w-4 mr-2" /> নতুন আর্টিস্ট
         </Button>
       </div>
@@ -201,7 +208,7 @@ export default function AdminArtists() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => { setEditing(a); setImagePreview(null); setImageFile(null); setSelectedCategory(a.category || a.specialization || ""); setDialogOpen(true); }}>
+                        <Button variant="ghost" size="icon" onClick={() => { const existingCategory = a.category || a.specialization || ""; setEditing(a); setImagePreview(null); setImageFile(null); setSelectedCategory(CATEGORY_OPTIONS.includes(existingCategory) ? existingCategory : existingCategory ? CUSTOM_CATEGORY_VALUE : ""); setCustomCategory(CATEGORY_OPTIONS.includes(existingCategory) ? "" : existingCategory); setDialogOpen(true); }}>
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
@@ -264,8 +271,16 @@ export default function AdminArtists() {
                   {CATEGORY_OPTIONS.map((cat) => (
                     <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                   ))}
+                  <SelectItem value={CUSTOM_CATEGORY_VALUE}>নতুন ক্যাটাগরি লিখুন</SelectItem>
                 </SelectContent>
               </Select>
+              {selectedCategory === CUSTOM_CATEGORY_VALUE && (
+                <Input
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                  placeholder="নতুন ক্যাটাগরি লিখুন"
+                />
+              )}
             </div>
             <div className="space-y-2"><Label>দেশ</Label><Input name="country" defaultValue={editing?.country || "বাংলাদেশ"} /></div>
             <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} /></div>
