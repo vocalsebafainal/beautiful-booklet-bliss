@@ -326,7 +326,7 @@ const OrderFlow = ({ open, onClose, category, tier, price }: OrderFlowProps) => 
 
         <div className="flex flex-col gap-3 w-full">
           <a
-            href="https://wa.me/8801619070709"
+            href="https://wa.me/8801710922638"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-700 transition-colors"
