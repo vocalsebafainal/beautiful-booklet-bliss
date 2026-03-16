@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminOrders from "./pages/AdminOrders";
 import AdminClients from "./pages/AdminClients";
 import AdminArtists from "./pages/AdminArtists";
+import AdminUsers from "./pages/AdminUsers";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="orders" element={<AdminOrders />} />
             <Route path="clients" element={<AdminClients />} />
             <Route path="artists" element={<AdminArtists />} />
+            <Route path="users" element={<AdminUsers />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

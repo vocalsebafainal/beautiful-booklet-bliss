@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Phone, Menu, X } from "lucide-react";
+import { Phone, Menu, X, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo.jfif";
 import ThemeToggle from "./ThemeToggle";
 
@@ -20,8 +21,7 @@ const StickyHeader = () => {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-      // Detect active section
-      const sections = navLinks.map(l => l.href.slice(1));
+      const sections = navLinks.map((l) => l.href.slice(1));
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i]);
         if (el && el.getBoundingClientRect().top <= 150) {
@@ -48,24 +48,24 @@ const StickyHeader = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4 md:px-6 flex items-center justify-between h-16 md:h-20">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:h-20 md:px-6">
         <div className="flex items-center gap-2">
-          <img src={logo} alt="Vocalseba Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover" />
-          <span className="text-foreground font-bold text-lg md:text-xl tracking-tight">
-            <span className="text-primary">Vocal</span><span className="text-secondary">seba</span>
+          <img src={logo} alt="Vocalseba Logo" className="h-8 w-8 rounded-full object-cover md:h-10 md:w-10" />
+          <span className="text-lg font-bold tracking-tight text-foreground md:text-xl">
+            <span className="text-primary">Vocal</span>
+            <span className="text-secondary">seba</span>
           </span>
         </div>
 
-        {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-1">
-          {navLinks.map(link => (
+          {navLinks.map((link) => (
             <button
               key={link.href}
               onClick={() => scrollTo(link.href)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 activeSection === link.href.slice(1)
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               }`}
             >
               {link.label}
@@ -73,52 +73,73 @@ const StickyHeader = () => {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <ThemeToggle />
+          <Link
+            to="/admin/login"
+            className="hidden items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted md:flex"
+          >
+            <ShieldCheck className="h-4 w-4 text-primary" />
+            Admin Login
+          </Link>
           <a
             href="https://wa.me/8801710922638"
             target="_blank"
             rel="noopener noreferrer"
-            className="gold-btn flex items-center gap-2 text-sm px-4 py-2 md:px-6 md:py-3"
+            className="gold-btn hidden items-center gap-2 px-4 py-2 text-sm md:flex md:px-6 md:py-3"
           >
-            <Phone className="w-4 h-4" />
-            <span className="hidden sm:inline">যোগাযোগ করুন</span>
-            <span className="sm:hidden">Contact</span>
+            <Phone className="h-4 w-4" />
+            <span>যোগাযোগ করুন</span>
           </a>
-          {/* Mobile menu toggle */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden p-2 text-foreground"
+            className="p-2 text-foreground lg:hidden"
             aria-label="Toggle menu"
           >
-            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border/50 overflow-hidden"
+            className="overflow-hidden border-b border-border/50 bg-background/95 backdrop-blur-xl lg:hidden"
           >
-            <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
-              {navLinks.map(link => (
+            <nav className="container mx-auto flex flex-col gap-1 px-4 py-4">
+              {navLinks.map((link) => (
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className={`text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`rounded-lg px-4 py-3 text-left text-sm font-medium transition-colors ${
                     activeSection === link.href.slice(1)
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                   }`}
                 >
                   {link.label}
                 </button>
               ))}
+              <Link
+                to="/admin/login"
+                onClick={() => setMenuOpen(false)}
+                className="mt-2 flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
+              >
+                <ShieldCheck className="h-4 w-4 text-primary" />
+                Admin Login
+              </Link>
+              <a
+                href="https://wa.me/8801710922638"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gold-btn mt-2 flex items-center justify-center gap-2 px-4 py-3 text-sm"
+              >
+                <Phone className="h-4 w-4" />
+                যোগাযোগ করুন
+              </a>
             </nav>
           </motion.div>
         )}
