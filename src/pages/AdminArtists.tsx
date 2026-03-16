@@ -208,7 +208,7 @@ export default function AdminArtists() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => { setEditing(a); setImagePreview(null); setImageFile(null); setSelectedCategory(a.category || a.specialization || ""); setDialogOpen(true); }}>
+                        <Button variant="ghost" size="icon" onClick={() => { const existingCategory = a.category || a.specialization || ""; setEditing(a); setImagePreview(null); setImageFile(null); setSelectedCategory(CATEGORY_OPTIONS.includes(existingCategory) ? existingCategory : existingCategory ? CUSTOM_CATEGORY_VALUE : ""); setCustomCategory(CATEGORY_OPTIONS.includes(existingCategory) ? "" : existingCategory); setDialogOpen(true); }}>
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
