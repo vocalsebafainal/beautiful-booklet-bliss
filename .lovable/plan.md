@@ -1,30 +1,73 @@
 
+লক্ষ্য: public site-এ একটি স্পষ্ট Login button থাকবে, কিন্তু আপনার উত্তর অনুযায়ী এটা হবে শুধুই Admin login। সাধারণ user account, profile table, বা public signup এখন যোগ করা হবে না।
 
-## Plan: PDF থেকে ১৩ জন আর্টিস্ট ডাটাবেসে যোগ করা
+1. বর্তমান অবস্থা যাচাই
+- `/admin/login` পেজ already আছে
+- `user_roles` + `has_role()` দিয়ে admin access already secure করা আছে
+- admin panel থেকে orders, clients, artists already manage করা যায়
+- public landing page-এ এখন কোনো login CTA নেই
 
-PDF থেকে পাওয়া ১৩ জন আর্টিস্টের তথ্য `artists` টেবিলে ইনসার্ট করা হবে।
+2. কী build করা হবে
+- Header-এ একটি স্পষ্ট “Admin Login” button যোগ করা হবে
+- Mobile menu-তেও একই login option থাকবে
+- চাইলে Hero section-এ secondary CTA হিসেবে admin login shortcutও যোগ করা হবে
+- button click করলে `/admin/login` এ যাবে
+- login success হলে `/admin` dashboard-এ redirect হবে
 
-### আর্টিস্ট তালিকা
+3. Admin management কীভাবে হবে
+কারণ আপনি “Only admin login” বলেছেন, তাই public login page-এ “admin/user add” form রাখা হবে না। এটা নিরাপদ না।
 
-| # | নাম | ফোন | ক্যাটাগরি | স্যাম্পল লিংক |
-|---|------|------|-----------|---------------|
-| 1 | Shadman Sakib | 01684-559779 | ন্যারেশন | https://ln.run/L4N6 |
-| 2 | Farzana Haq | 01771-941444 | নারী কণ্ঠ | https://ln.run/6a7c |
-| 3 | Ekram Hossain | 01813-226236 | পুরুষ কণ্ঠ | https://ln.run/Z0Ne |
-| 4 | Anny | 01833-626976 | নারী কণ্ঠ | https://ln.run/ybDK9 |
-| 5 | Sadik Hasan Emon | 01707-457968 | পুরুষ কণ্ঠ | https://ln.run/AaNCd |
-| 6 | Srabon Sani | 01794-692719 | পুরুষ কণ্ঠ | https://ln.run/T_Orr |
-| 7 | Ummay Habiba Shibly | 01881-138975 | নারী কণ্ঠ | https://ln.run/pSyn |
-| 8 | Rajvi | 01916-913814 | পুরুষ কণ্ঠ | https://ln.run/u5b3 |
-| 9 | Zain Shiplu | 01770-871770 | পুরুষ কণ্ঠ | https://ln.run/M20K |
-| 10 | Hasib | 01707-457968 | পুরুষ কণ্ঠ | https://ln.run/cKr-z |
-| 11 | Fatima Islam | 01714-379334 | ন্যারেশন | https://ln.run/EhWn |
-| 12 | Mim | 01812-710490 | নারী কণ্ঠ | https://ln.run/QwP |
-| 13 | Sakhawat | 01911-462211 | পুরুষ কণ্ঠ | https://ln.run/aY6G |
+তার বদলে:
+- admin panel-এর ভিতরে নতুন “Admin Users” / “Access Management” section যোগ করা হবে
+- existing admin সেখান থেকে নতুন admin add করতে পারবে
+- admin list দেখতে পারবে
+- প্রয়োজনে admin role remove করতে পারবে
+- সবকিছু server-side role check দিয়ে secure থাকবে
 
-### বাস্তবায়ন
+4. Backend approach
+- আলাদা profile table বানানো হবে না, কারণ আপনি বলেছেন profile data দরকার নেই
+- existing `user_roles` table reuse করা হবে
+- নতুন admin account তৈরি করার জন্য একটি secure backend function লাগবে
+- function:
+  - authenticated admin কিনা verify করবে
+  - নতুন auth user তৈরি করবে
+  - `user_roles` এ `admin` role insert করবে
+- public client থেকে সরাসরি role assign করা হবে না
 
-**একটি ডাটাবেস মাইগ্রেশন** চালিয়ে সব আর্টিস্ট একসাথে `artists` টেবিলে ইনসার্ট করা হবে — নাম, ফোন, ক্যাটাগরি, দেশ (বাংলাদেশ), এবং প্রথম স্যাম্পল ভিডিও লিংক সহ। সব আর্টিস্ট `active` স্ট্যাটাসে থাকবে এবং ল্যান্ডিং পেজে স্বয়ংক্রিয়ভাবে দেখাবে।
+5. UI flow
+```text
+Landing Page
+  -> Admin Login button
+  -> /admin/login
+  -> successful admin check
+  -> /admin dashboard
+       -> Orders
+       -> Clients
+       -> Artists
+       -> Admin Users
+```
 
-পরে আপনি Admin panel থেকে প্রতিটি আর্টিস্টের ছবি আপলোড ও ভিডিও লিংক পরিবর্তন করতে পারবেন।
+6. কোন ফাইলগুলোতে কাজ লাগবে
+- `src/components/StickyHeader.tsx`
+- `src/pages/AdminLogin.tsx` (copy/UX refinement if needed)
+- `src/App.tsx` (new admin users route)
+- `src/components/admin/AdminSidebar.tsx`
+- নতুন admin users page/component
+- secure backend function for creating/managing admin accounts
 
+7. Security decisions
+- public page থেকে admin create করা হবে না
+- localStorage/hardcoded admin check ব্যবহার করা হবে না
+- server-side role validation থাকবে
+- no anonymous signup
+- no user profile table unless later needed
+
+8. Final result
+- homepage থেকে সহজে admin login করা যাবে
+- admin panel থেকেই সব management করা যাবে
+- future-এ চাইলে regular user login আলাদা feature হিসেবে cleanভাবে add করা যাবে, কিন্তু এখন system admin-only থাকবে
+
+9. Assumption for implementation
+- যেহেতু “নতুন admin/user কোথা থেকে add হবে” প্রশ্নের উত্তর পাওয়া যায়নি, আমি secure default ধরছি:
+  - public site: only login button
+  - admin add/manage: admin panel-এর ভিতরে
