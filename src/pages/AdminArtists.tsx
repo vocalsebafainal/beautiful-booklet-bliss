@@ -23,6 +23,8 @@ const CATEGORY_OPTIONS = [
   "ন্যারেশন",
 ];
 
+const CUSTOM_CATEGORY_VALUE = "__custom__";
+
 export default function AdminArtists() {
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -30,6 +32,7 @@ export default function AdminArtists() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [customCategory, setCustomCategory] = useState("");
   const queryClient = useQueryClient();
 
   const { data: artists = [], isLoading } = useQuery({
