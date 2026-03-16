@@ -271,8 +271,16 @@ export default function AdminArtists() {
                   {CATEGORY_OPTIONS.map((cat) => (
                     <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                   ))}
+                  <SelectItem value={CUSTOM_CATEGORY_VALUE}>নতুন ক্যাটাগরি লিখুন</SelectItem>
                 </SelectContent>
               </Select>
+              {selectedCategory === CUSTOM_CATEGORY_VALUE && (
+                <Input
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                  placeholder="নতুন ক্যাটাগরি লিখুন"
+                />
+              )}
             </div>
             <div className="space-y-2"><Label>দেশ</Label><Input name="country" defaultValue={editing?.country || "বাংলাদেশ"} /></div>
             <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} /></div>
