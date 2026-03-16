@@ -28,7 +28,6 @@ export default function AdminLogin() {
       return;
     }
 
-    // Check admin role
     const { data: hasRole } = await supabase.rpc("has_role", {
       _user_id: data.user.id,
       _role: "admin" as const,
@@ -36,12 +35,12 @@ export default function AdminLogin() {
 
     if (!hasRole) {
       await supabase.auth.signOut();
-      toast.error("অ্যাক্সেস নিষিদ্ধ", { description: "আপনার অ্যাডমিন অনুমতি নেই।" });
+      toast.error("অ্যাক্সেস নিষিদ্ধ", { description: "আপনার অনুমতি নেই।" });
       setLoading(false);
       return;
     }
 
-    toast.success("স্বাগতম!", { description: "অ্যাডমিন প্যানেলে লগইন সফল।" });
+    toast.success("স্বাগতম!", { description: "লগইন সফল।" });
     navigate("/admin");
     setLoading(false);
   };
@@ -65,10 +64,10 @@ export default function AdminLogin() {
               <img src={logo} alt="Vocalseba" className="w-full h-full object-cover" />
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold">Admin Panel</CardTitle>
+              <CardTitle className="text-2xl font-bold">Login</CardTitle>
               <CardDescription className="flex items-center justify-center gap-1.5 mt-1">
                 <ShieldCheck className="w-4 h-4 text-primary" />
-                Vocalseba Agency — সুরক্ষিত এলাকা
+                Vocalseba Agency — সুরক্ষিত প্রবেশদ্বার
               </CardDescription>
             </div>
           </CardHeader>
@@ -80,7 +79,7 @@ export default function AdminLogin() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@vocalseba.com"
+                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
