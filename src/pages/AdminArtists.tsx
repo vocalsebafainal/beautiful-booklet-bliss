@@ -273,6 +273,7 @@ export default function AdminArtists() {
                   <SelectValue placeholder="ক্যাটাগরি সিলেক্ট করুন" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value={EMPTY_CATEGORY_VALUE}>ক্যাটাগরি ছাড়াই রাখুন</SelectItem>
                   {CATEGORY_OPTIONS.map((cat) => (
                     <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                   ))}
