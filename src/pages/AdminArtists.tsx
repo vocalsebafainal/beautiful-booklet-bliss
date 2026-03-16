@@ -111,6 +111,7 @@ export default function AdminArtists() {
     setImageFile(null);
     setImagePreview(null);
     setSelectedCategory("");
+    setCustomCategory("");
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,16 +125,19 @@ export default function AdminArtists() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    if (!selectedCategory) {
-      toast.error("ক্যাটাগরি সিলেক্ট করুন");
+    const finalCategory = selectedCategory === CUSTOM_CATEGORY_VALUE ? customCategory.trim() : selectedCategory;
+
+    if (!finalCategory) {
+      toast.error("ক্যাটাগরি সিলেক্ট বা লিখুন");
       return;
     }
+
     const data: any = {
       name: fd.get("name") as string,
-      category: selectedCategory,
+      category: finalCategory,
       country: fd.get("country") as string,
       phone: fd.get("phone") as string,
-      specialization: selectedCategory,
+      specialization: finalCategory,
       sample_video_url: (fd.get("sample_video_url") as string) || null,
     };
     if (editing) data.id = editing.id;
