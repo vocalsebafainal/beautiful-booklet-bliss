@@ -1,73 +1,36 @@
 
-লক্ষ্য: public site-এ একটি স্পষ্ট Login button থাকবে, কিন্তু আপনার উত্তর অনুযায়ী এটা হবে শুধুই Admin login। সাধারণ user account, profile table, বা public signup এখন যোগ করা হবে না।
 
-1. বর্তমান অবস্থা যাচাই
-- `/admin/login` পেজ already আছে
-- `user_roles` + `has_role()` দিয়ে admin access already secure করা আছে
-- admin panel থেকে orders, clients, artists already manage করা যায়
-- public landing page-এ এখন কোনো login CTA নেই
+# Ball Pool সেকশন — ইন্টারেক্টিভ সার্ভিস এক্সপ্লোরার
 
-2. কী build করা হবে
-- Header-এ একটি স্পষ্ট “Admin Login” button যোগ করা হবে
-- Mobile menu-তেও একই login option থাকবে
-- চাইলে Hero section-এ secondary CTA হিসেবে admin login shortcutও যোগ করা হবে
-- button click করলে `/admin/login` এ যাবে
-- login success হলে `/admin` dashboard-এ redirect হবে
+HeroSection এর পরে একটি আকর্ষণীয় "Ball Pool" সেকশন তৈরি হবে যেখানে সার্ভিস ক্যাটাগরিগুলো ফ্লোটিং বাবল/বল আকারে দেখাবে। ক্লিক করলে ডিটেইল expand হবে।
 
-3. Admin management কীভাবে হবে
-কারণ আপনি “Only admin login” বলেছেন, তাই public login page-এ “admin/user add” form রাখা হবে না। এটা নিরাপদ না।
+---
 
-তার বদলে:
-- admin panel-এর ভিতরে নতুন “Admin Users” / “Access Management” section যোগ করা হবে
-- existing admin সেখান থেকে নতুন admin add করতে পারবে
-- admin list দেখতে পারবে
-- প্রয়োজনে admin role remove করতে পারবে
-- সবকিছু server-side role check দিয়ে secure থাকবে
+## কী তৈরি হবে
 
-4. Backend approach
-- আলাদা profile table বানানো হবে না, কারণ আপনি বলেছেন profile data দরকার নেই
-- existing `user_roles` table reuse করা হবে
-- নতুন admin account তৈরি করার জন্য একটি secure backend function লাগবে
-- function:
-  - authenticated admin কিনা verify করবে
-  - নতুন auth user তৈরি করবে
-  - `user_roles` এ `admin` role insert করবে
-- public client থেকে সরাসরি role assign করা হবে না
+একটি নতুন `BallPoolSection.tsx` কম্পোনেন্ট:
 
-5. UI flow
+- **7টি ফ্লোটিং বল/বাবল** — প্রতিটি একটি সার্ভিস ক্যাটাগরি (Ad, YouTube, News, Storytelling, Islamic, Cartoon, Corporate)
+- প্রতিটি বলে **emoji + নাম** থাকবে
+- বলগুলো `framer-motion` দিয়ে **float animation** করবে (ওঠানামা, হালকা rotate)
+- **hover এ glow effect** ও scale up
+- **ক্লিক করলে** নিচে সেই ক্যাটাগরির সংক্ষিপ্ত বিবরণ + "অর্ডার করুন" বাটন expand হবে (AnimatePresence দিয়ে)
+- মোবাইলে 3 কলাম, ডেস্কটপে circular/scattered layout
+- CategoryGrid এর ডাটা reuse করা হবে
+
+## পেজে অবস্থান
+
 ```text
-Landing Page
-  -> Admin Login button
-  -> /admin/login
-  -> successful admin check
-  -> /admin dashboard
-       -> Orders
-       -> Clients
-       -> Artists
-       -> Admin Users
+StickyHeader
+HeroSection
+→ BallPoolSection (নতুন)
+StatsCounter
+TrustSection
+...
 ```
 
-6. কোন ফাইলগুলোতে কাজ লাগবে
-- `src/components/StickyHeader.tsx`
-- `src/pages/AdminLogin.tsx` (copy/UX refinement if needed)
-- `src/App.tsx` (new admin users route)
-- `src/components/admin/AdminSidebar.tsx`
-- নতুন admin users page/component
-- secure backend function for creating/managing admin accounts
+## ফাইল পরিবর্তন
 
-7. Security decisions
-- public page থেকে admin create করা হবে না
-- localStorage/hardcoded admin check ব্যবহার করা হবে না
-- server-side role validation থাকবে
-- no anonymous signup
-- no user profile table unless later needed
+1. **নতুন**: `src/components/BallPoolSection.tsx` — ফ্লোটিং বাবল UI + ক্লিকে ডিটেইল শো
+2. **এডিট**: `src/pages/Index.tsx` — BallPoolSection import ও HeroSection এর পরে যোগ
 
-8. Final result
-- homepage থেকে সহজে admin login করা যাবে
-- admin panel থেকেই সব management করা যাবে
-- future-এ চাইলে regular user login আলাদা feature হিসেবে cleanভাবে add করা যাবে, কিন্তু এখন system admin-only থাকবে
-
-9. Assumption for implementation
-- যেহেতু “নতুন admin/user কোথা থেকে add হবে” প্রশ্নের উত্তর পাওয়া যায়নি, আমি secure default ধরছি:
-  - public site: only login button
-  - admin add/manage: admin panel-এর ভিতরে
