@@ -80,7 +80,7 @@ const StickyHeader = () => {
             className="hidden items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted md:flex"
           >
             <ShieldCheck className="h-4 w-4 text-primary" />
-            Admin Login
+            Login
           </Link>
           <a
             href="https://wa.me/8801710922638"
@@ -129,7 +129,7 @@ const StickyHeader = () => {
                 className="mt-2 flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
               >
                 <ShieldCheck className="h-4 w-4 text-primary" />
-                Admin Login
+                Login
               </Link>
               <a
                 href="https://wa.me/8801710922638"
