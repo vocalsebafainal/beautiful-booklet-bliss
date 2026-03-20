@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -37,6 +38,7 @@ const OrderFlow = ({ open, onClose, category, tier, price }: OrderFlowProps) => 
   const [paymentMethod, setPaymentMethod] = useState<"bkash" | "nagad" | "rocket">("bkash");
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const orderId = `VS-${Date.now().toString(36).toUpperCase()}`;
   const advanceAmount = Math.ceil(price * 0.5);
@@ -271,7 +273,10 @@ const OrderFlow = ({ open, onClose, category, tier, price }: OrderFlowProps) => 
             ←
           </button>
           <button
-            onClick={() => setStep("success")}
+            onClick={() => {
+              handleClose();
+              navigate(`/thank-you?orderId=${orderId}&category=${encodeURIComponent(category)}&tier=${encodeURIComponent(tier)}&amount=${advanceAmount}`);
+            }}
             disabled={!transactionId.trim()}
             className="flex-1 gold-btn disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
