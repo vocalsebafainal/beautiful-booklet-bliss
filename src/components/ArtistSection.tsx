@@ -7,14 +7,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-const getYouTubeEmbedUrl = (url: string) => {
+const getYouTubeEmbedUrl = (url: string): string | null => {
   if (!url) return null;
-  // Already an embed URL
   if (url.includes("/embed/")) return url;
-  // Extract video ID from various YouTube URL formats
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/))([^&?\s]+)/);
   if (match) return `https://www.youtube.com/embed/${match[1]}`;
-  return url;
+  return null; // Not a YouTube URL
+};
+
+const isYouTubeUrl = (url: string) => {
+  return url.includes("youtube.com") || url.includes("youtu.be");
 };
 
 const ArtistSection = () => {
@@ -100,15 +102,32 @@ const ArtistSection = () => {
                 </div>
 
                 {artist.sample_video_url && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
-                    onClick={() => setSelectedArtist(artist)}
-                  >
-                    <Play size={12} />
-                    স্যাম্পল দেখুন
-                  </Button>
+                  isYouTubeUrl(artist.sample_video_url) ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
+                      onClick={() => setSelectedArtist(artist)}
+                    >
+                      <Play size={12} />
+                      স্যাম্পল দেখুন
+                    </Button>
+                  ) : (
+                    <a
+                      href={artist.sample_video_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
+                      >
+                        <Play size={12} />
+                        স্যাম্পল দেখুন
+                      </Button>
+                    </a>
+                  )
                 )}
               </motion.div>
             ))}
