@@ -1,36 +1,41 @@
 
 
-# Ball Pool সেকশন — ইন্টারেক্টিভ সার্ভিস এক্সপ্লোরার
+## Important Clarification
 
-HeroSection এর পরে একটি আকর্ষণীয় "Ball Pool" সেকশন তৈরি হবে যেখানে সার্ভিস ক্যাটাগরিগুলো ফ্লোটিং বাবল/বল আকারে দেখাবে। ক্লিক করলে ডিটেইল expand হবে।
+আপনার শেয়ার করা গাইডটি **Next.js + Vercel** প্রজেক্টের জন্য। কিন্তু আপনার VocalSeba প্রজেক্টটি **React + Vite** দিয়ে তৈরি এবং **Lovable Cloud**-এ হোস্টেড — Vercel-এ নয়। তাই ওই গাইডের অনেক কিছু এখানে প্রযোজ্য নয়।
+
+তবে, গাইড থেকে যা যা দরকারি সেগুলো এই প্রজেক্টে implement করা যায়:
 
 ---
 
-## কী তৈরি হবে
+## Plan
 
-একটি নতুন `BallPoolSection.tsx` কম্পোনেন্ট:
+### 1. Facebook Pixel Integration
+- `index.html`-এ Facebook Pixel base script যোগ করা (PageView tracking)
+- OrderFlow-এর success step-এ `fbq('track', 'Purchase')` event fire করা
+- Pixel ID একটি environment variable হিসেবে রাখা অথবা সরাসরি কোডে দেওয়া
 
-- **7টি ফ্লোটিং বল/বাবল** — প্রতিটি একটি সার্ভিস ক্যাটাগরি (Ad, YouTube, News, Storytelling, Islamic, Cartoon, Corporate)
-- প্রতিটি বলে **emoji + নাম** থাকবে
-- বলগুলো `framer-motion` দিয়ে **float animation** করবে (ওঠানামা, হালকা rotate)
-- **hover এ glow effect** ও scale up
-- **ক্লিক করলে** নিচে সেই ক্যাটাগরির সংক্ষিপ্ত বিবরণ + "অর্ডার করুন" বাটন expand হবে (AnimatePresence দিয়ে)
-- মোবাইলে 3 কলাম, ডেস্কটপে circular/scattered layout
-- CategoryGrid এর ডাটা reuse করা হবে
+### 2. Thank You Page (Dedicated Route)
+- `/thank-you` route তৈরি করা একটি আলাদা page হিসেবে
+- বর্তমানে success step শুধু OrderFlow dialog-এর ভিতরে আছে — চাইলে একটি full-page Thank You পেজও রাখা যায়
 
-## পেজে অবস্থান
+### 3. Missing Routes Check
+- বর্তমানে `/checkout`, `/payment/verify`, `/dashboard` — এই route গুলো নেই
+- প্রয়োজন অনুযায়ী এগুলো তৈরি করা যাবে, তবে আপনার বর্তমান flow-তে payment modal-based, তাই `/checkout` ও `/payment/verify` আলাদাভাবে দরকার নাও হতে পারে
 
-```text
-StickyHeader
-HeroSection
-→ BallPoolSection (নতুন)
-StatsCounter
-TrustSection
-...
-```
+### 4. Domain Issue (Already Known)
+- `vocalseba.com` এখনো পুরোনো Vercel-এ point করছে — এটি Lovable Settings → Domains থেকে ঠিক করতে হবে
+- Vercel-এ কিছু deploy করার দরকার নেই, কারণ app ইতিমধ্যে Lovable Cloud-এ চলছে
 
-## ফাইল পরিবর্তন
+### 5. Database/RLS (Already Done)
+- Orders table-এ anonymous insert policy আছে
+- Artists table-এ public select policy আছে
 
-1. **নতুন**: `src/components/BallPoolSection.tsx` — ফ্লোটিং বাবল UI + ক্লিকে ডিটেইল শো
-2. **এডিট**: `src/pages/Index.tsx` — BallPoolSection import ও HeroSection এর পরে যোগ
+---
+
+## What Needs Your Input
+
+আপনার **Facebook Pixel ID** লাগবে। আপনার কাছে কি Pixel ID আছে? থাকলে আমি সাথে সাথে implement করে দিতে পারি।
+
+Also — আপনি কি আলাদা `/thank-you` page চান, নাকি এখনকার modal-based success screen-ই যথেষ্ট?
 
