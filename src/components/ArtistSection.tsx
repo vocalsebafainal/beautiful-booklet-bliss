@@ -102,32 +102,15 @@ const ArtistSection = () => {
                 </div>
 
                 {artist.sample_video_url && (
-                  isYouTubeUrl(artist.sample_video_url) ? (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
-                      onClick={() => setSelectedArtist(artist)}
-                    >
-                      <Play size={12} />
-                      স্যাম্পল দেখুন
-                    </Button>
-                  ) : (
-                    <a
-                      href={artist.sample_video_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
-                      >
-                        <Play size={12} />
-                        স্যাম্পল দেখুন
-                      </Button>
-                    </a>
-                  )
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
+                    onClick={() => setSelectedArtist(artist)}
+                  >
+                    <Play size={12} />
+                    স্যাম্পল দেখুন
+                  </Button>
                 )}
               </motion.div>
             ))}
