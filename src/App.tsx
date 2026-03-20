@@ -12,6 +12,7 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminClients from "./pages/AdminClients";
 import AdminArtists from "./pages/AdminArtists";
 import AdminUsers from "./pages/AdminUsers";
+import ThankYou from "./pages/ThankYou";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/thank-you" element={<ThankYou />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
