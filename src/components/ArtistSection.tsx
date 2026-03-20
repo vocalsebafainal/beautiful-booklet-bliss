@@ -7,14 +7,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-const getYouTubeEmbedUrl = (url: string) => {
+const getYouTubeEmbedUrl = (url: string): string | null => {
   if (!url) return null;
-  // Already an embed URL
   if (url.includes("/embed/")) return url;
-  // Extract video ID from various YouTube URL formats
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/))([^&?\s]+)/);
   if (match) return `https://www.youtube.com/embed/${match[1]}`;
-  return url;
+  return null; // Not a YouTube URL
+};
+
+const isYouTubeUrl = (url: string) => {
+  return url.includes("youtube.com") || url.includes("youtu.be");
 };
 
 const ArtistSection = () => {
