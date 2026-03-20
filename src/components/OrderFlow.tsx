@@ -38,6 +38,7 @@ const OrderFlow = ({ open, onClose, category, tier, price }: OrderFlowProps) => 
   const [paymentMethod, setPaymentMethod] = useState<"bkash" | "nagad" | "rocket">("bkash");
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const orderId = `VS-${Date.now().toString(36).toUpperCase()}`;
   const advanceAmount = Math.ceil(price * 0.5);
