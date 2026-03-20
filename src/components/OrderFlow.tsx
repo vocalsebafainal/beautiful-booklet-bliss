@@ -273,7 +273,10 @@ const OrderFlow = ({ open, onClose, category, tier, price }: OrderFlowProps) => 
             ←
           </button>
           <button
-            onClick={() => setStep("success")}
+            onClick={() => {
+              handleClose();
+              navigate(`/thank-you?orderId=${orderId}&category=${encodeURIComponent(category)}&tier=${encodeURIComponent(tier)}&amount=${advanceAmount}`);
+            }}
             disabled={!transactionId.trim()}
             className="flex-1 gold-btn disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
