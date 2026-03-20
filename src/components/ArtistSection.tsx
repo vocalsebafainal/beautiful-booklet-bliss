@@ -102,32 +102,15 @@ const ArtistSection = () => {
                 </div>
 
                 {artist.sample_video_url && (
-                  isYouTubeUrl(artist.sample_video_url) ? (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
-                      onClick={() => setSelectedArtist(artist)}
-                    >
-                      <Play size={12} />
-                      স্যাম্পল দেখুন
-                    </Button>
-                  ) : (
-                    <a
-                      href={artist.sample_video_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
-                      >
-                        <Play size={12} />
-                        স্যাম্পল দেখুন
-                      </Button>
-                    </a>
-                  )
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs mt-1 border-primary/30 text-primary hover:bg-primary/10"
+                    onClick={() => setSelectedArtist(artist)}
+                  >
+                    <Play size={12} />
+                    স্যাম্পল দেখুন
+                  </Button>
                 )}
               </motion.div>
             ))}
@@ -157,13 +140,27 @@ const ArtistSection = () => {
           </DialogHeader>
           <div className="aspect-video w-full">
             {selectedArtist?.sample_video_url && (
-              <iframe
-                src={getYouTubeEmbedUrl(selectedArtist.sample_video_url) || ""}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={`${selectedArtist.name} sample`}
-              />
+              getYouTubeEmbedUrl(selectedArtist.sample_video_url) ? (
+                <iframe
+                  src={getYouTubeEmbedUrl(selectedArtist.sample_video_url) || ""}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={`${selectedArtist.name} sample`}
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-muted/30">
+                  <Play className="w-12 h-12 text-primary" />
+                  <a
+                    href={selectedArtist.sample_video_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 rounded-xl font-bold text-primary-foreground bg-primary hover:bg-primary/90 transition-colors"
+                  >
+                    ▶ ভিডিও দেখুন
+                  </a>
+                </div>
+              )
             )}
           </div>
         </DialogContent>
