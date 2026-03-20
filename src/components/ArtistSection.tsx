@@ -140,13 +140,27 @@ const ArtistSection = () => {
           </DialogHeader>
           <div className="aspect-video w-full">
             {selectedArtist?.sample_video_url && (
-              <iframe
-                src={getYouTubeEmbedUrl(selectedArtist.sample_video_url) || ""}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={`${selectedArtist.name} sample`}
-              />
+              getYouTubeEmbedUrl(selectedArtist.sample_video_url) ? (
+                <iframe
+                  src={getYouTubeEmbedUrl(selectedArtist.sample_video_url) || ""}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={`${selectedArtist.name} sample`}
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-muted/30">
+                  <Play className="w-12 h-12 text-primary" />
+                  <a
+                    href={selectedArtist.sample_video_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 rounded-xl font-bold text-primary-foreground bg-primary hover:bg-primary/90 transition-colors"
+                  >
+                    ▶ ভিডিও দেখুন
+                  </a>
+                </div>
+              )
             )}
           </div>
         </DialogContent>
