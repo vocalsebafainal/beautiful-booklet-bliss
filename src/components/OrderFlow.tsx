@@ -40,6 +40,14 @@ const OrderFlow = ({ open, onClose, category, tier, price }: OrderFlowProps) => 
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { trackLead, trackInitiateCheckout, trackPurchase, trackViewContent, trackButtonClick } = useAnalytics();
+
+  // Track Lead when order flow opens
+  useEffect(() => {
+    if (open) {
+      trackLead({ category, tier, price });
+    }
+  }, [open]);
 
   const orderId = `VS-${Date.now().toString(36).toUpperCase()}`;
   const advanceAmount = Math.ceil(price * 0.5);
