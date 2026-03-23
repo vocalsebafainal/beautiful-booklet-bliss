@@ -5,6 +5,7 @@ import {
   Mic,
   LogOut,
   ShieldCheck,
+  Settings,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -30,6 +31,7 @@ const menuItems = [
   { title: "ক্লায়েন্ট", url: "/admin/clients", icon: Users },
   { title: "আর্টিস্ট", url: "/admin/artists", icon: Mic },
   { title: "অ্যাডমিন ইউজারস", url: "/admin/users", icon: ShieldCheck },
+  { title: "সেটিংস", url: "/admin/settings", icon: Settings },
 ];
 
 interface AdminSidebarProps {
