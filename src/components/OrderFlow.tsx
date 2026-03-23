@@ -286,6 +286,7 @@ const OrderFlow = ({ open, onClose, category, tier, price }: OrderFlowProps) => 
           </button>
           <button
             onClick={() => {
+              trackPurchase(advanceAmount, "BDT", { category, tier, orderId });
               handleClose();
               navigate(`/thank-you?orderId=${orderId}&category=${encodeURIComponent(category)}&tier=${encodeURIComponent(tier)}&amount=${advanceAmount}`);
             }}
