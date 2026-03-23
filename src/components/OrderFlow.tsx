@@ -177,7 +177,10 @@ const OrderFlow = ({ open, onClose, category, tier, price }: OrderFlowProps) => 
             ← পিছনে
           </button>
           <button
-            onClick={() => setStep("payment")}
+            onClick={() => {
+              trackInitiateCheckout({ category, tier, price });
+              setStep("payment");
+            }}
             disabled={!scriptText.trim()}
             className="flex-1 gold-btn disabled:opacity-40 disabled:cursor-not-allowed"
           >
