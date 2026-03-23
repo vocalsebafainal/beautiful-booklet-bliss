@@ -101,6 +101,33 @@ export type Database = {
         }
         Relationships: []
       }
+      marketing_configs: {
+        Row: {
+          config_name: string
+          config_value: string
+          created_at: string
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          config_name: string
+          config_value?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          config_name?: string
+          config_value?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           amount: number
