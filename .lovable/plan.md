@@ -1,41 +1,55 @@
 
 
-## Important Clarification
+## বর্তমান অবস্থা বিশ্লেষণ
 
-আপনার শেয়ার করা গাইডটি **Next.js + Vercel** প্রজেক্টের জন্য। কিন্তু আপনার VocalSeba প্রজেক্টটি **React + Vite** দিয়ে তৈরি এবং **Lovable Cloud**-এ হোস্টেড — Vercel-এ নয়। তাই ওই গাইডের অনেক কিছু এখানে প্রযোজ্য নয়।
+কোডবেস পর্যালোচনা করে দেখা যাচ্ছে বেশিরভাগ সিস্টেম ইতিমধ্যেই সঠিকভাবে তৈরি করা আছে:
 
-তবে, গাইড থেকে যা যা দরকারি সেগুলো এই প্রজেক্টে implement করা যায়:
+- Authentication: Lovable Cloud (Supabase) দিয়ে কাজ করছে, `useAdminAuth` হুক session persist করে
+- Database: সব টেবিল (artists, orders, clients, user_roles, marketing_configs) RLS সহ আছে
+- CRUD: Artist create/edit/delete কাজ করছে
+- Protected routes: AdminLayout auth check করে
+
+**তবে কিছু সমস্যা ও উন্নতির জায়গা আছে:**
+
+## পরিকল্পনা
+
+### 1. Artist Update Flow চূড়ান্ত ফিক্স
+**ফাইল:** `src/pages/AdminArtists.tsx`
+- `toggleStatus` mutation-এ `.select()` যোগ করা (এটি ছাড়া Supabase resolve না-ও করতে পারে)
+- Delete mutation-এও `.select()` নিশ্চিত করা
+- `rate_per_project` ফিল্ড form-এ যোগ করা (ডিফল্ট 0)
+
+### 2. Session Stability উন্নতি
+**ফাইল:** `src/hooks/useAdminAuth.ts`
+- বর্তমান কোড ঠিক আছে, তবে `onAuthStateChange` listener-কে `getSession()` এর আগে সেট করা উচিত (Supabase best practice) যাতে কোনো event মিস না হয়
+
+### 3. Admin Panel Responsive Design উন্নতি
+**ফাইল:** `src/pages/AdminArtists.tsx`
+- মোবাইলে Table overflow ঠিক করা (horizontal scroll wrapper)
+- Form dialog মোবাইলে ভালোভাবে দেখানো
+
+### 4. Error Handling ও Loading States উন্নতি
+**ফাইল:** `src/pages/AdminArtists.tsx`, `src/pages/AdminOrders.tsx`, `src/pages/AdminClients.tsx`
+- সব mutation-এ consistent error handling
+- Delete confirmation dialog (native confirm এর বদলে AlertDialog)
+- Network error-এ retry option
+
+### 5. Form Validation শক্তিশালী করা
+**ফাইল:** `src/pages/AdminArtists.tsx`
+- নাম ফিল্ড minimum length চেক
+- Video URL format validation (YouTube/MP4)
+- Phone number format validation
 
 ---
 
-## Plan
+### গুরুত্বপূর্ণ নোট
+এই প্রজেক্ট **Lovable Cloud** (Supabase) ব্যবহার করছে, Firebase ব্যবহার করা সম্ভব নয় এবং প্রয়োজনও নেই — Lovable Cloud একই ধরনের সুবিধা দেয় (authentication, realtime database, file storage) কোনো অতিরিক্ত সেটআপ ছাড়াই।
 
-### 1. Facebook Pixel Integration
-- `index.html`-এ Facebook Pixel base script যোগ করা (PageView tracking)
-- OrderFlow-এর success step-এ `fbq('track', 'Purchase')` event fire করা
-- Pixel ID একটি environment variable হিসেবে রাখা অথবা সরাসরি কোডে দেওয়া
-
-### 2. Thank You Page (Dedicated Route)
-- `/thank-you` route তৈরি করা একটি আলাদা page হিসেবে
-- বর্তমানে success step শুধু OrderFlow dialog-এর ভিতরে আছে — চাইলে একটি full-page Thank You পেজও রাখা যায়
-
-### 3. Missing Routes Check
-- বর্তমানে `/checkout`, `/payment/verify`, `/dashboard` — এই route গুলো নেই
-- প্রয়োজন অনুযায়ী এগুলো তৈরি করা যাবে, তবে আপনার বর্তমান flow-তে payment modal-based, তাই `/checkout` ও `/payment/verify` আলাদাভাবে দরকার নাও হতে পারে
-
-### 4. Domain Issue (Already Known)
-- `vocalseba.com` এখনো পুরোনো Vercel-এ point করছে — এটি Lovable Settings → Domains থেকে ঠিক করতে হবে
-- Vercel-এ কিছু deploy করার দরকার নেই, কারণ app ইতিমধ্যে Lovable Cloud-এ চলছে
-
-### 5. Database/RLS (Already Done)
-- Orders table-এ anonymous insert policy আছে
-- Artists table-এ public select policy আছে
-
----
-
-## What Needs Your Input
-
-আপনার **Facebook Pixel ID** লাগবে। আপনার কাছে কি Pixel ID আছে? থাকলে আমি সাথে সাথে implement করে দিতে পারি।
-
-Also — আপনি কি আলাদা `/thank-you` page চান, নাকি এখনকার modal-based success screen-ই যথেষ্ট?
+### পরিবর্তিত ফাইলসমূহ
+| ফাইল | কাজ |
+|---|---|
+| `src/hooks/useAdminAuth.ts` | Auth listener ordering fix |
+| `src/pages/AdminArtists.tsx` | Mutation fixes, validation, responsive |
+| `src/pages/AdminOrders.tsx` | Error handling consistency |
+| `src/pages/AdminClients.tsx` | Error handling consistency |
 
