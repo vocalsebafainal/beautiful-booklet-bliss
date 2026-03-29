@@ -69,7 +69,7 @@ const PricingModal = ({ open, onClose, category, onSelectTier }: PricingModalPro
               <div className="flex items-start justify-between gap-2 mb-3">
                 <div className="text-2xl leading-none">{tier.label}</div>
                 {tier.highlight && (
-                  <div className="shrink-0 rounded-full bg-primary px-2 py-1 text-[10px] font-bold leading-none text-primary-foreground shadow-lg shadow-primary/30 md:text-xs">
+                  <div className="shrink-0 rounded-full bg-primary px-3 py-1.5 text-[11px] font-bold leading-none text-primary-foreground shadow-lg shadow-primary/30 md:text-xs">
                     ⭐ জনপ্রিয়
                   </div>
                 )}
