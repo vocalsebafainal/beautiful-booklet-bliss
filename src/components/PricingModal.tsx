@@ -55,20 +55,20 @@ const PricingModal = ({ open, onClose, category, onSelectTier }: PricingModalPro
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6 mt-6 md:mt-6">
           {tiers.map((tier, i) => (
             <motion.div
               key={tier.name}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className={`glass-card p-5 md:p-6 flex flex-col relative ${
-                tier.highlight ? "border-primary/50 ring-1 ring-primary/30" : ""
+              className={`glass-card p-5 md:p-6 flex flex-col relative overflow-visible ${
+                tier.highlight ? "border-primary/50 ring-1 ring-primary/30 mt-4" : ""
               }`}
             >
               {tier.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">
-                  জনপ্রিয়
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-purple-500 text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full shadow-lg shadow-primary/30 whitespace-nowrap z-10">
+                  ⭐ জনপ্রিয়
                 </div>
               )}
               <div className="text-2xl mb-3">{tier.label}</div>
