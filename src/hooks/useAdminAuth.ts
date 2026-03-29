@@ -11,7 +11,7 @@ export function useAdminAuth() {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const checkRole = async (userId: string) => {
       try {
         const { data } = await supabase.rpc("has_role", {
@@ -24,6 +24,22 @@ export function useAdminAuth() {
       }
     };
 
+    // 1. Restore session from storage FIRST
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!isMounted) return;
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+
+      if (currentUser) {
+        const admin = await checkRole(currentUser.id);
+        if (isMounted) setIsAdmin(admin);
+      } else {
+        setIsAdmin(false);
+      }
+      if (isMounted) setLoading(false);
+    });
+
+    // 2. Listen for subsequent auth changes (sign in/out)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         if (!isMounted) return;
