@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { OrderStatusBadge } from "@/components/admin/OrderStatusBadge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -26,10 +26,11 @@ export default function AdminOrders() {
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["admin-orders"],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("orders")
         .select("*, artists(name)")
         .order("created_at", { ascending: false });
+      if (error) throw error;
       return data || [];
     },
   });
@@ -44,19 +45,24 @@ export default function AdminOrders() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, ...updates }: any) => {
-      const { error } = await supabase.from("orders").update(updates).eq("id", id);
+      const { data, error } = await supabase.from("orders").update(updates).eq("id", id).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("অর্ডার আপডেট হয়নি");
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
       toast.success("অর্ডার আপডেট হয়েছে");
     },
+    onError: (err) => toast.error(err instanceof Error ? err.message : "আপডেট ব্যর্থ হয়েছে"),
   });
 
   const createMutation = useMutation({
     mutationFn: async (order: any) => {
-      const { error } = await supabase.from("orders").insert(order);
+      const { data, error } = await supabase.from("orders").insert(order).select().maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("অর্ডার তৈরি হয়নি");
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
@@ -64,6 +70,7 @@ export default function AdminOrders() {
       setDialogOpen(false);
       setEditingOrder(null);
     },
+    onError: (err) => toast.error(err instanceof Error ? err.message : "অর্ডার তৈরি ব্যর্থ হয়েছে"),
   });
 
   const filtered = orders.filter((o: any) => {
@@ -73,11 +80,11 @@ export default function AdminOrders() {
     return matchSearch && matchStatus;
   });
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const data: any = {
-      client_name: fd.get("client_name") as string,
+      client_name: (fd.get("client_name") as string).trim(),
       client_phone: fd.get("client_phone") as string,
       client_email: fd.get("client_email") as string,
       category: fd.get("category") as string,
@@ -89,6 +96,11 @@ export default function AdminOrders() {
       notes: fd.get("notes") as string,
     };
 
+    if (!data.client_name) {
+      toast.error("ক্লায়েন্ট নাম দিন");
+      return;
+    }
+
     if (editingOrder) {
       updateMutation.mutate({ id: editingOrder.id, ...data });
       setDialogOpen(false);
@@ -98,6 +110,8 @@ export default function AdminOrders() {
       createMutation.mutate(data);
     }
   };
+
+  const isSaving = updateMutation.isPending || createMutation.isPending;
 
   return (
     <div className="space-y-6">
@@ -130,66 +144,64 @@ export default function AdminOrders() {
           {isLoading ? (
             <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>অর্ডার ID</TableHead>
-                  <TableHead>ক্লায়েন্ট</TableHead>
-                  <TableHead>ক্যাটেগরি</TableHead>
-                  <TableHead>টিয়ার</TableHead>
-                  <TableHead>পরিমাণ</TableHead>
-                  <TableHead>স্ট্যাটাস</TableHead>
-                  <TableHead>আর্টিস্ট</TableHead>
-                  <TableHead>তারিখ</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.map((order: any) => (
-                  <TableRow key={order.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setEditingOrder(order); setDialogOpen(true); }}>
-                    <TableCell className="font-mono text-sm font-medium">{order.order_id}</TableCell>
-                    <TableCell>{order.client_name}</TableCell>
-                    <TableCell>{order.category}</TableCell>
-                    <TableCell>{order.tier}</TableCell>
-                    <TableCell>৳{order.amount.toLocaleString()}</TableCell>
-                    <TableCell>
-                      <Select
-                        value={order.status}
-                        onValueChange={(val) => {
-                          updateMutation.mutate({ id: order.id, status: val });
-                        }}
-                      >
-                        <SelectTrigger className="w-[140px] h-8" onClick={(e) => e.stopPropagation()}>
-                          <OrderStatusBadge status={order.status} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {statuses.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell>
-                      <Select
-                        value={order.assigned_artist_id || "none"}
-                        onValueChange={(val) => {
-                          updateMutation.mutate({ id: order.id, assigned_artist_id: val === "none" ? null : val });
-                        }}
-                      >
-                        <SelectTrigger className="w-[140px] h-8" onClick={(e) => e.stopPropagation()}>
-                          <SelectValue placeholder="অ্যাসাইন করুন" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="none">কেউ না</SelectItem>
-                          {artists.map((a: any) => <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{format(new Date(order.created_at), "dd MMM yyyy")}</TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>অর্ডার ID</TableHead>
+                    <TableHead>ক্লায়েন্ট</TableHead>
+                    <TableHead className="hidden md:table-cell">ক্যাটেগরি</TableHead>
+                    <TableHead className="hidden md:table-cell">টিয়ার</TableHead>
+                    <TableHead>পরিমাণ</TableHead>
+                    <TableHead>স্ট্যাটাস</TableHead>
+                    <TableHead className="hidden lg:table-cell">আর্টিস্ট</TableHead>
+                    <TableHead className="hidden md:table-cell">তারিখ</TableHead>
                   </TableRow>
-                ))}
-                {filtered.length === 0 && (
-                  <TableRow><TableCell colSpan={8} className="text-center py-8 text-muted-foreground">কোনো অর্ডার পাওয়া যায়নি</TableCell></TableRow>
-                )}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filtered.map((order: any) => (
+                    <TableRow key={order.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setEditingOrder(order); setDialogOpen(true); }}>
+                      <TableCell className="font-mono text-sm font-medium">{order.order_id}</TableCell>
+                      <TableCell>{order.client_name}</TableCell>
+                      <TableCell className="hidden md:table-cell">{order.category}</TableCell>
+                      <TableCell className="hidden md:table-cell">{order.tier}</TableCell>
+                      <TableCell>৳{order.amount.toLocaleString()}</TableCell>
+                      <TableCell>
+                        <Select
+                          value={order.status}
+                          onValueChange={(val) => updateMutation.mutate({ id: order.id, status: val })}
+                        >
+                          <SelectTrigger className="w-[140px] h-8" onClick={(e) => e.stopPropagation()}>
+                            <OrderStatusBadge status={order.status} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {statuses.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        <Select
+                          value={order.assigned_artist_id || "none"}
+                          onValueChange={(val) => updateMutation.mutate({ id: order.id, assigned_artist_id: val === "none" ? null : val })}
+                        >
+                          <SelectTrigger className="w-[140px] h-8" onClick={(e) => e.stopPropagation()}>
+                            <SelectValue placeholder="অ্যাসাইন করুন" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">কেউ না</SelectItem>
+                            {artists.map((a: any) => <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{format(new Date(order.created_at), "dd MMM yyyy")}</TableCell>
+                    </TableRow>
+                  ))}
+                  {filtered.length === 0 && (
+                    <TableRow><TableCell colSpan={8} className="text-center py-8 text-muted-foreground">কোনো অর্ডার পাওয়া যায়নি</TableCell></TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -200,7 +212,7 @@ export default function AdminOrders() {
             <DialogTitle>{editingOrder ? `অর্ডার: ${editingOrder.order_id}` : "নতুন অর্ডার"}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSave} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>ক্লায়েন্ট নাম *</Label>
                 <Input name="client_name" defaultValue={editingOrder?.client_name} required />
@@ -242,7 +254,8 @@ export default function AdminOrders() {
               <Label>নোট</Label>
               <Textarea name="notes" defaultValue={editingOrder?.notes} rows={2} />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isSaving}>
+              {isSaving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               {editingOrder ? "আপডেট করুন" : "অর্ডার তৈরি করুন"}
             </Button>
           </form>

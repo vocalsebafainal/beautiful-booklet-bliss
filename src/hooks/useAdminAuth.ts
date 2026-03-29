@@ -24,37 +24,29 @@ export function useAdminAuth() {
       }
     };
 
-    // 1. Restore session from storage FIRST
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    const handleSession = async (user: User | null) => {
       if (!isMounted) return;
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-
-      if (currentUser) {
-        const admin = await checkRole(currentUser.id);
+      setUser(user);
+      if (user) {
+        const admin = await checkRole(user.id);
         if (isMounted) setIsAdmin(admin);
       } else {
         setIsAdmin(false);
       }
       if (isMounted) setLoading(false);
-    });
+    };
 
-    // 2. Listen for subsequent auth changes (sign in/out)
+    // 1. Set listener FIRST (Supabase best practice) so no events are missed
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        if (!isMounted) return;
-        const currentUser = session?.user ?? null;
-        setUser(currentUser);
-
-        if (currentUser) {
-          const admin = await checkRole(currentUser.id);
-          if (isMounted) setIsAdmin(admin);
-        } else {
-          setIsAdmin(false);
-        }
-        if (isMounted) setLoading(false);
+      (_event, session) => {
+        handleSession(session?.user ?? null);
       }
     );
+
+    // 2. Then restore existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      handleSession(session?.user ?? null);
+    });
 
     // Fallback timeout to prevent infinite loading
     const timeout = setTimeout(() => {

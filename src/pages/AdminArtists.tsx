@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Search, Plus, Loader2, Pencil, Trash2, Upload, Image } from "lucide-react";
+import { Search, Plus, Loader2, Pencil, Trash2, Upload, Image, ExternalLink } from "lucide-react";
 
 const CATEGORY_OPTIONS = [
   "পুরুষ কণ্ঠ",
@@ -29,16 +29,29 @@ const EMPTY_CATEGORY_VALUE = "__none__";
 
 type ArtistPayload = TablesInsert<"artists"> & { id?: string };
 
-const getArtistErrorMessage = (error: unknown) => {
+const getErrorMessage = (error: unknown) => {
   if (error instanceof Error) {
     if (error.message.toLowerCase().includes("row-level security")) {
-      return "আপনার অ্যাডমিন অনুমতি যাচাই করা যায়নি, আবার লগইন করে চেষ্টা করুন";
+      return "আপনার অ্যাডমিন অনুমতি যাচাই করা যায়নি, আবার লগইন করে চেষ্টা করুন";
     }
-
     return error.message;
   }
+  return "অপারেশন সম্পন্ন হয়নি, আবার চেষ্টা করুন";
+};
 
-  return "আর্টিস্ট সেভ করা যায়নি, আবার চেষ্টা করুন";
+const isValidVideoUrl = (url: string) => {
+  if (!url) return true;
+  try {
+    const u = new URL(url);
+    return (
+      u.protocol === "https:" || u.protocol === "http:" ||
+      u.hostname.includes("youtube.com") ||
+      u.hostname.includes("youtu.be") ||
+      url.endsWith(".mp4")
+    );
+  } catch {
+    return false;
+  }
 };
 
 export default function AdminArtists() {
@@ -54,7 +67,8 @@ export default function AdminArtists() {
   const { data: artists = [], isLoading } = useQuery({
     queryKey: ["admin-artists"],
     queryFn: async () => {
-      const { data } = await supabase.from("artists").select("*").order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("artists").select("*").order("created_at", { ascending: false });
+      if (error) throw error;
       return data || [];
     },
   });
@@ -87,8 +101,7 @@ export default function AdminArtists() {
           .maybeSingle();
 
         if (error) throw error;
-        if (!data) throw new Error("আর্টিস্ট আপডেট সম্পন্ন হয়নি, আবার চেষ্টা করুন");
-
+        if (!data) throw new Error("আর্টিস্ট আপডেট সম্পন্ন হয়নি, আবার চেষ্টা করুন");
         return data;
       }
 
@@ -99,15 +112,14 @@ export default function AdminArtists() {
         .maybeSingle();
 
       if (error) throw error;
-      if (!data) throw new Error("নতুন আর্টিস্ট সেভ হয়নি, আবার চেষ্টা করুন");
-
+      if (!data) throw new Error("নতুন আর্টিস্ট সেভ হয়নি, আবার চেষ্টা করুন");
       return data;
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("artists").delete().eq("id", id);
+      const { error } = await supabase.from("artists").delete().eq("id", id).select();
       if (error) throw error;
     },
     onSuccess: () => {
@@ -115,18 +127,27 @@ export default function AdminArtists() {
       queryClient.invalidateQueries({ queryKey: ["public-artists"] });
       toast.success("আর্টিস্ট ডিলিট হয়েছে");
     },
+    onError: (err) => toast.error(getErrorMessage(err)),
   });
 
   const toggleStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const newStatus = status === "active" ? "inactive" : "active";
-      const { error } = await supabase.from("artists").update({ status: newStatus }).eq("id", id);
+      const { data, error } = await supabase
+        .from("artists")
+        .update({ status: newStatus })
+        .eq("id", id)
+        .select()
+        .maybeSingle();
       if (error) throw error;
+      if (!data) throw new Error("স্ট্যাটাস পরিবর্তন হয়নি");
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-artists"] });
       toast.success("স্ট্যাটাস পরিবর্তন হয়েছে");
     },
+    onError: (err) => toast.error(getErrorMessage(err)),
   });
 
   const filtered = artists.filter((a: any) =>
@@ -157,7 +178,6 @@ export default function AdminArtists() {
 
   const openEditDialog = (artist: any) => {
     const existingCategory = artist.category || artist.specialization || "";
-
     setEditing(artist);
     setImagePreview(null);
     setImageFile(null);
@@ -184,6 +204,21 @@ export default function AdminArtists() {
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    const name = (fd.get("name") as string).trim();
+    const videoUrl = (fd.get("sample_video_url") as string || "").trim();
+    const phone = (fd.get("phone") as string || "").trim();
+
+    // Validation
+    if (name.length < 2) {
+      toast.error("নাম কমপক্ষে ২ অক্ষর হতে হবে");
+      return;
+    }
+
+    if (videoUrl && !isValidVideoUrl(videoUrl)) {
+      toast.error("সঠিক ভিডিও লিংক দিন (YouTube বা MP4)");
+      return;
+    }
+
     const finalCategory = selectedCategory === CUSTOM_CATEGORY_VALUE
       ? customCategory.trim()
       : selectedCategory === EMPTY_CATEGORY_VALUE
@@ -196,12 +231,13 @@ export default function AdminArtists() {
     }
 
     const data: ArtistPayload = {
-      name: fd.get("name") as string,
+      name,
       category: finalCategory || null,
-      country: fd.get("country") as string,
-      phone: fd.get("phone") as string,
+      country: (fd.get("country") as string) || null,
+      phone: phone || null,
       specialization: finalCategory || null,
-      sample_video_url: (fd.get("sample_video_url") as string) || null,
+      sample_video_url: videoUrl || null,
+      rate_per_project: Number(fd.get("rate_per_project")) || 0,
     };
     if (editing) data.id = editing.id;
 
@@ -214,12 +250,12 @@ export default function AdminArtists() {
       void queryClient.invalidateQueries({ queryKey: ["admin-artists"] });
       void queryClient.invalidateQueries({ queryKey: ["public-artists"] });
     } catch (err) {
-      toast.error(getArtistErrorMessage(err));
+      toast.error(getErrorMessage(err));
     }
   };
 
   const currentImage = imagePreview || editing?.image_url;
-  const saveErrorMessage = saveMutation.error ? getArtistErrorMessage(saveMutation.error) : null;
+  const saveErrorMessage = saveMutation.error ? getErrorMessage(saveMutation.error) : null;
 
   return (
     <div className="space-y-6">
@@ -243,76 +279,86 @@ export default function AdminArtists() {
           {isLoading ? (
             <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ছবি</TableHead>
-                  <TableHead>নাম</TableHead>
-                  <TableHead>ক্যাটাগরি</TableHead>
-                  <TableHead>দেশ</TableHead>
-                  <TableHead>ফোন</TableHead>
-                  <TableHead>স্ট্যাটাস</TableHead>
-                  <TableHead>অ্যাকশন</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.map((a: any) => (
-                  <TableRow key={a.id}>
-                    <TableCell>
-                      {a.image_url ? (
-                        <img src={a.image_url} alt={a.name} className="w-10 h-10 rounded-full object-cover border border-border" />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                          <Image className="h-4 w-4 text-muted-foreground" />
-                        </div>
-                      )}
-                    </TableCell>
-                    <TableCell className="font-medium">{a.name}</TableCell>
-                    <TableCell>
-                      {(a.category || a.specialization) ? (
-                        <Badge variant="secondary" className="text-xs">{a.category || a.specialization}</Badge>
-                      ) : "—"}
-                    </TableCell>
-                    <TableCell>{a.country || "—"}</TableCell>
-                    <TableCell>{a.phone || "—"}</TableCell>
-                    <TableCell>
-                      <Switch
-                        checked={a.status === "active"}
-                        onCheckedChange={() => toggleStatus.mutate({ id: a.id, status: a.status })}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                         <Button variant="ghost" size="icon" onClick={() => openEditDialog(a)}>
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                          onClick={() => {
-                            if (confirm("এই আর্টিস্ট ডিলিট করতে চান?")) {
-                              deleteMutation.mutate(a.id);
-                            }
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ছবি</TableHead>
+                    <TableHead>নাম</TableHead>
+                    <TableHead>ক্যাটাগরি</TableHead>
+                    <TableHead className="hidden md:table-cell">দেশ</TableHead>
+                    <TableHead className="hidden md:table-cell">ফোন</TableHead>
+                    <TableHead>ভিডিও</TableHead>
+                    <TableHead>স্ট্যাটাস</TableHead>
+                    <TableHead>অ্যাকশন</TableHead>
                   </TableRow>
-                ))}
-                {filtered.length === 0 && (
-                  <TableRow><TableCell colSpan={7} className="text-center py-8 text-muted-foreground">কোনো আর্টিস্ট পাওয়া যায়নি</TableCell></TableRow>
-                )}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filtered.map((a: any) => (
+                    <TableRow key={a.id}>
+                      <TableCell>
+                        {a.image_url ? (
+                          <img src={a.image_url} alt={a.name} className="w-10 h-10 rounded-full object-cover border border-border" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                            <Image className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="font-medium">{a.name}</TableCell>
+                      <TableCell>
+                        {(a.category || a.specialization) ? (
+                          <Badge variant="secondary" className="text-xs">{a.category || a.specialization}</Badge>
+                        ) : "—"}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">{a.country || "—"}</TableCell>
+                      <TableCell className="hidden md:table-cell">{a.phone || "—"}</TableCell>
+                      <TableCell>
+                        {a.sample_video_url ? (
+                          <a href={a.sample_video_url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1 text-xs">
+                            <ExternalLink className="h-3 w-3" /> দেখুন
+                          </a>
+                        ) : "—"}
+                      </TableCell>
+                      <TableCell>
+                        <Switch
+                          checked={a.status === "active"}
+                          onCheckedChange={() => toggleStatus.mutate({ id: a.id, status: a.status })}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="icon" onClick={() => openEditDialog(a)}>
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                            onClick={() => {
+                              if (confirm("এই আর্টিস্ট ডিলিট করতে চান?")) {
+                                deleteMutation.mutate(a.id);
+                              }
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {filtered.length === 0 && (
+                    <TableRow><TableCell colSpan={8} className="text-center py-8 text-muted-foreground">কোনো আর্টিস্ট পাওয়া যায়নি</TableCell></TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={(open) => !open && closeDialog()}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editing ? "আর্টিস্ট এডিট" : "নতুন আর্টিস্ট"}</DialogTitle>
           </DialogHeader>
@@ -335,7 +381,7 @@ export default function AdminArtists() {
               <input id="artist-image" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
             </div>
 
-            <div className="space-y-2"><Label>নাম *</Label><Input name="name" defaultValue={editing?.name} required /></div>
+            <div className="space-y-2"><Label>নাম *</Label><Input name="name" defaultValue={editing?.name} required minLength={2} /></div>
             <div className="space-y-2">
               <Label>ক্যাটাগরি *</Label>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -343,7 +389,7 @@ export default function AdminArtists() {
                   <SelectValue placeholder="ক্যাটাগরি সিলেক্ট করুন" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={EMPTY_CATEGORY_VALUE}>ক্যাটাগরি ছাড়াই রাখুন</SelectItem>
+                  <SelectItem value={EMPTY_CATEGORY_VALUE}>ক্যাটাগরি ছাড়াই রাখুন</SelectItem>
                   {CATEGORY_OPTIONS.map((cat) => (
                     <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                   ))}
@@ -359,7 +405,8 @@ export default function AdminArtists() {
               )}
             </div>
             <div className="space-y-2"><Label>দেশ</Label><Input name="country" defaultValue={editing?.country || "বাংলাদেশ"} /></div>
-            <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} /></div>
+            <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} placeholder="01XXXXXXXXX" /></div>
+            <div className="space-y-2"><Label>রেট (প্রতি প্রজেক্ট ৳)</Label><Input name="rate_per_project" type="number" defaultValue={editing?.rate_per_project || 0} min={0} /></div>
             <div className="space-y-2"><Label>স্যাম্পল ভিডিও লিংক</Label><Input name="sample_video_url" defaultValue={editing?.sample_video_url} placeholder="https://www.youtube.com/watch?v=..." /></div>
             {saveErrorMessage && <p className="text-sm text-destructive">{saveErrorMessage}</p>}
             <Button type="submit" className="w-full" disabled={saveMutation.isPending}>

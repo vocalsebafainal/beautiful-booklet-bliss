@@ -21,7 +21,8 @@ export default function AdminClients() {
   const { data: clients = [], isLoading } = useQuery({
     queryKey: ["admin-clients"],
     queryFn: async () => {
-      const { data } = await supabase.from("clients").select("*").order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("clients").select("*").order("created_at", { ascending: false });
+      if (error) throw error;
       return data || [];
     },
   });
@@ -30,11 +31,15 @@ export default function AdminClients() {
     mutationFn: async (client: any) => {
       if (client.id) {
         const { id, ...rest } = client;
-        const { error } = await supabase.from("clients").update(rest).eq("id", id);
+        const { data, error } = await supabase.from("clients").update(rest).eq("id", id).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("ক্লায়েন্ট আপডেট হয়নি");
+        return data;
       } else {
-        const { error } = await supabase.from("clients").insert(client);
+        const { data, error } = await supabase.from("clients").insert(client).select().maybeSingle();
         if (error) throw error;
+        if (!data) throw new Error("ক্লায়েন্ট সেভ হয়নি");
+        return data;
       }
     },
     onSuccess: () => {
@@ -43,6 +48,7 @@ export default function AdminClients() {
       setDialogOpen(false);
       setEditing(null);
     },
+    onError: (err) => toast.error(err instanceof Error ? err.message : "সেভ ব্যর্থ হয়েছে"),
   });
 
   const filtered = clients.filter((c: any) =>
@@ -54,8 +60,15 @@ export default function AdminClients() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    const name = (fd.get("name") as string).trim();
+
+    if (name.length < 2) {
+      toast.error("নাম কমপক্ষে ২ অক্ষর হতে হবে");
+      return;
+    }
+
     const data: any = {
-      name: fd.get("name") as string,
+      name,
       phone: fd.get("phone") as string,
       email: fd.get("email") as string,
       notes: fd.get("notes") as string,
@@ -86,39 +99,41 @@ export default function AdminClients() {
           {isLoading ? (
             <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>নাম</TableHead>
-                  <TableHead>ফোন</TableHead>
-                  <TableHead>ইমেইল</TableHead>
-                  <TableHead>মোট অর্ডার</TableHead>
-                  <TableHead>মোট খরচ</TableHead>
-                  <TableHead>যোগদান</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.map((c: any) => (
-                  <TableRow key={c.id}>
-                    <TableCell className="font-medium">{c.name}</TableCell>
-                    <TableCell>{c.phone || "—"}</TableCell>
-                    <TableCell>{c.email || "—"}</TableCell>
-                    <TableCell>{c.total_orders || 0}</TableCell>
-                    <TableCell>৳{(c.total_spent || 0).toLocaleString()}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{format(new Date(c.created_at), "dd MMM yyyy")}</TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="icon" onClick={() => { setEditing(c); setDialogOpen(true); }}>
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>নাম</TableHead>
+                    <TableHead>ফোন</TableHead>
+                    <TableHead className="hidden md:table-cell">ইমেইল</TableHead>
+                    <TableHead>মোট অর্ডার</TableHead>
+                    <TableHead className="hidden md:table-cell">মোট খরচ</TableHead>
+                    <TableHead className="hidden md:table-cell">যোগদান</TableHead>
+                    <TableHead></TableHead>
                   </TableRow>
-                ))}
-                {filtered.length === 0 && (
-                  <TableRow><TableCell colSpan={7} className="text-center py-8 text-muted-foreground">কোনো ক্লায়েন্ট পাওয়া যায়নি</TableCell></TableRow>
-                )}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filtered.map((c: any) => (
+                    <TableRow key={c.id}>
+                      <TableCell className="font-medium">{c.name}</TableCell>
+                      <TableCell>{c.phone || "—"}</TableCell>
+                      <TableCell className="hidden md:table-cell">{c.email || "—"}</TableCell>
+                      <TableCell>{c.total_orders || 0}</TableCell>
+                      <TableCell className="hidden md:table-cell">৳{(c.total_spent || 0).toLocaleString()}</TableCell>
+                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{format(new Date(c.created_at), "dd MMM yyyy")}</TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="icon" onClick={() => { setEditing(c); setDialogOpen(true); }}>
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {filtered.length === 0 && (
+                    <TableRow><TableCell colSpan={7} className="text-center py-8 text-muted-foreground">কোনো ক্লায়েন্ট পাওয়া যায়নি</TableCell></TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -129,11 +144,14 @@ export default function AdminClients() {
             <DialogTitle>{editing ? "ক্লায়েন্ট এডিট" : "নতুন ক্লায়েন্ট"}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSave} className="space-y-4">
-            <div className="space-y-2"><Label>নাম *</Label><Input name="name" defaultValue={editing?.name} required /></div>
+            <div className="space-y-2"><Label>নাম *</Label><Input name="name" defaultValue={editing?.name} required minLength={2} /></div>
             <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} /></div>
             <div className="space-y-2"><Label>ইমেইল</Label><Input name="email" type="email" defaultValue={editing?.email} /></div>
             <div className="space-y-2"><Label>নোট</Label><Textarea name="notes" defaultValue={editing?.notes} rows={3} /></div>
-            <Button type="submit" className="w-full">{editing ? "আপডেট" : "যোগ করুন"}</Button>
+            <Button type="submit" className="w-full" disabled={saveMutation.isPending}>
+              {saveMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+              {editing ? "আপডেট" : "যোগ করুন"}
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
