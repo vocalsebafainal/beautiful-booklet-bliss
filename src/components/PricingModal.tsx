@@ -62,12 +62,12 @@ const PricingModal = ({ open, onClose, category, onSelectTier }: PricingModalPro
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className={`glass-card p-5 md:p-6 flex flex-col relative overflow-visible ${
-                tier.highlight ? "border-primary/50 ring-1 ring-primary/30 mt-4" : ""
+              className={`glass-card p-5 md:p-6 flex flex-col relative ${
+                tier.highlight ? "border-primary/50 ring-1 ring-primary/30 mt-5" : ""
               }`}
             >
               {tier.highlight && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-purple-500 text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full shadow-lg shadow-primary/30 whitespace-nowrap z-10">
+                <div className="absolute -top-3.5 right-3 bg-gradient-to-r from-primary to-purple-500 text-primary-foreground text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-primary/30 whitespace-nowrap z-10">
                   ⭐ জনপ্রিয়
                 </div>
               )}
