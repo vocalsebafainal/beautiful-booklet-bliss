@@ -10,39 +10,48 @@ export function useAdminAuth() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
+    
+    const checkRole = async (userId: string) => {
+      try {
+        const { data } = await supabase.rpc("has_role", {
+          _user_id: userId,
+          _role: "admin",
+        });
+        return !!data;
+      } catch {
+        return false;
+      }
+    };
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
+        if (!isMounted) return;
         const currentUser = session?.user ?? null;
         setUser(currentUser);
 
         if (currentUser) {
-          const { data } = await supabase.rpc("has_role", {
-            _user_id: currentUser.id,
-            _role: "admin",
-          });
-          setIsAdmin(!!data);
+          const admin = await checkRole(currentUser.id);
+          if (isMounted) setIsAdmin(admin);
         } else {
           setIsAdmin(false);
         }
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     );
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-
-      if (currentUser) {
-        const { data } = await supabase.rpc("has_role", {
-          _user_id: currentUser.id,
-          _role: "admin",
-        });
-        setIsAdmin(!!data);
+    // Fallback timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      if (isMounted && loading) {
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    }, 5000);
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      clearTimeout(timeout);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signOut = async () => {
