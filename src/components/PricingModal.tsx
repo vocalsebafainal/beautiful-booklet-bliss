@@ -66,12 +66,14 @@ const PricingModal = ({ open, onClose, category, onSelectTier }: PricingModalPro
                 tier.highlight ? "border-primary/50 ring-1 ring-primary/30 mt-5" : ""
               }`}
             >
-              {tier.highlight && (
-                <div className="absolute -top-3 left-3 bg-gradient-to-r from-primary to-purple-500 text-primary-foreground text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full shadow-lg shadow-primary/30 whitespace-nowrap z-10">
-                  ⭐ জনপ্রিয়
-                </div>
-              )}
-              <div className="text-2xl mb-3">{tier.label}</div>
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <div className="text-2xl leading-none">{tier.label}</div>
+                {tier.highlight && (
+                  <div className="shrink-0 rounded-full bg-primary px-2 py-1 text-[10px] font-bold leading-none text-primary-foreground shadow-lg shadow-primary/30 md:text-xs">
+                    ⭐ জনপ্রিয়
+                  </div>
+                )}
+              </div>
               <p className="text-muted-foreground text-sm mb-1">{tier.target}</p>
               <p className="text-secondary text-sm font-medium mb-1">{tier.delivery}</p>
               <p className="text-foreground text-sm font-semibold mb-4">{tier.revisions}</p>
