@@ -55,16 +55,25 @@ export default function AdminArtists() {
 
   const saveMutation = useMutation({
     mutationFn: async (artist: any) => {
-      if (imageFile) {
-        artist.image_url = await uploadImage(imageFile);
-      }
-      if (artist.id) {
-        const { id, ...rest } = artist;
-        const { error } = await supabase.from("artists").update(rest).eq("id", id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from("artists").insert(artist);
-        if (error) throw error;
+      try {
+        if (imageFile) {
+          artist.image_url = await uploadImage(imageFile);
+        }
+        if (artist.id) {
+          const { id, ...rest } = artist;
+          console.log("Updating artist:", id, rest);
+          const { data, error } = await supabase.from("artists").update(rest).eq("id", id).select();
+          console.log("Update result:", data, error);
+          if (error) throw error;
+        } else {
+          console.log("Inserting artist:", artist);
+          const { data, error } = await supabase.from("artists").insert(artist).select();
+          console.log("Insert result:", data, error);
+          if (error) throw error;
+        }
+      } catch (err) {
+        console.error("Save artist error:", err);
+        throw err;
       }
     },
     onSuccess: () => {
