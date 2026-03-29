@@ -63,16 +63,16 @@ const PricingModal = ({ open, onClose, category, onSelectTier }: PricingModalPro
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               className={`glass-card p-5 md:p-6 flex flex-col relative ${
-                tier.highlight ? "border-primary/50 ring-1 ring-primary/30 mt-5" : ""
+                tier.highlight ? "border-primary/50 ring-1 ring-primary/30 mt-8" : ""
               }`}
             >
-              <div className="flex items-start justify-between gap-2 mb-3">
+              {tier.highlight && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10 rounded-full bg-primary px-4 py-1.5 text-[11px] font-bold leading-none text-primary-foreground shadow-lg shadow-primary/30 whitespace-nowrap md:text-xs">
+                  ⭐ জনপ্রিয়
+                </div>
+              )}
+              <div className="flex items-start gap-2 mb-3">
                 <div className="text-2xl leading-none">{tier.label}</div>
-                {tier.highlight && (
-                  <div className="shrink-0 rounded-full bg-primary px-3 py-1.5 text-[11px] font-bold leading-none text-primary-foreground shadow-lg shadow-primary/30 md:text-xs">
-                    ⭐ জনপ্রিয়
-                  </div>
-                )}
               </div>
               <p className="text-muted-foreground text-sm mb-1">{tier.target}</p>
               <p className="text-secondary text-sm font-medium mb-1">{tier.delivery}</p>
