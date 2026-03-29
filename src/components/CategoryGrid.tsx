@@ -447,7 +447,7 @@ const CategoryGrid = ({ onTierSelect }: CategoryGridProps) => {
                                   initial={{ opacity: 0, scale: 0.5, y: -10 }}
                                   animate={{ opacity: 1, scale: 1, y: 0 }}
                                   transition={{ delay: 0.5, type: "spring", damping: 15 }}
-                                  className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 bg-primary text-primary-foreground text-xs font-bold rounded-full shadow-lg shadow-primary/30 whitespace-nowrap py-[3px] px-[19px] mx-[64px] my-[40px]"
+                                  className="absolute right-3 top-3 z-10 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold leading-none text-primary-foreground shadow-lg shadow-primary/30 whitespace-nowrap md:right-4 md:top-4 md:px-3 md:py-1.5 md:text-xs"
                                 >
                                   ⭐ জনপ্রিয়
                                 </motion.div>
