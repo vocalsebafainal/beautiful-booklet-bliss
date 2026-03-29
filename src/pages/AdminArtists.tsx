@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,20 @@ const CATEGORY_OPTIONS = [
 
 const CUSTOM_CATEGORY_VALUE = "__custom__";
 const EMPTY_CATEGORY_VALUE = "__none__";
+
+type ArtistPayload = TablesInsert<"artists"> & { id?: string };
+
+const getArtistErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    if (error.message.toLowerCase().includes("row-level security")) {
+      return "আপনার অ্যাডমিন অনুমতি যাচাই করা যায়নি, আবার লগইন করে চেষ্টা করুন";
+    }
+
+    return error.message;
+  }
+
+  return "আর্টিস্ট সেভ করা যায়নি, আবার চেষ্টা করুন";
+};
 
 export default function AdminArtists() {
   const [search, setSearch] = useState("");
@@ -54,35 +69,40 @@ export default function AdminArtists() {
   };
 
   const saveMutation = useMutation({
-    mutationFn: async (artist: any) => {
-      try {
-        if (imageFile) {
-          artist.image_url = await uploadImage(imageFile);
-        }
-        if (artist.id) {
-          const { id, ...rest } = artist;
-          console.log("Updating artist:", id, rest);
-          const { data, error } = await supabase.from("artists").update(rest).eq("id", id).select();
-          console.log("Update result:", data, error);
-          if (error) throw error;
-        } else {
-          console.log("Inserting artist:", artist);
-          const { data, error } = await supabase.from("artists").insert(artist).select();
-          console.log("Insert result:", data, error);
-          if (error) throw error;
-        }
-      } catch (err) {
-        console.error("Save artist error:", err);
-        throw err;
+    retry: false,
+    mutationFn: async (artist: ArtistPayload) => {
+      const payload: ArtistPayload = { ...artist };
+
+      if (imageFile) {
+        payload.image_url = await uploadImage(imageFile);
       }
+
+      if (payload.id) {
+        const { id, ...rest } = payload;
+        const { data, error } = await supabase
+          .from("artists")
+          .update(rest as TablesUpdate<"artists">)
+          .eq("id", id)
+          .select()
+          .maybeSingle();
+
+        if (error) throw error;
+        if (!data) throw new Error("আর্টিস্ট আপডেট সম্পন্ন হয়নি, আবার চেষ্টা করুন");
+
+        return data;
+      }
+
+      const { data, error } = await supabase
+        .from("artists")
+        .insert(payload as TablesInsert<"artists">)
+        .select()
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) throw new Error("নতুন আর্টিস্ট সেভ হয়নি, আবার চেষ্টা করুন");
+
+      return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-artists"] });
-      queryClient.invalidateQueries({ queryKey: ["public-artists"] });
-      toast.success(editing ? "আর্টিস্ট আপডেট হয়েছে" : "নতুন আর্টিস্ট যোগ হয়েছে");
-      closeDialog();
-    },
-    onError: (err: any) => toast.error(err.message),
   });
 
   const deleteMutation = useMutation({
@@ -122,6 +142,35 @@ export default function AdminArtists() {
     setImagePreview(null);
     setSelectedCategory("");
     setCustomCategory("");
+    saveMutation.reset();
+  };
+
+  const openCreateDialog = () => {
+    setEditing(null);
+    setImageFile(null);
+    setImagePreview(null);
+    setSelectedCategory("");
+    setCustomCategory("");
+    saveMutation.reset();
+    setDialogOpen(true);
+  };
+
+  const openEditDialog = (artist: any) => {
+    const existingCategory = artist.category || artist.specialization || "";
+
+    setEditing(artist);
+    setImagePreview(null);
+    setImageFile(null);
+    setSelectedCategory(
+      CATEGORY_OPTIONS.includes(existingCategory)
+        ? existingCategory
+        : existingCategory
+          ? CUSTOM_CATEGORY_VALUE
+          : EMPTY_CATEGORY_VALUE
+    );
+    setCustomCategory(CATEGORY_OPTIONS.includes(existingCategory) ? "" : existingCategory);
+    saveMutation.reset();
+    setDialogOpen(true);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,7 +181,7 @@ export default function AdminArtists() {
     }
   };
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const finalCategory = selectedCategory === CUSTOM_CATEGORY_VALUE
@@ -146,7 +195,7 @@ export default function AdminArtists() {
       return;
     }
 
-    const data: any = {
+    const data: ArtistPayload = {
       name: fd.get("name") as string,
       category: finalCategory || null,
       country: fd.get("country") as string,
@@ -155,10 +204,22 @@ export default function AdminArtists() {
       sample_video_url: (fd.get("sample_video_url") as string) || null,
     };
     if (editing) data.id = editing.id;
-    saveMutation.mutate(data);
+
+    saveMutation.reset();
+
+    try {
+      await saveMutation.mutateAsync(data);
+      closeDialog();
+      toast.success(editing ? "আর্টিস্ট আপডেট হয়েছে" : "নতুন আর্টিস্ট যোগ হয়েছে");
+      void queryClient.invalidateQueries({ queryKey: ["admin-artists"] });
+      void queryClient.invalidateQueries({ queryKey: ["public-artists"] });
+    } catch (err) {
+      toast.error(getArtistErrorMessage(err));
+    }
   };
 
   const currentImage = imagePreview || editing?.image_url;
+  const saveErrorMessage = saveMutation.error ? getArtistErrorMessage(saveMutation.error) : null;
 
   return (
     <div className="space-y-6">
@@ -167,7 +228,7 @@ export default function AdminArtists() {
           <h2 className="text-2xl font-bold text-foreground">আর্টিস্ট ম্যানেজমেন্ট</h2>
           <p className="text-muted-foreground text-sm">কণ্ঠশিল্পীদের প্রোফাইল পরিচালনা করুন</p>
         </div>
-        <Button onClick={() => { setEditing(null); setImageFile(null); setImagePreview(null); setSelectedCategory(""); setCustomCategory(""); setDialogOpen(true); }}>
+        <Button onClick={openCreateDialog}>
           <Plus className="h-4 w-4 mr-2" /> নতুন আর্টিস্ট
         </Button>
       </div>
@@ -222,7 +283,7 @@ export default function AdminArtists() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => { const existingCategory = a.category || a.specialization || ""; setEditing(a); setImagePreview(null); setImageFile(null); setSelectedCategory(CATEGORY_OPTIONS.includes(existingCategory) ? existingCategory : existingCategory ? CUSTOM_CATEGORY_VALUE : EMPTY_CATEGORY_VALUE); setCustomCategory(CATEGORY_OPTIONS.includes(existingCategory) ? "" : existingCategory); setDialogOpen(true); }}>
+                         <Button variant="ghost" size="icon" onClick={() => openEditDialog(a)}>
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
@@ -300,6 +361,7 @@ export default function AdminArtists() {
             <div className="space-y-2"><Label>দেশ</Label><Input name="country" defaultValue={editing?.country || "বাংলাদেশ"} /></div>
             <div className="space-y-2"><Label>ফোন</Label><Input name="phone" defaultValue={editing?.phone} /></div>
             <div className="space-y-2"><Label>স্যাম্পল ভিডিও লিংক</Label><Input name="sample_video_url" defaultValue={editing?.sample_video_url} placeholder="https://www.youtube.com/watch?v=..." /></div>
+            {saveErrorMessage && <p className="text-sm text-destructive">{saveErrorMessage}</p>}
             <Button type="submit" className="w-full" disabled={saveMutation.isPending}>
               {saveMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               {editing ? "আপডেট" : "যোগ করুন"}
