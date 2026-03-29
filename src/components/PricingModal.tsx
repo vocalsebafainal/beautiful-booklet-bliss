@@ -67,7 +67,7 @@ const PricingModal = ({ open, onClose, category, onSelectTier }: PricingModalPro
               }`}
             >
               {tier.highlight && (
-                <div className="absolute -top-3.5 right-3 bg-gradient-to-r from-primary to-purple-500 text-primary-foreground text-[10px] md:text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-primary/30 whitespace-nowrap z-10">
+                <div className="absolute -top-3 left-3 bg-gradient-to-r from-primary to-purple-500 text-primary-foreground text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full shadow-lg shadow-primary/30 whitespace-nowrap z-10">
                   ⭐ জনপ্রিয়
                 </div>
               )}
