@@ -73,7 +73,7 @@ const HeroSection = () => {
             কণ্ঠ হোক প্রচারের<br />বিশ্বস্ত সঙ্গী
           </h1>
           <p className="text-muted-foreground text-sm md:text-xl tracking-widest uppercase">
-            কন্ঠ হোক স্বপ্ন জয়ের ঠিকানা।
+            আপনার ব্র্যান্ড, কন্টেন্ট বা বিজ্ঞাপনকে প্রাণবন্ত করুন আমাদের প্রফেশনাল বাংলা ভয়েস ওভার দিয়ে।
           </p>
         </motion.div>
 
