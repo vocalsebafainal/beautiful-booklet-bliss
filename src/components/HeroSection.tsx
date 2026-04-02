@@ -69,8 +69,8 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="mb-6"
         >
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl md:text-7xl font-black gradient-text tracking-tight mb-3">
-            ভোকাল সেবা
+          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black gradient-text tracking-tight mb-3 md:text-8xl">
+            কণ্ঠ হোক প্রচারের<br />বিশ্বস্ত সঙ্গী
           </h1>
           <p className="text-muted-foreground text-sm md:text-xl tracking-widest uppercase">
             কন্ঠ হোক স্বপ্ন জয়ের ঠিকানা।
