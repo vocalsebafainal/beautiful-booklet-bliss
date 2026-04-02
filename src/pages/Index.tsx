@@ -13,6 +13,7 @@ import ArtistSection from "@/components/ArtistSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
+import OfferBanner from "@/components/OfferBanner";
 import OrderFlow from "@/components/OrderFlow";
 
 const Index = () => {
@@ -41,6 +42,7 @@ const Index = () => {
       <DemoSection />
       <TestimonialsSection />
       <ArtistSection />
+      <OfferBanner />
       <FAQSection />
       <Footer />
       <FloatingButtons />
