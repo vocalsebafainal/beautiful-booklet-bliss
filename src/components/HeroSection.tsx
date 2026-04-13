@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Star, Users, Zap } from "lucide-react";
+import { ChevronDown, Mic } from "lucide-react";
 import studioBg from "@/assets/studio-bg.jpg";
 
 const SoundwaveBars = () => {
@@ -112,27 +112,53 @@ const HeroSection = () => {
           <ChevronDown className="w-5 h-5 inline-block ml-2 group-hover:translate-y-1 transition-transform" />
         </motion.button>
 
-        {/* Social Proof Badges */}
+        {/* Social Proof Card */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-10 md:mt-14"
+          className="mt-10 md:mt-14 flex justify-center"
         >
-          <div className="flex items-center gap-2 glass-card px-4 py-2.5">
-            <Users className="w-4 h-4 text-primary" />
-            <span className="text-foreground text-sm font-semibold">500+</span>
-            <span className="text-muted-foreground text-sm">সন্তুষ্ট ক্লায়েন্ট</span>
-          </div>
-          <div className="flex items-center gap-2 glass-card px-4 py-2.5">
-            <Star className="w-4 h-4 text-primary fill-primary" />
-            <span className="text-foreground text-sm font-semibold">4.9</span>
-            <span className="text-muted-foreground text-sm">রেটিং</span>
-          </div>
-          <div className="flex items-center gap-2 glass-card px-4 py-2.5">
-            <Zap className="w-4 h-4 text-secondary" />
-            <span className="text-foreground text-sm font-semibold">১২ ঘণ্টা</span>
-            <span className="text-muted-foreground text-sm">ফাস্ট ডেলিভারি</span>
+          <div className="glass-card px-8 py-6 md:px-12 md:py-8 flex flex-col items-center gap-5 relative overflow-hidden">
+            {/* Mic icon with purple glow */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/30 rounded-full blur-xl animate-pulse-glow scale-150" />
+              <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
+                <Mic className="w-7 h-7 md:w-9 md:h-9 text-primary" />
+              </div>
+            </div>
+
+            {/* Mini soundwave bars */}
+            <div className="flex items-center gap-[3px]">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-[3px] rounded-full bg-primary/60 soundwave-bar"
+                  style={{
+                    animationDelay: `${i * 0.1}s`,
+                    height: "6px",
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Stats row */}
+            <div className="flex items-center gap-6 md:gap-10">
+              <div className="text-center">
+                <p className="text-lg md:text-xl font-bold text-foreground">৫০০+</p>
+                <p className="text-xs md:text-sm text-muted-foreground">প্রজেক্ট</p>
+              </div>
+              <div className="w-px h-8 bg-border" />
+              <div className="text-center">
+                <p className="text-lg md:text-xl font-bold text-foreground">২৪ঘণ্টা</p>
+                <p className="text-xs md:text-sm text-muted-foreground">ডেলিভারি</p>
+              </div>
+              <div className="w-px h-8 bg-border" />
+              <div className="text-center">
+                <p className="text-lg md:text-xl font-bold text-primary">৪.৯★</p>
+                <p className="text-xs md:text-sm text-muted-foreground">রেটিং</p>
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
