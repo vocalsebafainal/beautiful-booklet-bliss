@@ -37,7 +37,7 @@ const Index = () => {
       <BallPoolSection />
       <StatsCounter />
       <TrustSection />
-      <CategoryGrid onTierSelect={handleTierSelect} />
+      
       <VoiceTypeSection onTierSelect={handleTierSelect} />
       <DemoSection />
       <SamplesSection />
