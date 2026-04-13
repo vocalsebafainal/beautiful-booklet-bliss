@@ -36,12 +36,12 @@ const Index = () => {
       <BallPoolSection />
       <StatsCounter />
       <TrustSection />
-      <HowItWorks />
       <CategoryGrid onTierSelect={handleTierSelect} />
       <VoiceTypeSection onTierSelect={handleTierSelect} />
       <DemoSection />
       <TestimonialsSection />
       <ArtistSection />
+      <HowItWorks />
       <OfferBanner />
       <FAQSection />
       <Footer />
