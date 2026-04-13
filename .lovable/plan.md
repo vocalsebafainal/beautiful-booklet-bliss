@@ -1,22 +1,24 @@
 
 
-## Plan: VoiceTypeSection রিমুভ ও CategoryGrid-এ স্যাম্পল উন্নত করা
+## Plan: VoiceTypeSection-এ প্রাইসিং টিয়ার ফিরিয়ে আনা
 
-### সমস্যা বিশ্লেষণ
-- CategoryGrid-এ ইতোমধ্যেই প্রতিটি ক্যাটাগরিতে Basic/Standard/Premium টিয়ার + স্যাম্পল লিংক আছে (স্ক্রিনশট অনুযায়ী)
-- VoiceTypeSection ডুপ্লিকেট — একই ক্যাটাগরি আবার দেখায়, তাই রিমুভ করতে হবে
-- CategoryGrid-এ বেশিরভাগ স্যাম্পল শুধু Basic-এ আছে, Standard ও Premium-এ খালি — সুন্দরভাবে ডিস্ট্রিবিউট করা দরকার
+### সমস্যা
+আগে VoiceTypeSection-এ প্রতিটি ক্যাটাগরি expand করলে Basic/Standard/Premium প্যাকেজ দেখাতো। এখন সেগুলো সরিয়ে দেওয়ায় শুধু "স্যাম্পল শীঘ্রই আসছে..." দেখাচ্ছে।
 
 ### কী করব
 
-**1. VoiceTypeSection রিমুভ:**
-- `src/components/VoiceTypeSection.tsx` ফাইল থেকে কম্পোনেন্ট রিমুভ (বা ফাইল ডিলিট)
-- `src/pages/Index.tsx` থেকে VoiceTypeSection import ও রেন্ডারিং সরিয়ে দেব
+**VoiceTypeSection.tsx আপডেট:**
 
-**2. CategoryGrid-এ স্যাম্পল লিংক ডিস্ট্রিবিউশন উন্নত:**
-- যেসব ক্যাটাগরিতে শুধু Basic-এ স্যাম্পল আছে, সেগুলো Standard ও Premium-এও ছড়িয়ে দেব (যদি পর্যাপ্ত লিংক থাকে)
-- স্যাম্পল ডিসপ্লে স্টাইল ঠিক রাখব — বর্তমান "🔗 স্যাম্পল:" + লিংক লিস্ট ফরম্যাটই থাকবে
+1. **TierInfo interface ফিরিয়ে আনব** — name, label, price, priceNum, limit, services, highlight
+2. **প্রতিটি voiceType-এ tiers ডেটা যোগ করব** — ১২টি ক্যাটাগরির জন্য আলাদা আলাদা Basic/Standard/Premium প্যাকেজ (প্রাইস, শব্দ সীমা, সার্ভিস তালিকা)
+3. **sampleLinks রাখব** — তবে প্রাইসিং কার্ডের পাশাপাশি দেখাবে
+4. **Expand হলে CategoryGrid-এর মতো ৩-কলাম টিয়ার কার্ড রেন্ডার করব** — প্রাইস, লিমিট, সার্ভিস, অর্ডার বাটন সহ
+5. **onTierSelect prop ফিরিয়ে আনব** — অর্ডার বাটনে ক্লিক করলে OrderFlow ওপেন হবে
+
+**Index.tsx আপডেট:**
+- `VoiceTypeSection`-এ `onTierSelect={handleTierSelect}` prop পাঠাব
 
 ### Technical Details
-- ফাইল: `src/components/VoiceTypeSection.tsx` (রিমুভ), `src/pages/Index.tsx` (ক্লিনআপ), `src/components/CategoryGrid.tsx` (স্যাম্পল আপডেট)
+- CategoryGrid-এর টিয়ার কার্ড রেন্ডারিং প্যাটার্ন হুবহু অনুসরণ করব (glass-card, shimmer-border, জনপ্রিয় ব্যাজ, অর্ডার বাটন)
+- ফাইল: `src/components/VoiceTypeSection.tsx`, `src/pages/Index.tsx`
 
