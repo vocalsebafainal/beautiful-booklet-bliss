@@ -3,32 +3,143 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Tv, Film, Clapperboard, BookOpen, Bell, MonitorPlay, Phone,
   GraduationCap, Megaphone, Lightbulb, Gamepad2, ScrollText,
-  ChevronDown, ChevronUp, Play, ExternalLink
+  ChevronDown, ChevronUp, Play, ExternalLink, Check
 } from "lucide-react";
+
+interface TierInfo {
+  name: string;
+  label: string;
+  price: string;
+  priceNum: number;
+  limit: string;
+  services: string[];
+  highlight: boolean;
+}
 
 interface VoiceCategory {
   icon: any;
   title: string;
   desc: string;
-  sampleLinks: string[];
+  sampleLinks: string[][];
+  tiers: TierInfo[];
 }
 
 const voiceTypes: VoiceCategory[] = [
-  { icon: Tv, title: "কমার্শিয়াল", desc: "TV / Radio বিজ্ঞাপন", sampleLinks: [] },
-  { icon: Film, title: "ন্যারেশন", desc: "ডকুমেন্টারি ও গল্পকথন", sampleLinks: [] },
-  { icon: Clapperboard, title: "অ্যানিমেশন", desc: "কার্টুন ও মোশন ভিডিও", sampleLinks: [] },
-  { icon: BookOpen, title: "অডিও বুক", desc: "বই ও গল্পের অডিও", sampleLinks: [] },
-  { icon: Bell, title: "এনাউন্সমেন্ট", desc: "অফিস ও ইভেন্ট ঘোষণা", sampleLinks: [] },
-  { icon: MonitorPlay, title: "ট্রেইলার", desc: "মুভি ও প্রোডাক্ট ট্রেইলার", sampleLinks: [] },
-  { icon: Phone, title: "IVR সিস্টেম", desc: "ইন্টারেক্টিভ ভয়েস রেসপন্স", sampleLinks: [] },
-  { icon: GraduationCap, title: "ই-লার্নিং", desc: "শিক্ষামূলক কন্টেন্ট", sampleLinks: [] },
-  { icon: Megaphone, title: "প্রোমো", desc: "ব্র্যান্ড প্রোমোশন", sampleLinks: [] },
-  { icon: Lightbulb, title: "এক্সপ্লেইনার", desc: "পণ্য ও সেবা ব্যাখ্যা", sampleLinks: [] },
-  { icon: Gamepad2, title: "ভিডিও গেমস", desc: "গেম ক্যারেক্টার ভয়েস", sampleLinks: [] },
-  { icon: ScrollText, title: "স্টোরিটেলিং", desc: "ঐতিহাসিক ও সাংস্কৃতিক", sampleLinks: [] },
+  {
+    icon: Tv, title: "কমার্শিয়াল", desc: "TV / Radio বিজ্ঞাপন",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,৫০০ টাকা", priceNum: 1500, limit: "৫০ শব্দ", services: ["রেকর্ডিং", "ক্লিন ভয়েস"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৩,০০০ টাকা", priceNum: 3000, limit: "১০০ শব্দ", services: ["রেকর্ডিং", "এডিট", "ব্যাকগ্রাউন্ড মিউজিক"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "২০০ শব্দ", services: ["প্রফেশনাল মিক্সিং", "মিউজিক", "দ্রুত ডেলিভারি"], highlight: false },
+    ],
+  },
+  {
+    icon: Film, title: "ন্যারেশন", desc: "ডকুমেন্টারি ও গল্পকথন",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,২০০ টাকা", priceNum: 1200, limit: "১ মিনিট", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৩,০০০ টাকা", priceNum: 3000, limit: "৩ মিনিট", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "৫ মিনিট", services: ["প্রফেশনাল মিক্সিং", "মিউজিক"], highlight: false },
+    ],
+  },
+  {
+    icon: Clapperboard, title: "অ্যানিমেশন", desc: "কার্টুন ও মোশন ভিডিও",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,৫০০ টাকা", priceNum: 1500, limit: "১ চরিত্র", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৩,০০০ টাকা", priceNum: 3000, limit: "২ চরিত্র", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "৩ চরিত্র", services: ["ভয়েস রেকর্ডিং", "সাউন্ড", "প্রফেশনাল মিক্সিং"], highlight: false },
+    ],
+  },
+  {
+    icon: BookOpen, title: "অডিও বুক", desc: "বই ও গল্পের অডিও",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,৫০০ টাকা", priceNum: 1500, limit: "৩ মিনিট", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৩,০০০ টাকা", priceNum: 3000, limit: "৬ মিনিট", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "১০ মিনিট", services: ["ভয়েস রেকর্ডিং", "মিউজিক", "সাউন্ড ডিজাইন"], highlight: false },
+    ],
+  },
+  {
+    icon: Bell, title: "এনাউন্সমেন্ট", desc: "অফিস ও ইভেন্ট ঘোষণা",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,০০০ টাকা", priceNum: 1000, limit: "৩০ শব্দ", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "২,০০০ টাকা", priceNum: 2000, limit: "৬০ শব্দ", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৪,০০০ টাকা", priceNum: 4000, limit: "১২০ শব্দ", services: ["প্রফেশনাল মিক্সিং", "মিউজিক"], highlight: false },
+    ],
+  },
+  {
+    icon: MonitorPlay, title: "ট্রেইলার", desc: "মুভি ও প্রোডাক্ট ট্রেইলার",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "২,০০০ টাকা", priceNum: 2000, limit: "১ মিনিট", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৪,০০০ টাকা", priceNum: 4000, limit: "২ মিনিট", services: ["ভয়েস রেকর্ডিং", "এডিট", "মিউজিক"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৭,০০০ টাকা", priceNum: 7000, limit: "৩ মিনিট", services: ["প্রফেশনাল মিক্সিং", "সাউন্ড ডিজাইন", "দ্রুত ডেলিভারি"], highlight: false },
+    ],
+  },
+  {
+    icon: Phone, title: "IVR সিস্টেম", desc: "ইন্টারেক্টিভ ভয়েস রেসপন্স",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,৫০০ টাকা", priceNum: 1500, limit: "৫ প্রম্পট", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৩,০০০ টাকা", priceNum: 3000, limit: "১০ প্রম্পট", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "২০ প্রম্পট", services: ["প্রফেশনাল রেকর্ডিং", "মিক্সিং"], highlight: false },
+    ],
+  },
+  {
+    icon: GraduationCap, title: "ই-লার্নিং", desc: "শিক্ষামূলক কন্টেন্ট",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,০০০ টাকা", priceNum: 1000, limit: "২ মিনিট", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "২,৫০০ টাকা", priceNum: 2500, limit: "৫ মিনিট", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "১০ মিনিট", services: ["ভয়েস রেকর্ডিং", "মিউজিক", "প্রফেশনাল মিক্সিং"], highlight: false },
+    ],
+  },
+  {
+    icon: Megaphone, title: "প্রোমো", desc: "ব্র্যান্ড প্রোমোশন",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,৫০০ টাকা", priceNum: 1500, limit: "৫০ শব্দ", services: ["রেকর্ডিং", "ক্লিন ভয়েস"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৩,০০০ টাকা", priceNum: 3000, limit: "১০০ শব্দ", services: ["রেকর্ডিং", "এডিট", "মিউজিক"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "২০০ শব্দ", services: ["প্রফেশনাল মিক্সিং", "মিউজিক", "দ্রুত ডেলিভারি"], highlight: false },
+    ],
+  },
+  {
+    icon: Lightbulb, title: "এক্সপ্লেইনার", desc: "পণ্য ও সেবা ব্যাখ্যা",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,২০০ টাকা", priceNum: 1200, limit: "১ মিনিট", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৩,০০০ টাকা", priceNum: 3000, limit: "৩ মিনিট", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "৫ মিনিট", services: ["প্রফেশনাল মিক্সিং", "মিউজিক", "সাউন্ড ডিজাইন"], highlight: false },
+    ],
+  },
+  {
+    icon: Gamepad2, title: "ভিডিও গেমস", desc: "গেম ক্যারেক্টার ভয়েস",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "২,০০০ টাকা", priceNum: 2000, limit: "১ চরিত্র", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৪,০০০ টাকা", priceNum: 4000, limit: "২ চরিত্র", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৭,০০০ টাকা", priceNum: 7000, limit: "৩ চরিত্র", services: ["ভয়েস রেকর্ডিং", "সাউন্ড ডিজাইন", "প্রফেশনাল মিক্সিং"], highlight: false },
+    ],
+  },
+  {
+    icon: ScrollText, title: "স্টোরিটেলিং", desc: "ঐতিহাসিক ও সাংস্কৃতিক",
+    sampleLinks: [[], [], []],
+    tiers: [
+      { name: "Basic", label: "🎙 বেসিক", price: "১,৫০০ টাকা", priceNum: 1500, limit: "৩ মিনিট", services: ["ভয়েস রেকর্ডিং"], highlight: false },
+      { name: "Standard", label: "⭐ স্ট্যান্ডার্ড", price: "৩,০০০ টাকা", priceNum: 3000, limit: "৬ মিনিট", services: ["ভয়েস রেকর্ডিং", "এডিট"], highlight: true },
+      { name: "Premium", label: "👑 প্রিমিয়াম", price: "৫,০০০ টাকা", priceNum: 5000, limit: "১০ মিনিট", services: ["ভয়েস রেকর্ডিং", "মিউজিক", "সাউন্ড ডিজাইন"], highlight: false },
+    ],
+  },
 ];
 
-const VoiceTypeSection = () => {
+interface VoiceTypeSectionProps {
+  onTierSelect: (category: string, tier: string, price: number) => void;
+}
+
+const VoiceTypeSection = ({ onTierSelect }: VoiceTypeSectionProps) => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
   const handleCategoryClick = (title: string) => {
@@ -54,10 +165,9 @@ const VoiceTypeSection = () => {
           transition={{ delay: 0.1 }}
           className="text-primary text-sm md:text-base max-w-2xl mx-auto mb-10"
         >
-          ৫২টিরও বেশি ক্যাটাগরিতে আমরা প্রফেশনাল ভয়েস ওভার প্রদান করি। ক্যাটাগরিতে ক্লিক করে স্যাম্পল শুনুন।
+          ৫২টিরও বেশি ক্যাটাগরিতে আমরা প্রফেশনাল ভয়েস ওভার প্রদান করি। ক্যাটাগরিতে ক্লিক করে প্যাকেজ দেখুন।
         </motion.p>
 
-        {/* Category Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
           {voiceTypes.map((item, i) => {
             const isExpanded = expandedCategory === item.title;
@@ -103,13 +213,13 @@ const VoiceTypeSection = () => {
                       whileHover={{ scale: 1.05 }}
                       className="mt-1 flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground"
                     >
-                      <span>স্যাম্পল দেখুন</span>
+                      <span>প্যাকেজ দেখুন</span>
                       <ChevronDown className="w-3 h-3" />
                     </motion.div>
                   )}
                 </div>
 
-                {/* Expanded Sample Links */}
+                {/* Expanded Tier Cards */}
                 <AnimatePresence>
                   {isExpanded && (
                     <motion.div
@@ -120,37 +230,93 @@ const VoiceTypeSection = () => {
                       className="overflow-hidden"
                     >
                       <div className="px-4 md:px-6 pb-6">
-                        {item.sampleLinks.length > 0 ? (
-                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                            {item.sampleLinks.map((link, idx) => (
-                              <motion.a
-                                key={idx}
-                                href={link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                initial={{ opacity: 0, y: 15, scale: 0.9 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ delay: 0.1 + idx * 0.08, type: "spring", damping: 20 }}
-                                whileHover={{ y: -4, scale: 1.03 }}
-                                className="glass-card p-4 flex flex-col items-center gap-2 group hover:border-primary/40 transition-all"
-                              >
-                                <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center group-hover:bg-primary/25 transition-colors">
-                                  <Play className="w-5 h-5 text-primary" />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+                          {item.tiers.map((tier, ti) => (
+                            <motion.div
+                              key={tier.name}
+                              initial={{ opacity: 0, y: 25, scale: 0.9 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              transition={{ delay: 0.15 + ti * 0.12, type: "spring", damping: 20, stiffness: 150 }}
+                              whileHover={{ y: -6, scale: 1.02 }}
+                              className={`glass-card p-5 md:p-6 flex flex-col relative ${
+                                tier.highlight ? "shimmer-border ring-1 ring-primary/40" : ""
+                              }`}
+                            >
+                              {tier.highlight && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.5, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  transition={{ delay: 0.5, type: "spring", damping: 15 }}
+                                  className="absolute right-3 top-3 z-10 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold leading-none text-primary-foreground shadow-lg shadow-primary/30 whitespace-nowrap md:right-4 md:top-4 md:px-3 md:py-1.5 md:text-xs"
+                                >
+                                  ⭐ জনপ্রিয়
+                                </motion.div>
+                              )}
+
+                              <div className="text-2xl md:text-3xl mb-2">{tier.label}</div>
+
+                              <div className="text-xl md:text-2xl font-bold text-primary mb-2">
+                                {tier.price}
+                              </div>
+
+                              <span className="inline-block text-xs font-semibold text-primary bg-primary/10 rounded-full px-3 py-1 mb-3 w-fit">
+                                📏 {tier.limit}
+                              </span>
+
+                              <div className="flex-1 space-y-2 mb-6">
+                                {tier.services.map((s, si) => (
+                                  <motion.div
+                                    key={s}
+                                    className="flex items-center gap-2 text-sm text-muted-foreground"
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.3 + ti * 0.1 + si * 0.05 }}
+                                  >
+                                    <Check className="w-3.5 h-3.5 text-primary shrink-0" />
+                                    {s}
+                                  </motion.div>
+                                ))}
+                              </div>
+
+                              {/* Sample links */}
+                              {item.sampleLinks && item.sampleLinks[ti] && item.sampleLinks[ti].length > 0 && (
+                                <div className="mb-4">
+                                  <p className="text-xs text-muted-foreground mb-1.5">🔗 স্যাম্পল:</p>
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {item.sampleLinks[ti].map((link, li) => (
+                                      <a
+                                        key={li}
+                                        href={link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="text-xs text-primary hover:text-primary/80 underline underline-offset-2"
+                                      >
+                                        স্যাম্পল {li + 1}
+                                      </a>
+                                    ))}
+                                  </div>
                                 </div>
-                                <span className="text-xs font-semibold text-foreground">স্যাম্পল {idx + 1}</span>
-                                <ExternalLink className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                              </motion.a>
-                            ))}
-                          </div>
-                        ) : (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="text-center py-6"
-                          >
-                            <p className="text-muted-foreground text-sm">স্যাম্পল শীঘ্রই আসছে...</p>
-                          </motion.div>
-                        )}
+                              )}
+
+                              <motion.button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onTierSelect(item.title, tier.name, tier.priceNum);
+                                }}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                                  tier.highlight
+                                    ? "gold-btn"
+                                    : "bg-muted text-foreground hover:bg-muted/80"
+                                }`}
+                              >
+                                অর্ডার করুন
+                              </motion.button>
+                            </motion.div>
+                          ))}
+                        </div>
                       </div>
                     </motion.div>
                   )}
