@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Tv, Film, Clapperboard, BookOpen, Bell, MonitorPlay, Phone, GraduationCap, Megaphone, Lightbulb, Gamepad2, ScrollText } from "lucide-react";
 
 const voiceTypes = [
@@ -17,8 +18,10 @@ const voiceTypes = [
 ];
 
 const VoiceTypeSection = () => {
+  const navigate = useNavigate();
+
   const scrollToCategories = () => {
-    document.getElementById("categories")?.scrollIntoView({ behavior: "smooth" });
+    navigate("/categories");
   };
 
   return (

@@ -65,6 +65,39 @@ export type Database = {
         }
         Relationships: []
       }
+      categories: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           created_at: string
@@ -199,6 +232,62 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          audio_url: string | null
+          category_id: string
+          created_at: string
+          delivery_time: string | null
+          description: string | null
+          express_price: number | null
+          id: string
+          is_active: boolean | null
+          per_word_price: number | null
+          price: number
+          revision_charge: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          audio_url?: string | null
+          category_id: string
+          created_at?: string
+          delivery_time?: string | null
+          description?: string | null
+          express_price?: number | null
+          id?: string
+          is_active?: boolean | null
+          per_word_price?: number | null
+          price?: number
+          revision_charge?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          audio_url?: string | null
+          category_id?: string
+          created_at?: string
+          delivery_time?: string | null
+          description?: string | null
+          express_price?: number | null
+          id?: string
+          is_active?: boolean | null
+          per_word_price?: number | null
+          price?: number
+          revision_charge?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
             referencedColumns: ["id"]
           },
         ]
