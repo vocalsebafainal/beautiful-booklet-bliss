@@ -15,6 +15,7 @@ import Footer from "@/components/Footer";
 import FloatingButtons from "@/components/FloatingButtons";
 import OfferBanner from "@/components/OfferBanner";
 import OrderFlow from "@/components/OrderFlow";
+import SamplesSection from "@/components/SamplesSection";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -39,6 +40,7 @@ const Index = () => {
       <CategoryGrid onTierSelect={handleTierSelect} />
       <VoiceTypeSection onTierSelect={handleTierSelect} />
       <DemoSection />
+      <SamplesSection />
       <TestimonialsSection />
       <ArtistSection />
       <HowItWorks />
