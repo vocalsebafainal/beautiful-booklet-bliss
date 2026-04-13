@@ -4,12 +4,10 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-const getYouTubeEmbedUrl = (url: string): string | null => {
+const getYouTubeVideoId = (url: string): string | null => {
   if (!url) return null;
-  if (url.includes("/embed/")) return url;
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/))([^&?\s]+)/);
-  if (match) return `https://www.youtube.com/embed/${match[1]}`;
-  return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([^&?\s]+)/);
+  return match ? match[1] : null;
 };
 
 const DemoSection = () => {
@@ -29,7 +27,11 @@ const DemoSection = () => {
   });
 
   const rawUrl = config?.config_value || "";
-  const embedUrl = getYouTubeEmbedUrl(rawUrl) || rawUrl;
+  const videoId = getYouTubeVideoId(rawUrl);
+  const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : rawUrl;
+  const thumbnailUrl = videoId
+    ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+    : null;
 
   if (!embedUrl && !isLoading) return null;
 
@@ -61,20 +63,34 @@ const DemoSection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="glass-card overflow-hidden"
+            className="glass-card overflow-hidden rounded-2xl"
           >
             <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
               {!playing ? (
                 <button
                   onClick={() => setPlaying(true)}
-                  className="absolute inset-0 flex items-center justify-center bg-muted/60 backdrop-blur-sm transition-all duration-300 hover:bg-muted/40 group z-10"
+                  className="absolute inset-0 flex items-center justify-center z-10 group"
                 >
-                  <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 gold-glow">
+                  {thumbnailUrl && (
+                    <img
+                      src={thumbnailUrl}
+                      alt="Video thumbnail"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to hqdefault if maxres not available
+                        const target = e.target as HTMLImageElement;
+                        if (videoId && target.src.includes("maxresdefault")) {
+                          target.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                        }
+                      }}
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300" />
+                  <div className="relative w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 gold-glow">
                     <Play size={36} className="text-primary-foreground ml-1" />
                   </div>
                 </button>
-              ) : null}
-              {playing && (
+              ) : (
                 <iframe
                   className="absolute inset-0 w-full h-full"
                   src={`${embedUrl}?autoplay=1`}
