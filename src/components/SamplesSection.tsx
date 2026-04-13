@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { Play, X } from "lucide-react";
 
 interface CategorySamples {
   name: string;
@@ -52,57 +53,92 @@ const categorySamples: CategorySamples[] = [
 ];
 
 const SamplesSection = () => {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const filtered = categorySamples.filter((c) => c.links.length > 0);
 
   return (
-    <section className="py-16 px-4 md:px-8 bg-background" id="samples">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-            🎧 আমাদের স্যাম্পল শুনুন
-          </h2>
-          <p className="text-muted-foreground text-lg">
-            প্রতিটি ক্যাটাগরির জন্য আমাদের কিছু নমুনা কাজ
-          </p>
-        </motion.div>
+    <>
+      <section className="py-16 px-4 md:px-8 bg-background" id="samples">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+              🎧 আমাদের স্যাম্পল শুনুন
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              প্রতিটি ক্যাটাগরির জন্য আমাদের কিছু নমুনা কাজ
+            </p>
+          </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((cat, idx) => (
-            <motion.div
-              key={cat.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.08 }}
-              className="glass-card rounded-xl p-5 border border-white/10"
-            >
-              <h3 className="text-lg font-bold text-foreground mb-3">
-                {cat.emoji} {cat.name}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {cat.links.map((link, li) => (
-                  <a
-                    key={li}
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors border border-primary/20"
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                    স্যাম্পল {li + 1}
-                  </a>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((cat, idx) => (
+              <motion.div
+                key={cat.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.08 }}
+                className="glass-card rounded-xl p-6 border border-white/10"
+              >
+                <h3 className="text-xl font-bold text-foreground mb-4">
+                  {cat.emoji} {cat.name}
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {cat.links.map((link, li) => (
+                    <button
+                      key={li}
+                      onClick={() => setActiveVideo(link)}
+                      className="group flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-primary/5 hover:bg-primary/15 border border-primary/10 hover:border-primary/30 transition-all duration-200 hover:scale-105"
+                    >
+                      <div className="w-10 h-10 rounded-full bg-primary/20 group-hover:bg-primary/30 flex items-center justify-center transition-colors">
+                        <Play className="w-4 h-4 text-primary fill-primary" />
+                      </div>
+                      <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                        স্যাম্পল {li + 1}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Video Popup */}
+      {activeVideo && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setActiveVideo(null)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            className="relative w-full max-w-3xl aspect-video rounded-xl overflow-hidden bg-black shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setActiveVideo(null)}
+              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-colors"
+            >
+              <X className="w-5 h-5 text-white" />
+            </button>
+            <iframe
+              src={activeVideo}
+              className="w-full h-full"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            />
+          </motion.div>
+        </div>
+      )}
+    </>
   );
 };
 
