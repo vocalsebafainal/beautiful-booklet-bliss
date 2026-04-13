@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Star, Users, Zap } from "lucide-react";
+import { ChevronDown, Mic } from "lucide-react";
 import studioBg from "@/assets/studio-bg.jpg";
 
 const SoundwaveBars = () => {
