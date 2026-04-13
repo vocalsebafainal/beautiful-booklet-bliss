@@ -80,8 +80,11 @@ const ArtistSection = () => {
                   {artist.image_url ? (
                     <AvatarImage src={artist.image_url} alt={artist.name} className="object-cover" />
                   ) : null}
-                  <AvatarFallback className="bg-primary/10 text-primary font-bold text-lg md:text-xl">
-                    {getInitials(artist.name)}
+                  <AvatarFallback className="bg-gradient-to-br from-primary/20 via-primary/10 to-accent/20 text-primary font-bold text-lg md:text-xl">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <Mic size={14} className="opacity-60" />
+                      <span className="text-xs md:text-sm">{getInitials(artist.name)}</span>
+                    </div>
                   </AvatarFallback>
                 </Avatar>
 

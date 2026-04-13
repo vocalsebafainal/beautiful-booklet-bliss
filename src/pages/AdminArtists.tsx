@@ -297,13 +297,40 @@ export default function AdminArtists() {
                   {filtered.map((a: any) => (
                     <TableRow key={a.id}>
                       <TableCell>
-                        {a.image_url ? (
-                          <img src={a.image_url} alt={a.name} className="w-10 h-10 rounded-full object-cover border border-border" />
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                            <Image className="h-4 w-4 text-muted-foreground" />
+                        <div className="relative group cursor-pointer" onClick={() => {
+                          const input = document.createElement('input');
+                          input.type = 'file';
+                          input.accept = 'image/*';
+                          input.onchange = async (ev) => {
+                            const file = (ev.target as HTMLInputElement).files?.[0];
+                            if (!file) return;
+                            try {
+                              const ext = file.name.split('.').pop();
+                              const path = `${crypto.randomUUID()}.${ext}`;
+                              const { error } = await supabase.storage.from('artist-images').upload(path, file);
+                              if (error) throw error;
+                              const { data: urlData } = supabase.storage.from('artist-images').getPublicUrl(path);
+                              await supabase.from('artists').update({ image_url: urlData.publicUrl }).eq('id', a.id);
+                              queryClient.invalidateQueries({ queryKey: ['admin-artists'] });
+                              queryClient.invalidateQueries({ queryKey: ['public-artists'] });
+                              toast.success('ছবি আপডেট হয়েছে');
+                            } catch (err) {
+                              toast.error(getErrorMessage(err));
+                            }
+                          };
+                          input.click();
+                        }}>
+                          {a.image_url ? (
+                            <img src={a.image_url} alt={a.name} className="w-10 h-10 rounded-full object-cover border border-border" />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                              <Image className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                          )}
+                          <div className="absolute inset-0 w-10 h-10 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Upload className="h-4 w-4 text-white" />
                           </div>
-                        )}
+                        </div>
                       </TableCell>
                       <TableCell className="font-medium">{a.name}</TableCell>
                       <TableCell>
@@ -372,12 +399,31 @@ export default function AdminArtists() {
                   <Image className="h-8 w-8 text-muted-foreground" />
                 </div>
               )}
-              <Label htmlFor="artist-image" className="cursor-pointer">
-                <div className="flex items-center gap-2 text-sm text-primary hover:underline">
-                  <Upload className="h-4 w-4" />
-                  ছবি আপলোড করুন
-                </div>
-              </Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="artist-image" className="cursor-pointer">
+                  <div className="flex items-center gap-2 text-sm text-primary hover:underline">
+                    <Upload className="h-4 w-4" />
+                    ছবি আপলোড করুন
+                  </div>
+                </Label>
+                {currentImage && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive hover:text-destructive text-xs"
+                    onClick={() => {
+                      setImageFile(null);
+                      setImagePreview(null);
+                      if (editing) {
+                        setEditing({ ...editing, image_url: null });
+                      }
+                    }}
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" /> ছবি সরান
+                  </Button>
+                )}
+              </div>
               <input id="artist-image" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
             </div>
 
