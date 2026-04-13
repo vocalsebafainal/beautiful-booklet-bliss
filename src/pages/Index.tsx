@@ -5,7 +5,7 @@ import BallPoolSection from "@/components/BallPoolSection";
 import StatsCounter from "@/components/StatsCounter";
 import TrustSection from "@/components/TrustSection";
 import HowItWorks from "@/components/HowItWorks";
-import VoiceTypeSection from "@/components/VoiceTypeSection";
+
 import CategoryGrid from "@/components/CategoryGrid";
 import DemoSection from "@/components/DemoSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -37,7 +37,7 @@ const Index = () => {
       <StatsCounter />
       <TrustSection />
       <CategoryGrid onTierSelect={handleTierSelect} />
-      <VoiceTypeSection onTierSelect={handleTierSelect} />
+      
       <DemoSection />
       <TestimonialsSection />
       <ArtistSection />
