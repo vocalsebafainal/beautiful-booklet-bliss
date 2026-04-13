@@ -1,24 +1,25 @@
 
 
-## Plan: VoiceTypeSection-এ প্রাইসিং টিয়ার ফিরিয়ে আনা
-
-### সমস্যা
-আগে VoiceTypeSection-এ প্রতিটি ক্যাটাগরি expand করলে Basic/Standard/Premium প্যাকেজ দেখাতো। এখন সেগুলো সরিয়ে দেওয়ায় শুধু "স্যাম্পল শীঘ্রই আসছে..." দেখাচ্ছে।
+## Plan: স্যাম্পল সেকশন তৈরি — DemoSection এর নিচে
 
 ### কী করব
 
-**VoiceTypeSection.tsx আপডেট:**
+**1. নতুন কম্পোনেন্ট তৈরি: `src/components/SamplesSection.tsx`**
+- CategoryGrid থেকে সব ক্যাটাগরির স্যাম্পল লিংক ডেটা নিয়ে একটি আলাদা সেকশন বানাব
+- প্রতিটি ক্যাটাগরির নাম (যেমন: অ্যাডভার্টাইজমেন্ট ভয়েস, ইউটিউব ভয়েস, নিউজ ভয়েস...) সাব-হেডিং হিসেবে থাকবে
+- প্রতিটি ক্যাটাগরির নিচে "স্যাম্পল ১, স্যাম্পল ২..." লিংকগুলো পাশাপাশি দেখাবে (রেফারেন্স ইমেজের মতো)
+- যেসব ক্যাটাগরিতে স্যাম্পল নেই সেগুলো বাদ দেব
+- glass-card স্টাইল, framer-motion animation
 
-1. **TierInfo interface ফিরিয়ে আনব** — name, label, price, priceNum, limit, services, highlight
-2. **প্রতিটি voiceType-এ tiers ডেটা যোগ করব** — ১২টি ক্যাটাগরির জন্য আলাদা আলাদা Basic/Standard/Premium প্যাকেজ (প্রাইস, শব্দ সীমা, সার্ভিস তালিকা)
-3. **sampleLinks রাখব** — তবে প্রাইসিং কার্ডের পাশাপাশি দেখাবে
-4. **Expand হলে CategoryGrid-এর মতো ৩-কলাম টিয়ার কার্ড রেন্ডার করব** — প্রাইস, লিমিট, সার্ভিস, অর্ডার বাটন সহ
-5. **onTierSelect prop ফিরিয়ে আনব** — অর্ডার বাটনে ক্লিক করলে OrderFlow ওপেন হবে
+**2. Index.tsx আপডেট:**
+- `SamplesSection` কম্পোনেন্ট import করে `DemoSection` এর ঠিক নিচে রাখব
 
-**Index.tsx আপডেট:**
-- `VoiceTypeSection`-এ `onTierSelect={handleTierSelect}` prop পাঠাব
+### UI ডিজাইন
+- শিরোনাম: "আমাদের স্যাম্পল শুনুন" বা অনুরূপ
+- ক্যাটাগরি অনুযায়ী গ্রুপ করা হবে — ৩ কলাম গ্রিড (মোবাইলে ১ কলাম)
+- প্রতিটি ক্যাটাগরি কার্ডে: ক্যাটাগরি নাম + emoji, তারপর "🔗 স্যাম্পল:" লেবেল + ক্লিকযোগ্য লিংক (স্যাম্পল ১, স্যাম্পল ২...)
 
-### Technical Details
-- CategoryGrid-এর টিয়ার কার্ড রেন্ডারিং প্যাটার্ন হুবহু অনুসরণ করব (glass-card, shimmer-border, জনপ্রিয় ব্যাজ, অর্ডার বাটন)
-- ফাইল: `src/components/VoiceTypeSection.tsx`, `src/pages/Index.tsx`
+### ফাইল
+- `src/components/SamplesSection.tsx` — নতুন তৈরি
+- `src/pages/Index.tsx` — SamplesSection যোগ
 
