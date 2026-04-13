@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Tv, Film, Clapperboard, BookOpen, Bell, MonitorPlay, Phone, GraduationCap, Megaphone, Lightbulb, Gamepad2, ScrollText } from "lucide-react";
+import {
+  Tv, Film, Clapperboard, BookOpen, Bell, MonitorPlay, Phone,
+  GraduationCap, Megaphone, Lightbulb, Gamepad2, ScrollText,
+  ChevronDown
+} from "lucide-react";
 
 const voiceTypes = [
   { icon: Tv, title: "কমার্শিয়াল", desc: "TV / Radio বিজ্ঞাপন" },
@@ -17,11 +21,22 @@ const voiceTypes = [
   { icon: ScrollText, title: "স্টোরিটেলিং", desc: "ঐতিহাসিক ও সাংস্কৃতিক" },
 ];
 
+// Categories from 1st photo — shown as expandable cards
+const categoryCards = [
+  { emoji: "📢", name: "অ্যাডভার্টাইজমেন্ট ভয়েস", desc: "বিজ্ঞাপন ও প্রমোশনাল কন্টেন্ট" },
+  { emoji: "🎥", name: "ইউটিউব ভয়েস", desc: "ইউটিউব ভিডিও ন্যারেশন" },
+  { emoji: "📰", name: "নিউজ ভয়েস ওভার", desc: "নিউজ রিডিং ও ডকুমেন্টারি" },
+  { emoji: "📖", name: "স্টোরিটেলিং ভয়েস ওভার", desc: "গল্প বলা ও অডিওবুক রেকর্ডিং" },
+  { emoji: "🕌", name: "ইসলামিক ভয়েস ওভার", desc: "ইসলামিক কন্টেন্ট ও ওয়াজ" },
+  { emoji: "🎨", name: "কার্টুন ভয়েস", desc: "কার্টুন ডাবিং ও ক্যারেক্টার ভয়েস" },
+  { emoji: "🏢", name: "কর্পোরেট ভয়েস ওভার", desc: "কর্পোরেট প্রেজেন্টেশন ও IVR" },
+];
+
 const VoiceTypeSection = () => {
   const navigate = useNavigate();
 
   const scrollToCategories = () => {
-    navigate("/categories");
+    document.getElementById("categories")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -46,6 +61,7 @@ const VoiceTypeSection = () => {
           ৫২টিরও বেশি ক্যাটাগরিতে আমরা প্রফেশনাল ভয়েস ওভার প্রদান করি।
         </motion.p>
 
+        {/* Icon grid — row 1 (7 items) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4">
           {voiceTypes.slice(0, 7).map((item, i) => (
             <motion.div
@@ -65,6 +81,7 @@ const VoiceTypeSection = () => {
           ))}
         </div>
 
+        {/* Icon grid — row 2 (5 items) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4 mt-3 md:mt-4">
           {voiceTypes.slice(7).map((item, i) => (
             <motion.div
@@ -82,6 +99,56 @@ const VoiceTypeSection = () => {
               <p className="text-muted-foreground text-[10px] md:text-xs leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}
+        </div>
+
+        {/* Category cards from 1st photo */}
+        <div className="mt-12 md:mt-16">
+          <motion.h3
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-xl md:text-2xl font-bold text-foreground mb-2"
+          >
+            আপনার প্রজেক্টের ধরন অনুযায়ী{" "}
+            <span className="text-primary">ক্যাটাগরি</span> বেছে নিন
+          </motion.h3>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-muted-foreground text-sm mb-8"
+          >
+            নিচের ক্যাটাগরি থেকে আপনার পছন্দ সিলেক্ট করুন
+          </motion.p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {categoryCards.map((cat, i) => (
+              <motion.div
+                key={cat.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.06 * i }}
+                whileHover={{ scale: 1.03, y: -4 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={scrollToCategories}
+                className="glass-card-hover cursor-pointer rounded-2xl border border-border/50 p-5 md:p-6 text-left"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-4xl">{cat.emoji}</span>
+                  <div>
+                    <h4 className="font-bold text-foreground text-sm md:text-base">{cat.name}</h4>
+                    <p className="text-muted-foreground text-xs">{cat.desc}</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-muted/80 border border-primary/30 hover:bg-primary/10 hover:border-primary/50 transition-all">
+                  <span className="text-sm font-medium text-muted-foreground">বিস্তারিত জানতে ক্লিক করুন</span>
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
