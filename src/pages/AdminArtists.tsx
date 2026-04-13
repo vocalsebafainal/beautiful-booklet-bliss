@@ -239,6 +239,10 @@ export default function AdminArtists() {
       sample_video_url: videoUrl || null,
       rate_per_project: Number(fd.get("rate_per_project")) || 0,
     };
+    // If image was removed (editing had image but now cleared)
+    if (editing && !imageFile && !editing.image_url) {
+      data.image_url = null;
+    }
     if (editing) data.id = editing.id;
 
     saveMutation.reset();
