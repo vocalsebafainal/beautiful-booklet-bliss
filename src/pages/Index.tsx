@@ -34,7 +34,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <StickyHeader />
       <HeroSection />
-      <BallPoolSection />
+      
       <StatsCounter />
       <TrustSection />
       
