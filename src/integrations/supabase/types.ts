@@ -236,6 +236,39 @@ export type Database = {
           },
         ]
       }
+      samples: {
+        Row: {
+          category_emoji: string
+          category_name: string
+          created_at: string
+          display_order: number
+          id: string
+          is_active: boolean
+          updated_at: string
+          video_url: string
+        }
+        Insert: {
+          category_emoji?: string
+          category_name: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+          video_url: string
+        }
+        Update: {
+          category_emoji?: string
+          category_name?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+          video_url?: string
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           audio_url: string | null
