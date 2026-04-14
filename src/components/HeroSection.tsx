@@ -69,12 +69,12 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="mb-6 md:mb-8 lg:mb-10"
         >
-          <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight mb-3 md:mb-5 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight mb-3 md:mb-5 leading-tight">
             <span className="text-white">কণ্ঠ হোক</span>{" "}
             <span className="gradient-text">প্রচারের</span><br />
             <span className="gradient-text">বিশ্বস্ত সঙ্গী</span>
           </h1>
-          <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl tracking-widest uppercase max-w-3xl mx-auto">
+          <p className="text-muted-foreground text-xs sm:text-sm md:text-base lg:text-lg tracking-widest uppercase max-w-3xl mx-auto">
             আপনার ব্র্যান্ড, কন্টেন্ট বা বিজ্ঞাপনকে প্রাণবন্ত করুন আমাদের প্রফেশনাল বাংলা ভয়েস ওভার দিয়ে।
           </p>
         </motion.div>
