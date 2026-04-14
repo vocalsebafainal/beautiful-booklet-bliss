@@ -111,11 +111,26 @@ const SamplesSection = () => {
                   {cat.links.map((link, li) => (
                     <button
                       key={li}
-                      onClick={() => setActiveVideo(link)}
+                      onClick={() => {
+                        if (isEmbeddable(link)) {
+                          const embedUrl = getYouTubeEmbedUrl(link);
+                          if (embedUrl) {
+                            setActiveVideo(embedUrl);
+                          } else {
+                            setActiveVideo(link);
+                          }
+                        } else {
+                          window.open(link, "_blank", "noopener,noreferrer");
+                        }
+                      }}
                       className="group flex flex-col items-center justify-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-lg bg-primary/5 hover:bg-primary/15 border border-primary/10 hover:border-primary/30 transition-all duration-200 hover:scale-105"
                     >
                       <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 group-hover:bg-primary/30 flex items-center justify-center transition-colors">
-                        <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary fill-primary" />
+                        {isEmbeddable(link) ? (
+                          <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary fill-primary" />
+                        ) : (
+                          <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
+                        )}
                       </div>
                       <span className="text-xs sm:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                         স্যাম্পল {li + 1}
