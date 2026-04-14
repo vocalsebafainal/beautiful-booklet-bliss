@@ -1,25 +1,16 @@
 
 
-## Plan: হিরো টেক্সট ফোন ও ডেস্কটপে সুন্দরভাবে ফিট করা
+## Plan: স্যাম্পল লিংক সমস্যা ঠিক করা
 
 ### সমস্যা
-স্ক্রিনশটে দেখা যাচ্ছে হিরো টাইটেল অনেক বড়, হেডারের সাথে overlap করছে, এবং মাঝারি সাইজের ডেস্কটপে (১০১৪px) টেক্সট অত্যন্ত বড় দেখাচ্ছে।
+স্যাম্পল বাটনে ক্লিক করলে ভিডিও দেখা যাচ্ছে না। কারণ — লিংকগুলো URL shortener (`ln.run`, `tinyurl.com`) যেগুলো iframe-এ লোড হয় না (X-Frame-Options block করে)। শুধুমাত্র সরাসরি YouTube embed URL iframe-এ কাজ করে।
 
-### সমাধান — `src/components/HeroSection.tsx`
+### সমাধান — `src/components/SamplesSection.tsx`
 
-1. **হিরো টাইটেল ফন্ট সাইজ কমানো** — বর্তমান `text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl` থেকে আরো ব্যালেন্সড স্কেল করব:
-   - মোবাইল: `text-3xl`
-   - sm: `text-4xl`
-   - md: `text-5xl`
-   - lg: `text-6xl`
-   - xl: `text-7xl`
-
-2. **সেকশনে উপরে padding যোগ** — হেডারের সাথে overlap এড়াতে `pt-20 md:pt-24` যোগ করব
-
-3. **ট্যাগলাইন ও রোটেটিং টেক্সটের সাইজ** সামান্য adjust করে ভিজুয়াল হায়ারার্কি ঠিক রাখব
-
-4. **CTA বাটন** — মোবাইলে একটু ছোট (`text-sm px-6 py-3`) রাখব
+1. **YouTube লিংক detect করে embed URL-এ রূপান্তর** — যদি লিংকে `youtube.com` বা `youtu.be` থাকে তাহলে `/embed/` ফরম্যাটে কনভার্ট করে iframe-এ দেখাব
+2. **Shortener লিংক (ln.run, tinyurl)** — এগুলো iframe-এ কাজ করবে না, তাই এগুলোর জন্য **নতুন ট্যাবে ওপেন** করব (`window.open`)
+3. **Popup শুধু YouTube embed URL এর জন্য** — বাকিগুলো সরাসরি নতুন ট্যাবে যাবে
 
 ### ফাইল
-- `src/components/HeroSection.tsx` — শুধুমাত্র এই একটি ফাইল পরিবর্তন হবে
+- `src/components/SamplesSection.tsx` — লিংক হ্যান্ডলিং লজিক আপডেট
 
