@@ -2,23 +2,21 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Play, X, ExternalLink } from "lucide-react";
 
-const getYouTubeEmbedUrl = (url: string): string | null => {
-  let videoId: string | null = null;
+const getYouTubeVideoId = (url: string): string | null => {
   try {
     const u = new URL(url);
     if (u.hostname.includes("youtube.com")) {
-      videoId = u.searchParams.get("v");
-      if (!videoId && u.pathname.startsWith("/shorts/")) {
-        videoId = u.pathname.split("/shorts/")[1];
-      }
+      const v = u.searchParams.get("v");
+      if (v) return v;
+      if (u.pathname.startsWith("/shorts/")) return u.pathname.split("/shorts/")[1]?.split("?")[0];
     } else if (u.hostname.includes("youtu.be")) {
-      videoId = u.pathname.slice(1);
+      return u.pathname.slice(1).split("?")[0];
     }
-  } catch { /* not a valid URL */ }
-  return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : null;
+  } catch {}
+  return null;
 };
 
-const isEmbeddable = (url: string): boolean => {
+const isYouTubeLink = (url: string): boolean => {
   return url.includes("youtube.com") || url.includes("youtu.be");
 };
 
@@ -33,7 +31,8 @@ const categorySamples: CategorySamples[] = [
     name: "অ্যাডভার্টাইজমেন্ট ভয়েস",
     emoji: "📢",
     links: [
-      "https://ln.run/pSynh", "https://ln.run/L4N6a", "https://ln.run/lyy5J", "https://ln.run/XwfS_", "https://ln.run/Z6ZAA", "https://ln.run/ibP56",
+      "https://ln.run/pSynh", "https://ln.run/L4N6a", "https://ln.run/lyy5J",
+      "https://ln.run/XwfS_", "https://ln.run/Z6ZAA", "https://ln.run/ibP56",
       "https://ln.run/aY6GU", "https://ln.run/VWyY3", "https://ln.run/ZKwFx",
     ],
   },
@@ -48,26 +47,34 @@ const categorySamples: CategorySamples[] = [
     name: "নিউজ ভয়েস",
     emoji: "📰",
     links: [
-      "https://ln.run/cKr-z", "https://tinyurl.com/28pf7p2p", "https://tinyurl.com/5xbkbd5t", "https://tinyurl.com/2n228yhm", "https://tinyurl.com/45ns35af", "https://tinyurl.com/yefvkvvz",
+      "https://ln.run/cKr-z",
+      "https://www.youtube.com/watch?v=XVoiI6uEgog",
+      "https://www.youtube.com/watch?v=FigqZCmqM5s",
+      "https://www.youtube.com/watch?v=OG5V86tz7h8",
+      "https://www.youtube.com/watch?v=qlftjsu8v8Q",
+      "https://www.youtube.com/watch?v=cQtL545Kyas",
     ],
   },
   {
     name: "গল্প বলা ও অডিওবুক",
     emoji: "📖",
-    links: ["https://tinyurl.com/yfp95359"],
+    links: ["https://www.youtube.com/watch?v=8kMDo-UFx0M"],
   },
   {
     name: "অ্যানিমেশন ভয়েস",
     emoji: "🎨",
     links: [
-      "https://tinyurl.com/mr3un4k9", "https://tinyurl.com/5mryrszw", "https://tinyurl.com/3f5b3zmu",
+      "https://www.youtube.com/watch?v=T1jb2_1AkCY",
+      "https://www.youtube.com/shorts/FX2rQ1G1o2w",
+      "https://www.youtube.com/watch?v=XsIpKdT4QU0",
     ],
   },
   {
     name: "কর্পোরেট ভয়েস",
     emoji: "🏢",
     links: [
-      "https://tinyurl.com/ydrj4uc7", "https://tinyurl.com/2fm6mxjj",
+      "https://www.youtube.com/watch?v=MmxfZumIOGU",
+      "https://www.youtube.com/watch?v=p3ZHYQlwIR8",
     ],
   },
 ];
@@ -75,6 +82,15 @@ const categorySamples: CategorySamples[] = [
 const SamplesSection = () => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const filtered = categorySamples.filter((c) => c.links.length > 0);
+
+  const handleClick = (link: string) => {
+    const videoId = getYouTubeVideoId(link);
+    if (videoId) {
+      setActiveVideo(`https://www.youtube.com/embed/${videoId}?autoplay=1`);
+    } else {
+      window.open(link, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <>
@@ -107,36 +123,51 @@ const SamplesSection = () => {
                 <h3 className="text-xl font-bold text-foreground mb-4">
                   {cat.emoji} {cat.name}
                 </h3>
-                <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
-                  {cat.links.map((link, li) => (
-                    <button
-                      key={li}
-                      onClick={() => {
-                        if (isEmbeddable(link)) {
-                          const embedUrl = getYouTubeEmbedUrl(link);
-                          if (embedUrl) {
-                            setActiveVideo(embedUrl);
-                          } else {
-                            setActiveVideo(link);
-                          }
-                        } else {
-                          window.open(link, "_blank", "noopener,noreferrer");
-                        }
-                      }}
-                      className="group flex flex-col items-center justify-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-lg bg-primary/5 hover:bg-primary/15 border border-primary/10 hover:border-primary/30 transition-all duration-200 hover:scale-105"
-                    >
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 group-hover:bg-primary/30 flex items-center justify-center transition-colors">
-                        {isEmbeddable(link) ? (
-                          <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary fill-primary" />
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {cat.links.map((link, li) => {
+                    const videoId = getYouTubeVideoId(link);
+                    const isYT = isYouTubeLink(link);
+                    const thumbUrl = videoId
+                      ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+                      : null;
+
+                    return (
+                      <button
+                        key={li}
+                        onClick={() => handleClick(link)}
+                        className="group relative aspect-video rounded-lg overflow-hidden border border-primary/10 hover:border-primary/40 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                      >
+                        {thumbUrl ? (
+                          <img
+                            src={thumbUrl}
+                            alt={`${cat.name} স্যাম্পল ${li + 1}`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
                         ) : (
-                          <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
+                          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                            <span className="text-2xl">{cat.emoji}</span>
+                          </div>
                         )}
-                      </div>
-                      <span className="text-xs sm:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-                        স্যাম্পল {li + 1}
-                      </span>
-                    </button>
-                  ))}
+                        {/* Overlay */}
+                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-full bg-primary/90 group-hover:bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            {isYT ? (
+                              <Play className="w-5 h-5 text-primary-foreground fill-primary-foreground ml-0.5" />
+                            ) : (
+                              <ExternalLink className="w-4 h-4 text-primary-foreground" />
+                            )}
+                          </div>
+                        </div>
+                        {/* Label */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-1.5">
+                          <span className="text-[10px] sm:text-xs text-white font-medium">
+                            স্যাম্পল {li + 1}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </motion.div>
             ))}
@@ -153,7 +184,6 @@ const SamplesSection = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.2 }}
             className="relative w-full max-w-3xl aspect-video rounded-xl overflow-hidden bg-black shadow-2xl"
             onClick={(e) => e.stopPropagation()}
