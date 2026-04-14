@@ -86,7 +86,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="mb-8 md:mb-12 h-12 md:h-16 flex items-center justify-center"
         >
-          <span className="text-muted-foreground text-base md:text-lg lg:text-xl">প্রফেশনাল ভয়েসওভার — </span>
+          <span className="text-muted-foreground text-sm md:text-base lg:text-lg">প্রফেশনাল ভয়েসওভার — </span>
           <AnimatePresence mode="wait">
             <motion.span
               key={wordIndex}
