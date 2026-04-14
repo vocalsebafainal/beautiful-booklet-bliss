@@ -16,6 +16,7 @@ import AdminUsers from "./pages/AdminUsers";
 import AdminSettings from "./pages/AdminSettings";
 import AdminCategories from "./pages/AdminCategories";
 import AdminServices from "./pages/AdminServices";
+import AdminSamples from "./pages/AdminSamples";
 import ThankYou from "./pages/ThankYou";
 import Categories from "./pages/Categories";
 import CategoryServices from "./pages/CategoryServices";
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="users" element={<AdminUsers />} />
               <Route path="categories-manage" element={<AdminCategories />} />
               <Route path="services-manage" element={<AdminServices />} />
+              <Route path="samples" element={<AdminSamples />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             <Route path="*" element={<NotFound />} />

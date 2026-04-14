@@ -8,6 +8,7 @@ import {
   Settings,
   FolderOpen,
   ListMusic,
+  PlayCircle,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -34,6 +35,7 @@ const menuItems = [
   { title: "আর্টিস্ট", url: "/admin/artists", icon: Mic },
   { title: "ক্যাটাগরি", url: "/admin/categories-manage", icon: FolderOpen },
   { title: "সার্ভিস", url: "/admin/services-manage", icon: ListMusic },
+  { title: "স্যাম্পল", url: "/admin/samples", icon: PlayCircle },
   { title: "অ্যাডমিন ইউজারস", url: "/admin/users", icon: ShieldCheck },
   { title: "সেটিংস", url: "/admin/settings", icon: Settings },
 ];
