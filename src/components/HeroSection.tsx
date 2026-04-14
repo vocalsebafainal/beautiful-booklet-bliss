@@ -62,19 +62,19 @@ const HeroSection = () => {
       <SoundwaveBars />
 
       {/* Content */}
-      <div className="relative z-10 text-center max-w-5xl mx-auto">
+      <div className="relative z-10 text-center max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-6"
+          className="mb-6 md:mb-8 lg:mb-10"
         >
-          <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-8xl font-black tracking-tight mb-3">
+          <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight mb-3 md:mb-5 leading-tight">
             <span className="text-white">কণ্ঠ হোক</span>{" "}
             <span className="gradient-text">প্রচারের</span><br />
             <span className="gradient-text">বিশ্বস্ত সঙ্গী</span>
           </h1>
-          <p className="text-muted-foreground text-sm md:text-xl tracking-widest uppercase">
+          <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl tracking-widest uppercase max-w-3xl mx-auto">
             আপনার ব্র্যান্ড, কন্টেন্ট বা বিজ্ঞাপনকে প্রাণবন্ত করুন আমাদের প্রফেশনাল বাংলা ভয়েস ওভার দিয়ে।
           </p>
         </motion.div>
@@ -84,9 +84,9 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="mb-8 md:mb-10 h-12 md:h-14 flex items-center justify-center"
+          className="mb-8 md:mb-12 h-12 md:h-16 flex items-center justify-center"
         >
-          <span className="text-muted-foreground text-base md:text-lg">প্রফেশনাল ভয়েসওভার — </span>
+          <span className="text-muted-foreground text-base md:text-lg lg:text-xl">প্রফেশনাল ভয়েসওভার — </span>
           <AnimatePresence mode="wait">
             <motion.span
               key={wordIndex}
@@ -94,7 +94,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="text-primary font-bold text-lg md:text-xl ml-2"
+              className="text-primary font-bold text-lg md:text-xl lg:text-2xl ml-2"
             >
               {rotatingWords[wordIndex]}
             </motion.span>
@@ -106,7 +106,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           onClick={scrollToCategories}
-          className="gold-btn text-lg md:text-xl px-10 py-5 group pulse-glow-btn"
+          className="gold-btn text-base sm:text-lg md:text-xl px-8 py-4 md:px-12 md:py-5 group pulse-glow-btn"
         >
           ভয়েস ক্যাটাগরি দেখুন
           <ChevronDown className="w-5 h-5 inline-block ml-2 group-hover:translate-y-1 transition-transform" />
@@ -117,23 +117,23 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-10 md:mt-14 flex justify-center"
+          className="mt-10 md:mt-16 flex justify-center"
         >
-          <div className="glass-card px-4 py-4 sm:px-8 sm:py-6 md:px-12 md:py-8 flex flex-col items-center gap-3 sm:gap-5 relative overflow-hidden">
+          <div className="glass-card px-4 py-4 sm:px-8 sm:py-6 md:px-14 md:py-8 lg:px-20 lg:py-10 flex flex-col items-center gap-3 sm:gap-5 md:gap-6 relative overflow-hidden">
             {/* Mic icon with purple glow */}
             <div className="relative">
               <div className="absolute inset-0 bg-primary/30 rounded-full blur-xl animate-pulse-glow scale-150" />
-              <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
-                <Mic className="w-7 h-7 md:w-9 md:h-9 text-primary" />
+              <div className="relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
+                <Mic className="w-7 h-7 md:w-9 md:h-9 lg:w-11 lg:h-11 text-primary" />
               </div>
             </div>
 
             {/* Mini soundwave bars */}
-            <div className="flex items-center gap-[3px]">
-              {Array.from({ length: 12 }).map((_, i) => (
+            <div className="flex items-center gap-[3px] md:gap-1">
+              {Array.from({ length: 16 }).map((_, i) => (
                 <div
                   key={i}
-                  className="w-[3px] rounded-full bg-primary/60 soundwave-bar"
+                  className="w-[3px] md:w-[4px] rounded-full bg-primary/60 soundwave-bar"
                   style={{
                     animationDelay: `${i * 0.1}s`,
                     height: "6px",
@@ -143,20 +143,20 @@ const HeroSection = () => {
             </div>
 
             {/* Stats row */}
-            <div className="flex items-center gap-4 sm:gap-6 md:gap-10">
+            <div className="flex items-center gap-4 sm:gap-6 md:gap-12 lg:gap-16">
               <div className="text-center">
-                <p className="text-lg md:text-xl font-bold text-foreground">৫০০+</p>
-                <p className="text-xs md:text-sm text-muted-foreground">প্রজেক্ট</p>
+                <p className="text-lg md:text-2xl lg:text-3xl font-bold text-foreground">৫০০+</p>
+                <p className="text-xs md:text-sm lg:text-base text-muted-foreground">প্রজেক্ট</p>
               </div>
-              <div className="w-px h-8 bg-border" />
+              <div className="w-px h-8 md:h-10 bg-border" />
               <div className="text-center">
-                <p className="text-lg md:text-xl font-bold text-foreground">২৪ঘণ্টা</p>
-                <p className="text-xs md:text-sm text-muted-foreground">ডেলিভারি</p>
+                <p className="text-lg md:text-2xl lg:text-3xl font-bold text-foreground">২৪ঘণ্টা</p>
+                <p className="text-xs md:text-sm lg:text-base text-muted-foreground">ডেলিভারি</p>
               </div>
-              <div className="w-px h-8 bg-border" />
+              <div className="w-px h-8 md:h-10 bg-border" />
               <div className="text-center">
-                <p className="text-lg md:text-xl font-bold text-primary">৪.৯★</p>
-                <p className="text-xs md:text-sm text-muted-foreground">রেটিং</p>
+                <p className="text-lg md:text-2xl lg:text-3xl font-bold text-primary">৪.৯★</p>
+                <p className="text-xs md:text-sm lg:text-base text-muted-foreground">রেটিং</p>
               </div>
             </div>
           </div>
