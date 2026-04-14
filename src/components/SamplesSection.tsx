@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Play, X, ExternalLink } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const getYouTubeVideoId = (url: string): string | null => {
   try {
@@ -20,68 +22,41 @@ const isYouTubeLink = (url: string): boolean => {
   return url.includes("youtube.com") || url.includes("youtu.be");
 };
 
-interface CategorySamples {
+interface GroupedCategory {
   name: string;
   emoji: string;
   links: string[];
 }
 
-const categorySamples: CategorySamples[] = [
-  {
-    name: "অ্যাডভার্টাইজমেন্ট ভয়েস",
-    emoji: "📢",
-    links: [
-      "https://ln.run/pSynh", "https://ln.run/L4N6a", "https://ln.run/lyy5J",
-      "https://ln.run/XwfS_", "https://ln.run/Z6ZAA", "https://ln.run/ibP56",
-      "https://ln.run/aY6GU", "https://ln.run/VWyY3", "https://ln.run/ZKwFx",
-    ],
-  },
-  {
-    name: "ইউটিউব ভয়েস",
-    emoji: "🎥",
-    links: [
-      "https://ln.run/dzH_S", "https://ln.run/MRn4R", "https://ln.run/U57V0", "https://ln.run/MX0UO",
-    ],
-  },
-  {
-    name: "নিউজ ভয়েস",
-    emoji: "📰",
-    links: [
-      "https://ln.run/cKr-z",
-      "https://www.youtube.com/watch?v=XVoiI6uEgog",
-      "https://www.youtube.com/watch?v=FigqZCmqM5s",
-      "https://www.youtube.com/watch?v=OG5V86tz7h8",
-      "https://www.youtube.com/watch?v=qlftjsu8v8Q",
-      "https://www.youtube.com/watch?v=cQtL545Kyas",
-    ],
-  },
-  {
-    name: "গল্প বলা ও অডিওবুক",
-    emoji: "📖",
-    links: ["https://www.youtube.com/watch?v=8kMDo-UFx0M"],
-  },
-  {
-    name: "অ্যানিমেশন ভয়েস",
-    emoji: "🎨",
-    links: [
-      "https://www.youtube.com/watch?v=T1jb2_1AkCY",
-      "https://www.youtube.com/shorts/FX2rQ1G1o2w",
-      "https://www.youtube.com/watch?v=XsIpKdT4QU0",
-    ],
-  },
-  {
-    name: "কর্পোরেট ভয়েস",
-    emoji: "🏢",
-    links: [
-      "https://www.youtube.com/watch?v=MmxfZumIOGU",
-      "https://www.youtube.com/watch?v=p3ZHYQlwIR8",
-    ],
-  },
-];
-
 const SamplesSection = () => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
-  const filtered = categorySamples.filter((c) => c.links.length > 0);
+
+  const { data: samples = [] } = useQuery({
+    queryKey: ["samples"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("samples")
+        .select("*")
+        .eq("is_active", true)
+        .order("category_name")
+        .order("display_order");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Group by category
+  const grouped: GroupedCategory[] = [];
+  const seen = new Map<string, number>();
+  for (const s of samples) {
+    const idx = seen.get(s.category_name);
+    if (idx !== undefined) {
+      grouped[idx].links.push(s.video_url);
+    } else {
+      seen.set(s.category_name, grouped.length);
+      grouped.push({ name: s.category_name, emoji: s.category_emoji, links: [s.video_url] });
+    }
+  }
 
   const handleClick = (link: string) => {
     const videoId = getYouTubeVideoId(link);
@@ -91,6 +66,8 @@ const SamplesSection = () => {
       window.open(link, "_blank", "noopener,noreferrer");
     }
   };
+
+  if (grouped.length === 0) return null;
 
   return (
     <>
@@ -111,7 +88,7 @@ const SamplesSection = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((cat, idx) => (
+            {grouped.map((cat, idx) => (
               <motion.div
                 key={cat.name}
                 initial={{ opacity: 0, y: 20 }}
@@ -149,9 +126,8 @@ const SamplesSection = () => {
                             <span className="text-2xl">{cat.emoji}</span>
                           </div>
                         )}
-                        {/* Overlay */}
                         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                            <div className="w-12 h-12 rounded-full bg-primary/90 group-hover:bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <div className="w-12 h-12 rounded-full bg-primary/90 group-hover:bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                             {isYT ? (
                               <Play className="w-6 h-6 text-primary-foreground fill-primary-foreground ml-0.5" />
                             ) : (
@@ -159,7 +135,6 @@ const SamplesSection = () => {
                             )}
                           </div>
                         </div>
-                        {/* Label */}
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-1.5">
                           <span className="text-[10px] sm:text-xs text-white font-medium">
                             স্যাম্পল {li + 1}
@@ -175,7 +150,6 @@ const SamplesSection = () => {
         </div>
       </section>
 
-      {/* Video Popup */}
       {activeVideo && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
