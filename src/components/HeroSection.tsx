@@ -106,7 +106,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           onClick={scrollToCategories}
-          className="gold-btn text-base sm:text-lg md:text-xl px-8 py-4 md:px-12 md:py-5 group pulse-glow-btn"
+          className="gold-btn text-sm sm:text-base md:text-lg px-6 py-3 md:px-10 md:py-4 group pulse-glow-btn"
         >
           ভয়েস ক্যাটাগরি দেখুন
           <ChevronDown className="w-5 h-5 inline-block ml-2 group-hover:translate-y-1 transition-transform" />
