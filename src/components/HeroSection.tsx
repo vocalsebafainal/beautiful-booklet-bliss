@@ -94,7 +94,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="text-primary font-bold text-lg md:text-xl lg:text-2xl ml-2"
+              className="text-primary font-bold text-base md:text-lg lg:text-xl ml-2"
             >
               {rotatingWords[wordIndex]}
             </motion.span>
