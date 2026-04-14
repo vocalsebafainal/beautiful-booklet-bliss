@@ -69,7 +69,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="mb-6"
         >
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tight mb-3 md:text-8xl">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-8xl font-black tracking-tight mb-3">
             <span className="text-white">কণ্ঠ হোক</span>{" "}
             <span className="gradient-text">প্রচারের</span><br />
             <span className="gradient-text">বিশ্বস্ত সঙ্গী</span>
@@ -119,7 +119,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="mt-10 md:mt-14 flex justify-center"
         >
-          <div className="glass-card px-8 py-6 md:px-12 md:py-8 flex flex-col items-center gap-5 relative overflow-hidden">
+          <div className="glass-card px-4 py-4 sm:px-8 sm:py-6 md:px-12 md:py-8 flex flex-col items-center gap-3 sm:gap-5 relative overflow-hidden">
             {/* Mic icon with purple glow */}
             <div className="relative">
               <div className="absolute inset-0 bg-primary/30 rounded-full blur-xl animate-pulse-glow scale-150" />
@@ -143,7 +143,7 @@ const HeroSection = () => {
             </div>
 
             {/* Stats row */}
-            <div className="flex items-center gap-6 md:gap-10">
+            <div className="flex items-center gap-4 sm:gap-6 md:gap-10">
               <div className="text-center">
                 <p className="text-lg md:text-xl font-bold text-foreground">৫০০+</p>
                 <p className="text-xs md:text-sm text-muted-foreground">প্রজেক্ট</p>
