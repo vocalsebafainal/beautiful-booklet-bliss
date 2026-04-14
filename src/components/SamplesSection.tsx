@@ -123,7 +123,7 @@ const SamplesSection = () => {
                 <h3 className="text-xl font-bold text-foreground mb-4">
                   {cat.emoji} {cat.name}
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {cat.links.map((link, li) => {
                     const videoId = getYouTubeVideoId(link);
                     const isYT = isYouTubeLink(link);
@@ -151,11 +151,11 @@ const SamplesSection = () => {
                         )}
                         {/* Overlay */}
                         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                          <div className="w-10 h-10 rounded-full bg-primary/90 group-hover:bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <div className="w-12 h-12 rounded-full bg-primary/90 group-hover:bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                             {isYT ? (
-                              <Play className="w-5 h-5 text-primary-foreground fill-primary-foreground ml-0.5" />
+                              <Play className="w-6 h-6 text-primary-foreground fill-primary-foreground ml-0.5" />
                             ) : (
-                              <ExternalLink className="w-4 h-4 text-primary-foreground" />
+                              <ExternalLink className="w-5 h-5 text-primary-foreground" />
                             )}
                           </div>
                         </div>
