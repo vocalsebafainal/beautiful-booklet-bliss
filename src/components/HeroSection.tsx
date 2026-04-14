@@ -37,7 +37,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 pt-20 md:pt-24">
       {/* Background */}
       <img src={studioBg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-[0.08] pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
@@ -69,12 +69,12 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="mb-6 md:mb-8 lg:mb-10"
         >
-          <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight mb-3 md:mb-5 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight mb-3 md:mb-5 leading-tight">
             <span className="text-white">কণ্ঠ হোক</span>{" "}
             <span className="gradient-text">প্রচারের</span><br />
             <span className="gradient-text">বিশ্বস্ত সঙ্গী</span>
           </h1>
-          <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl tracking-widest uppercase max-w-3xl mx-auto">
+          <p className="text-muted-foreground text-xs sm:text-sm md:text-base lg:text-lg tracking-widest uppercase max-w-3xl mx-auto">
             আপনার ব্র্যান্ড, কন্টেন্ট বা বিজ্ঞাপনকে প্রাণবন্ত করুন আমাদের প্রফেশনাল বাংলা ভয়েস ওভার দিয়ে।
           </p>
         </motion.div>
@@ -86,7 +86,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="mb-8 md:mb-12 h-12 md:h-16 flex items-center justify-center"
         >
-          <span className="text-muted-foreground text-base md:text-lg lg:text-xl">প্রফেশনাল ভয়েসওভার — </span>
+          <span className="text-muted-foreground text-sm md:text-base lg:text-lg">প্রফেশনাল ভয়েসওভার — </span>
           <AnimatePresence mode="wait">
             <motion.span
               key={wordIndex}
@@ -94,7 +94,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="text-primary font-bold text-lg md:text-xl lg:text-2xl ml-2"
+              className="text-primary font-bold text-base md:text-lg lg:text-xl ml-2"
             >
               {rotatingWords[wordIndex]}
             </motion.span>
@@ -106,7 +106,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           onClick={scrollToCategories}
-          className="gold-btn text-base sm:text-lg md:text-xl px-8 py-4 md:px-12 md:py-5 group pulse-glow-btn"
+          className="gold-btn text-sm sm:text-base md:text-lg px-6 py-3 md:px-10 md:py-4 group pulse-glow-btn"
         >
           ভয়েস ক্যাটাগরি দেখুন
           <ChevronDown className="w-5 h-5 inline-block ml-2 group-hover:translate-y-1 transition-transform" />
