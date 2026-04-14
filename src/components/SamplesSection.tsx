@@ -1,6 +1,26 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Play, X } from "lucide-react";
+import { Play, X, ExternalLink } from "lucide-react";
+
+const getYouTubeEmbedUrl = (url: string): string | null => {
+  let videoId: string | null = null;
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtube.com")) {
+      videoId = u.searchParams.get("v");
+      if (!videoId && u.pathname.startsWith("/shorts/")) {
+        videoId = u.pathname.split("/shorts/")[1];
+      }
+    } else if (u.hostname.includes("youtu.be")) {
+      videoId = u.pathname.slice(1);
+    }
+  } catch { /* not a valid URL */ }
+  return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : null;
+};
+
+const isEmbeddable = (url: string): boolean => {
+  return url.includes("youtube.com") || url.includes("youtu.be");
+};
 
 interface CategorySamples {
   name: string;
