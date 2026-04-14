@@ -230,7 +230,7 @@ const VoiceTypeSection = ({ onTierSelect }: VoiceTypeSectionProps) => {
                       className="overflow-hidden"
                     >
                       <div className="px-4 md:px-6 pb-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
                           {item.tiers.map((tier, ti) => (
                             <motion.div
                               key={tier.name}
@@ -238,7 +238,7 @@ const VoiceTypeSection = ({ onTierSelect }: VoiceTypeSectionProps) => {
                               animate={{ opacity: 1, y: 0, scale: 1 }}
                               transition={{ delay: 0.15 + ti * 0.12, type: "spring", damping: 20, stiffness: 150 }}
                               whileHover={{ y: -6, scale: 1.02 }}
-                              className={`glass-card p-5 md:p-6 flex flex-col relative ${
+                              className={`glass-card p-4 sm:p-5 md:p-6 flex flex-col relative ${
                                 tier.highlight ? "shimmer-border ring-1 ring-primary/40" : ""
                               }`}
                             >

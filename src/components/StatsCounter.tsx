@@ -33,7 +33,7 @@ const CountUp = ({ target, decimal, suffix }: { target: number; decimal?: boolea
   }, [inView, target]);
 
   return (
-    <span ref={ref} className="text-3xl md:text-5xl font-black gradient-text">
+    <span ref={ref} className="text-2xl sm:text-3xl md:text-5xl font-black gradient-text">
       {decimal ? count.toFixed(1) : Math.floor(count)}{suffix}
     </span>
   );

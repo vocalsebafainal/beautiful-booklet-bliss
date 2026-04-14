@@ -87,17 +87,17 @@ const SamplesSection = () => {
                 <h3 className="text-xl font-bold text-foreground mb-4">
                   {cat.emoji} {cat.name}
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
                   {cat.links.map((link, li) => (
                     <button
                       key={li}
                       onClick={() => setActiveVideo(link)}
-                      className="group flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-primary/5 hover:bg-primary/15 border border-primary/10 hover:border-primary/30 transition-all duration-200 hover:scale-105"
+                      className="group flex flex-col items-center justify-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-lg bg-primary/5 hover:bg-primary/15 border border-primary/10 hover:border-primary/30 transition-all duration-200 hover:scale-105"
                     >
-                      <div className="w-10 h-10 rounded-full bg-primary/20 group-hover:bg-primary/30 flex items-center justify-center transition-colors">
-                        <Play className="w-4 h-4 text-primary fill-primary" />
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 group-hover:bg-primary/30 flex items-center justify-center transition-colors">
+                        <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary fill-primary" />
                       </div>
-                      <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                      <span className="text-xs sm:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                         স্যাম্পল {li + 1}
                       </span>
                     </button>

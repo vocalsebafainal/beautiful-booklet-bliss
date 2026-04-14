@@ -74,7 +74,7 @@ const TrustSection = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: i * 0.08 }}
-                className="flex items-center gap-3 glass-card px-4 py-3 hover:border-primary/30 transition-all duration-300"
+                className="flex items-center gap-3 glass-card px-3 py-2.5 sm:px-4 sm:py-3 hover:border-primary/30 transition-all duration-300 w-[calc(50%-10px)] sm:w-auto"
               >
                 <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <a.icon className="w-4 h-4 text-primary" />
@@ -94,7 +94,7 @@ const TrustSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="glass-card p-8 md:p-12 relative overflow-hidden shimmer-border border-primary/20"
+          className="glass-card p-5 sm:p-8 md:p-12 relative overflow-hidden shimmer-border border-primary/20"
         >
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 leading-tight">
