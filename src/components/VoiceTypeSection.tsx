@@ -147,7 +147,7 @@ const VoiceTypeSection = ({ onTierSelect }: VoiceTypeSectionProps) => {
   };
 
   return (
-    <section className="py-16 md:py-24 px-4">
+    <section id="categories" className="py-16 md:py-24 px-4">
       <div className="max-w-6xl mx-auto text-center">
         <motion.h2
           initial={{ opacity: 0, y: 10 }}
